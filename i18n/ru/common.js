@@ -1,0 +1,27 @@
+/* ru/common: generated from i18n source tables */
+RSLang.add("ru",{
+"CLOSE": "ЗАКРЫТЬ",
+"CANCEL": "ОТМЕНА",
+"OK": "ОК",
+"YES": "ДА",
+"NO": "НЕТ",
+"SAVE": "СОХРАНИТЬ",
+"DELETE": "УДАЛИТЬ",
+"EDIT": "ИЗМЕНИТЬ",
+"BACK": "НАЗАД",
+"NEXT": "ДАЛЕЕ",
+"DONE": "ГОТОВО",
+"START": "СТАРТ",
+"PAUSE": "ПАУЗА",
+"RESUME": "ПРОДОЛЖИТЬ",
+"RESTART": "ЗАНОВО",
+"LOADING...": "ЗАГРУЗКА...",
+"Loading...": "Загрузка...",
+"Loading…": "Загрузка…",
+"Pause": "Пауза",
+"Restart": "Заново",
+"Mute": "Без звука",
+"Sound": "Звук",
+"Fullscreen": "Во весь экран",
+"English": "English"
+},null);

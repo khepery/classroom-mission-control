@@ -1,0 +1,26 @@
+CLASSROOM MISSION CONTROL - ASSET PROMPTS 6 (Home banners, batch 6 of 5)
+
+How to use
+Same as before. Paste the STYLE text at the end of every prompt. Make 2 or 3 first, check they look like one set with the earlier banners, then do the rest. Save each as hero/<name>.png and send them back. I will crop, shrink and wire them in.
+
+Banner count so far: 28 tools have a banner. 33 do not. This batch covers 8 of them. Batches 7 to 10 will cover the rest.
+
+STYLE: Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. Strict layout: main subject entirely on RIGHT HALF. LEFT HALF dark, empty, calm, low detail negative space for app title and buttons added later. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-picker] a giant brass slot machine arm and a glowing capsule drawn out of a transparent dome full of small round glowing tokens, one golden token lifted into the light by a thin beam, other tokens floating in a soft spiral behind it.
+
+[hero-groups] a large glowing planet splitting cleanly into four coloured smaller planets, each one a different colour of teal, amber, pink and green, thin light trails showing where each piece moved, tiny stars scattered around.
+
+[hero-score] a huge retro LED scoreboard floating in space with two big glowing blocks of dot-matrix light, one amber and one teal, small sparks and confetti of light rising off the amber side, no readable digits, only abstract glowing dot patterns.
+
+[hero-buzzer] two big glossy round game show buzzer buttons side by side, one red and one blue, the red one pressed down and glowing with a ring of shock waves spreading outward, a faint starfield behind.
+
+[hero-brain] a glowing stylised brain made of soft neon circuit lines with a small rocket launching out of the top, spiral sparks and a trail of light, calm nebula behind.
+
+[hero-calm] a glowing translucent orb floating above a still dark lake in space, rings of light spreading across the water, a faint crescent moon and a soft aurora ribbon, very peaceful and quiet.
+
+[hero-econ] a large glowing supply and demand cross made of two crossing light beams, one rising and one falling, with a bright golden planet sitting exactly where they meet and a faint grid of coordinate lines behind it, no numbers, no labels.
+
+[hero-grader] a retro handheld scanner camera hovering above a stack of paper answer sheets covered in tiny round bubbles, a bright green beam sweeping across them, a few bubbles glowing gold where they were read.
+
+Next up, batch 7 will be: Stopwatch, Discussion Timer, Lesson Agenda, Sound Meter, Random Number, Dice and Coin, Seating Chart, Class Lists.

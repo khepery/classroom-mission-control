@@ -1,0 +1,43 @@
+CLASSROOM MISSION CONTROL - ASSET PROMPTS 5 (Zoom Map and more banners)
+
+How to use
+Same as before. Paste the STYLE text of each section at the end of every prompt in that section. Make 2 or 3 of a section first, check they look like one set, then do the rest. Send them back named as shown and I will crop, shrink and wire them in.
+
+
+1. ZOOM MAP ICON  (save as ic/zoom.png)
+============================================================
+STYLE: Square 1:1 app icon, one bold 3D object in the centre filling about 70 percent of the frame, glossy stylised illustration like a premium mobile game icon, soft rim light and a small glow, subtle retro space-age details, simple smooth gradient background in the colour given, no text, no letters, no numbers, no border, no frame, no shadow box
+
+[zoom] a large glass lens with a brass rim held over a cluster of glowing planets, a big golden planet with a smaller pink planet and a green planet inside it, tiny moons orbiting inside the big planets, the lens magnifies the middle so a planet inside a planet is visible. Background deep teal to navy.
+
+
+2. ZOOM MAP BANNER  (save as hero/zoom.png)
+============================================================
+STYLE: Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. Strict layout: main subject entirely on RIGHT HALF. LEFT HALF dark, empty, calm, low detail negative space for app title and buttons added later. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-zoom] a vast glowing golden planet in the right half with four smaller coloured planets inside it, each of those holding even smaller glowing planets, a curved light trail showing a spacecraft camera flying from the outer planet into the smallest one, stars and soft nebula behind.
+
+
+3. ZOOM MAP BACKDROPS  (save as bg/zm-1.png to bg/zm-4.png)
+============================================================
+Backdrops that sit behind the map circles, so they must stay calm and dark in the middle with no strong objects. Text and circles are drawn on top, so avoid bright spots and fine detail.
+STYLE: Wide landscape 1536x1024. Painted retro space-age concept art, soft and atmospheric, low contrast, darker toward the centre, gentle colour gradient, subtle film grain, no focal object, no text, no letters, no numbers, no logos, no watermark, no people.
+
+[zm-1] deep violet and teal nebula clouds with distant tiny stars.
+[zm-2] a calm night sky over a dark ocean horizon with a faint aurora ribbon.
+[zm-3] warm amber and dark brown dusty galaxy swirl with a few glowing dust lanes.
+[zm-4] cool blue blueprint grid fading into darkness with faint constellation lines.
+
+
+4. MORE HOME SCREEN BANNERS  (tools that still show their icon on the billboard)
+============================================================
+Save each as hero/<name>.png. Same layout and STYLE as section 2.
+
+[hero-cards] a fan of large square paper answer cards floating in space, each with a different black and white square code pattern and a bright letter-free corner marker, a glowing scanner beam sweeping across them from a small camera lens.
+[hero-mystery] a handheld retro game console in space showing a half-hidden pixel picture, some blocks revealed and others covered by glowing question tiles.
+[hero-bell] a huge brass school bell with an old split-flap board behind it, soft steam of light rising from the bell, a small clock face glowing.
+[hero-budget] a glowing planet shaped like a piggy bank with coins orbiting it, a small house, a small car and a bag of groceries floating around it on light trails.
+[hero-choice] a three by three grid of glowing square tiles floating in space, a few tiles lit gold in a diagonal line, a small rocket pointer hovering over one tile.
+[hero-exit] a vintage cinema ticket with a punched hole glowing in the middle, a row of small glowing thumbs-up and thumbs-down lights fading into the distance.
+[hero-subplan] a manila folder open on a desk in space with a glowing paper checklist rising out of it and a small brass desk lamp beside it.
+[hero-listen] a vintage cassette deck with glowing tape reels and sound waves rising into a starry sky, a pair of retro headphones resting beside it.

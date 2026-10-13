@@ -1,0 +1,8 @@
+CLASSROOM MISSION CONTROL - ASSET PROMPTS 10 (About page icon)
+
+How to use
+Paste the whole block as one prompt. Attach two or three of your existing painted icons from the ic folder as style references, for example the Zoom Map icon and the Countdown Timer icon. Make 3 versions, pick the best, and save it as ic/about.png. Send it back and I will resize it and wire it into the About page and anywhere that icon shows.
+
+[ic-about]
+Create one standalone Classroom Mission Control app icon. Square 1:1 app icon, one bold 3D object in the centre filling about 70 percent of the frame, glossy stylised illustration like a premium mobile game icon, soft rim light and a small glow, subtle retro space-age details, simple smooth gradient background in deep navy to teal. The object is a brass mission control beacon, a round glowing lens with a ring of small amber lights around it and a short brass antenna on top, a soft beam of light rising from the lens, a small badge-shaped plate on the front with an abstract star mark. No text, no letters, no numbers, no border, no frame, no shadow box. No people.
+Match supplied references only in painted style, colors and lighting.

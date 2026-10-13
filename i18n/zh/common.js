@@ -1,0 +1,27 @@
+/* zh/common: generated from i18n source tables */
+RSLang.add("zh",{
+"CLOSE": "关闭",
+"CANCEL": "取消",
+"OK": "确定",
+"YES": "是",
+"NO": "否",
+"SAVE": "保存",
+"DELETE": "删除",
+"EDIT": "编辑",
+"BACK": "返回",
+"NEXT": "下一步",
+"DONE": "完成",
+"START": "开始",
+"PAUSE": "暂停",
+"RESUME": "继续",
+"RESTART": "重新开始",
+"LOADING...": "加载中…",
+"Loading...": "加载中…",
+"Loading…": "加载中…",
+"Pause": "暂停",
+"Restart": "重新开始",
+"Mute": "静音",
+"Sound": "声音",
+"Fullscreen": "全屏",
+"English": "English"
+},null, {punct:{':':'：',';':'；','?':'？','!':'！'}});

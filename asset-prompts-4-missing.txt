@@ -1,0 +1,32 @@
+CLASSROOM MISSION CONTROL - MISSING ASSETS (8 pictures)
+
+How to use
+Paste the STYLE line at the end of every prompt in that section.
+Name each file with the name in brackets. Make 2 first and check they match before doing the rest.
+
+============================================================
+1. DATA LAB BACKDROPS  (6 pictures, save as lab/bg-<name>.png)
+============================================================
+These sit behind the moving apparatus in Data Lab. The app darkens them and draws the equipment in the middle, so the middle must stay empty.
+STYLE: painted retro sci-fi illustration, wide 1600x1000, dark navy and teal palette, soft lighting, blurred and out of focus like a photo background, large empty calm area in the centre, a plain flat workbench or ground along the bottom fifth, no people, no text, no numbers, no apparatus in the middle
+
+[bg-phys] a physics lab inside a space station, metal walls, a round porthole window with stars on the left, shelves with faint dials and meters at the edges.
+[bg-chem] a chemistry lab on a spaceship, a fume cupboard and glassware shelves blurred at the sides, warm amber lamps.
+[bg-bio] a biology lab greenhouse on a space station, potted plants and microscopes blurred at the edges, soft green light.
+[bg-street] a small market street at dusk on a moon colony, shop fronts and glowing signs blurred at the sides, empty pavement in the middle.
+[bg-valley] a wide open valley at dawn under a big sky with faint stars, distant hills only, nothing tall in the middle.
+[bg-games] a retro games room on a starship, a felt table along the bottom, soft neon glow at the edges.
+
+============================================================
+2. SLIDE STUDIO ICON  (1 picture, save as ic/slides.png)
+============================================================
+STYLE: square 1024x1024 app icon, same look as the other painted tool icons, polished 3D retro sci-fi game art, rich soft lighting, dark space background filling the whole square, no text, no letters, no numbers, no logos
+
+[slides] a glowing retro projector screen floating in space, the screen shows a glass slide with a bright title bar and three small cards, soft purple and blue light, a small red laser dot on the screen.
+
+============================================================
+3. SLIDE STUDIO BANNER  (1 picture, save as hero/slides.png)
+============================================================
+STYLE: Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. Strict layout: main subject entirely on RIGHT HALF. LEFT HALF dark, empty, calm, low detail negative space for app title and buttons added later. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[slides] a huge cinema screen in a starship lecture hall showing a bright slide with a bar chart and a glowing title bar, a thin red laser pointer beam coming from the right, rows of empty seats in silhouette below the screen.

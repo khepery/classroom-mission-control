@@ -1,0 +1,86 @@
+CLASSROOM MISSION CONTROL - ICON PROMPTS
+
+How to use
+1. Paste the STYLE text at the end of every prompt, so all icons match.
+2. Square 1:1, 1024x1024. One icon per image.
+3. Make 4 or 5 first, check they look like one set, then do the rest.
+4. Send them back named by tool, for example timer.png. I will crop, shrink and put them in.
+
+STYLE (add to every prompt)
+Square 1:1 app icon, one bold 3D object in the centre filling about 70 percent of the frame, glossy stylised illustration like a premium mobile game icon, soft rim light and a small glow, subtle retro space-age details, simple smooth gradient background in the colour given, no text, no letters, no numbers, no border, no frame, no shadow box
+
+PROMPTS (tool name: prompt)
+
+START THE LESSON
+Countdown Timer: App icon of a chunky retro countdown dial with a glowing orange ring and a small alarm bell on top, dark charcoal background.
+Stopwatch: App icon of a classic chrome stopwatch with glowing amber hands, dark brown background.
+Discussion Timer: App icon of three colourful speech bubbles circling a small glowing hourglass, midnight blue background.
+Lesson Agenda: App icon of a clipboard with three ticked checklist rows and a tiny rocket on the clip, warm beige background.
+Bell Ringer: App icon of a brass school bell ringing with motion lines, charcoal background.
+Visual Schedule: App icon of three picture cards in a row with a glowing arrow pointing at the middle card, light teal background.
+Big Message: App icon of a glowing LED marquee sign with light dots, black background.
+Chalkboard: App icon of a small green chalkboard with a chalk stick and chalk dust, dark green background.
+
+PICK STUDENTS AND MAKE GROUPS
+Name Picker: App icon of a retro computer terminal showing a glowing silhouette of a student, dark green background.
+Spin the Wheel: App icon of a neon prize wheel with pink, yellow and cyan segments and a gold pointer, purple background.
+Random Number: App icon of split-flap board tiles caught mid-flip, bright yellow background.
+Dice and Coin: App icon of two translucent holographic dice and a spinning gold coin, deep violet background.
+Group Maker: App icon of three small groups of round friendly figures in different colours, warm sand background.
+Seating Chart: App icon of a top-down miniature classroom with rows of desks and one desk glowing, royal blue background.
+Class Lists: App icon of a fanned stack of colourful student ID cards with a star badge, lilac background.
+
+GAMES
+Quiz Show: App icon of a game show podium with a big glowing question mark light bulb, purple to orange background.
+Class Feud: App icon of a game show board with flipping blue answer tiles, gold bulb lights and a big red X, royal blue background.
+Escape Room: App icon of an ornate keyhole lock with a glowing golden key, dark gold background.
+Mystery Picture: App icon of a handheld retro game console whose screen reveals a pixel picture, olive green background.
+Quiz Tic-Tac-Toe: App icon of a tic-tac-toe board made of glowing X and O tiles, teal background.
+Full Arcade: App icon of a retro arcade cabinet with a cute pixel alien on the screen, black and red background.
+Quiz Buzzer: App icon of a big red arcade buzzer button with motion lines, dark navy background.
+Scoreboard: App icon of a glowing red dot-matrix LED scoreboard, black background.
+Doodle Dash: App icon of a glowing pencil drawing a neon line that turns into a cat, deep indigo background.
+
+CHECK WHO UNDERSTOOD
+Exit Tickets: App icon of a cinema ticket stub with a perforated edge and a check mark, crimson background.
+Answer Card Scanner: App icon of a square printed answer card held up inside a camera viewfinder frame, teal background.
+Paper Test Scanner: App icon of an answer sheet with filled bubbles and a green scanning laser line, mint background.
+Rubric Builder: App icon of a small grid table with coloured cells and a gold star, cream background.
+Choice Board: App icon of a 3 by 3 grid of colourful task cards with the middle card glowing, cream background.
+
+CALM, FOCUS AND BEHAVIOUR
+Voice Rules: App icon of a traffic light with the red lamp glowing and hazard stripes at the base, dark grey background.
+Sound Meter: App icon of an analogue needle meter in a wooden case with the needle near the red zone, warm brown background.
+Calm Corner: App icon of a glowing teal orb with soft rings around it, deep teal background.
+Class Rewards: App icon of a cute round monster creature wearing a small gold crown, deep purple background.
+Brain Break: App icon of a cartoon brain wearing sneakers with a lightning bolt, hot pink background.
+Sound Board: App icon of a retro sound pad with glowing square buttons and sound waves, graphite background.
+
+PLAN AND WRITE LESS
+Teacher Planner: App icon of a leather weekly planner with colourful tabs, rich brown background.
+Lesson Plan Builder: App icon of an open lesson planner book with a timeline and a ribbon bookmark, light blue background.
+Sub Plan Builder: App icon of a manila folder with a checklist sheet and a small name badge, tan background.
+Report Comments: App icon of a report card with a fountain pen and three gold stars, navy background.
+Parent Messages: App icon of an airmail envelope with a heart stamp and a paper plane, red, white and blue background.
+Revision Planner: App icon of a glowing countdown ring around a stack of books with a small rocket, space navy background.
+
+PRINT AND MAKE
+Worksheet Maker: App icon of a worksheet page with a crossword grid and a pencil, pastel pink background.
+Print Shop: App icon of a desktop printer printing a colourful name badge, slate background.
+QR Code Maker: App icon of an abstract square pattern of glowing tiles like a QR code, white and cyan background.
+Diagram Sketcher: App icon of hand-drawn boxes and arrows on graph paper with a pencil, off-white background.
+
+ECONOMICS AND BUSINESS
+Econ Graph Lab: App icon of two glowing curves crossing on a grid like a supply and demand graph, dark blue background.
+Supply and Demand Lab: App icon of a market stall price tag with up and down arrows and a small balance scale, dark green background.
+Budget Life: App icon of a piggy bank with gold coins and a calculator, green background.
+
+LANGUAGE AND SCIENCE
+Speaking Cards: App icon of a vintage microphone with a red ON AIR light and a cue card, charcoal background.
+Dictation and Listening: App icon of a cassette tape with headphones, retro orange background.
+Periodic Table: App icon of three blank coloured element tiles with a glowing atom, dark navy background.
+
+AI ON THIS COMPUTER
+Voice Studio: App icon of a retro studio microphone with soft sound waves, dark orange background.
+Speech to Text: App icon of a speech bubble turning into lines of text with a sound wave, graphite background.
+Cut-out Studio: App icon of scissors cutting around a photo to make a sticker shape, emerald background.

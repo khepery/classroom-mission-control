@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#021417">
+<title>Mission Control Card Scanner</title>
+<style>
+@font-face{font-family:'Share Tech Mono';font-display:swap;src:url(/fonts/share-tech-mono-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Orbitron';font-weight:800;font-display:swap;src:url(/fonts/orbitron-latin-800-normal.woff2) format('woff2')}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#021417;color:#2effc4;font-family:"Share Tech Mono",Consolas,monospace}
+body{display:flex;flex-direction:column;gap:12px;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));min-height:100dvh;background:radial-gradient(circle at 30% 20%,#073a40,#021417 70%)}
+h1{margin:0;font-family:"Orbitron",sans-serif;font-size:18px;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:#7dff6a}.dot.off{background:#ff6b8a}
+.card{border:2px solid #0f5e57;border-radius:10px;padding:12px;background:rgba(0,30,30,.6)}
+.t{color:#e6fff8;font-size:17px;line-height:1.35;margin:0 0 6px}
+.k{font-size:13px;color:#9fffe6}
+.bar{height:10px;border-radius:5px;background:#0b2f2f;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:#2effc4;width:0;transition:width .3s}
+.miss{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.miss span{background:rgba(255,93,115,.18);color:#ffc2cc;border-radius:6px;padding:3px 7px;font-size:13px}
+.go{display:block;text-align:center;background:#2effc4;color:#021417;font-family:"Orbitron",sans-serif;font-weight:800;font-size:20px;padding:20px;border-radius:14px;cursor:pointer;box-shadow:0 6px 0 #138a6c;user-select:none}
+.go:active{transform:translateY(3px);box-shadow:0 3px 0 #138a6c}
+.pic{position:relative;border-radius:10px;overflow:hidden;border:2px solid #0f5e57;line-height:0}
+.pic canvas{width:100%;height:auto;display:block}
+.pic i{position:absolute;transform:translate(-50%,-50%);background:#7dff6a;color:#021417;font-style:normal;font-weight:700;font-size:12px;line-height:1;padding:3px 5px;border-radius:5px;box-shadow:0 0 0 2px #021417}
+.prog{height:8px;background:#0b2f2f;border-radius:4px;overflow:hidden}.prog i{display:block;height:100%;background:#ffd23f;width:0}
+.msg{color:#e6fff8;font-size:15px;line-height:1.4;margin:0}
+.tip{font-size:13px;color:#7fc9b8;line-height:1.45;margin:0}
+</style>
+</head>
+<body>
+<h1><span class="dot" id="dot"></span>CARD SCANNER</h1>
+<div class="card" id="st"><p class="t">Connecting to the classroom laptop</p></div>
+<label class="go" for="f">Take a photo of the room</label>
+<input type="file" id="f" accept="image/*" capture="environment" hidden>
+<div class="prog" id="pg" hidden><i></i></div>
+<p class="msg" id="msg"></p>
+<div class="pic" id="pic" hidden></div>
+<p class="tip">Stand at the front. Fit as many cards as you can in one photo. Hold the phone steady. Take a second photo from another side for anyone missed.</p>
+<script src="/lib/jsQR.js"></script>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)},S=null,V=0,said=false;
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function readCards(src,onCode,onProgress){return new Promise(res=>{
+  const k=Math.min(1,2000/Math.max(src.width||src.naturalWidth,src.height||src.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.round((src.width||src.naturalWidth)*k);cv.height=Math.round((src.height||src.naturalHeight)*k);
+  const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(src,0,0,cv.width,cv.height);const w=cv.width,h=cv.height,T=[[0,0,w,h]];
+  [.5,.34,.25,.17].forEach(s=>{const sw=Math.round(Math.min(w,h)*s*1.3),sh=sw,st=sw/3,nx=Math.max(1,Math.ceil((w-sw)/st)+1),ny=Math.max(1,Math.ceil((h-sh)/st)+1);if(sw<90)return;for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)T.push([Math.max(0,Math.min(w-sw,Math.round(x*st))),Math.max(0,Math.min(h-sh,Math.round(y*st))),Math.min(sw,w),Math.min(sh,h)])});
+  const orient=c=>{const a=c.location.topLeftCorner,b=c.location.topRightCorner,g=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;return g>-45&&g<=45?'A':g>-135&&g<=-45?'B':g>45&&g<=135?'D':'C'};
+  const found={};let i=0;
+  (function step(){const t0=performance.now();while(i<T.length&&performance.now()-t0<28){const t=T[i++];try{const c=typeof jsQR==='function'&&jsQR(cx.getImageData(t[0],t[1],t[2],t[3]).data,t[2],t[3],{inversionAttempts:'dontInvert'});if(c){const m=/^MC:(\d+)$/.exec(c.data||'');if(m&&!found[m[1]]){const L=orient(c),p=c.location;found[m[1]]=L;onCode&&onCode(+m[1],L,{x:(t[0]+(p.topLeftCorner.x+p.bottomRightCorner.x)/2)/w,y:(t[1]+(p.topLeftCorner.y+p.bottomRightCorner.y)/2)/h})}}}catch(e){}}
+    onProgress&&onProgress(i/T.length);if(i<T.length)setTimeout(step,0);else res(found)})()})}
+
+function send(o){if(!S)return;o.room=S.room;return fetch('/api/send',{method:'POST',body:JSON.stringify(o)}).catch(function(){})}
+function poll(){fetch('/api/state?v='+V,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){$('#dot').className='dot';if(d.s===undefined)return;V=d.v;S=d.s&&d.s.app==='cards'?d.s:null;paint();if(S&&!said){said=true;send({k:'hello'})}}).catch(function(){$('#dot').className='dot off'})}
+function paint(){var b=$('#st');if(!S){b.innerHTML='<p class="t">The laptop is not scanning yet.</p><p class="k">On the laptop, open Answer Card Scanner and press Phone as scanner.</p>';return}
+  b.innerHTML='<p class="t">'+esc(S.title)+'</p><p class="k">'+esc((S.opts||[]).join('   '))+'</p><p class="k" style="margin-top:6px">'+S.have+' OF '+S.total+' ANSWERED</p><div class="bar"><i style="width:'+(S.total?S.have/S.total*100:0)+'%"></i></div>'+(S.missing&&S.missing.length?'<div class="miss">'+S.missing.map(function(m){return'<span>'+esc(m)+'</span>'}).join('')+'</div>':'')}
+setInterval(poll,1200);poll();
+$('#f').onchange=function(e){var file=e.target.files[0];e.target.value='';if(!file)return;var url=URL.createObjectURL(file),im=new Image();im.onload=function(){
+  var pic=$('#pic'),cv=document.createElement('canvas'),k=Math.min(1,900/Math.max(im.width,im.height));cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);pic.innerHTML='';pic.appendChild(cv);pic.hidden=false;
+  var pg=$('#pg'),codes=[];pg.hidden=false;$('#msg').textContent='Reading the cards';
+  readCards(im,function(n,L,pos){codes.push([n,L]);var m=document.createElement('i');m.style.left=(pos.x*100)+'%';m.style.top=(pos.y*100)+'%';m.textContent=n+L;pic.appendChild(m)},function(p){pg.firstChild.style.width=Math.round(p*100)+'%'}).then(function(){pg.hidden=true;
+    if(codes.length){send({k:'cards',codes:codes});$('#msg').textContent='Found '+codes.length+' card'+(codes.length===1?'':'s')+'. Sent to the laptop.';try{navigator.vibrate&&navigator.vibrate(60)}catch(x){}}
+    else $('#msg').textContent='No cards found. Move closer, use more light, and keep the cards facing the phone.'})};im.src=url};
+})();
+</script>
+</body>
+</html>

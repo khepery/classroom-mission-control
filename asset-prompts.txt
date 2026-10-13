@@ -1,0 +1,157 @@
+CLASSROOM MISSION CONTROL. EXTRA ASSET PROMPTS FOR GPT IMAGES
+
+How to use
+Paste the STYLE line of each section in front of every prompt in that section.
+Sizes: square 1024x1024, wide 1536x1024, tall 1024x1536. Each prompt says which one.
+Ask for no text in every image. I add all words in the app so they stay sharp and can be translated.
+Make 2 or 3 from a section first and send them to me before doing the whole set.
+Name each file as shown in brackets, for example vs-read.png.
+
+
+============================================================
+1. SALES COVERS FOR GUMROAD AND TPT  (do these first)
+============================================================
+STYLE: retro 1970s space age illustration, painted look like a vintage sci-fi paperback cover, deep navy and black space, warm orange, amber and teal accents, soft film grain, cinematic lighting, no text, no letters, no logos.
+
+[cover-main] wide. A classroom built inside a retro spaceship bridge. A teacher stands at a glowing command console, rows of student desks face a giant curved window showing a nebula and a ringed planet. Floating holographic panels around the room show a timer ring, dice, a scoreboard and a wheel. Leave the top third calm and dark so a title can sit there.
+
+[cover-square] square. Close view of a retro command console covered in round glowing buttons, each button lit with a tiny classroom symbol, a hand reaching to press the biggest orange button. Planet visible through a window behind.
+
+[cover-escape] wide. Eight small doorways in a curved corridor of a space station, each door shows a different world through it: haunted mansion, detective office, spaceship, pirate ship, science lab, bank vault, deep ocean, Egyptian tomb. Strong central perspective.
+
+[cover-games] wide. Classroom game show stage on a space station, two team podiums with buzzers, a big answer board glowing behind, spotlights, audience silhouettes of students cheering.
+
+[cover-teacher] wide. Calm teacher's desk on a spaceship at night, a planner open, a cup of tea, a small robot assistant sorting paper cards, stars outside the window. Peaceful, organised feeling.
+
+
+============================================================
+2. VISUAL SCHEDULE PICTURE CARDS  (30 cards, big classroom value)
+============================================================
+STYLE: friendly flat vector illustration for a classroom picture schedule, one simple clear action in the centre, thick rounded outlines, bright but soft colours, plain cream background, diverse children aged 8 to 16 in neutral school uniforms, no text, no numbers, square 1024x1024.
+
+[vs-starter] a student sitting down and opening a notebook at the start of class, a small clock on the wall.
+[vs-goal] a student looking at a target with an arrow in the centre, a lightbulb above.
+[vs-read] a student reading a book, relaxed.
+[vs-write] a hand writing in an exercise book with a pencil.
+[vs-listen] a student listening with a hand cupped to the ear, sound waves.
+[vs-discuss] three students talking around a table with speech bubbles that have no words.
+[vs-pairs] two students sharing one worksheet side by side.
+[vs-group] four students around a table working on one big poster.
+[vs-think] a student with a hand on the chin and a thought cloud.
+[vs-quiz] a student holding up a card with a tick, a buzzer on the desk.
+[vs-test] a quiet desk with a test paper and a pencil, a small timer.
+[vs-draw] a student drawing with coloured pencils.
+[vs-computers] a student using a laptop.
+[vs-video] a class watching a big screen with a play symbol.
+[vs-present] a student presenting in front of a board, pointing.
+[vs-handsup] three students with hands raised.
+[vs-quiet] a student working silently with a finger to the lips symbol beside them.
+[vs-game] students playing a board game and smiling.
+[vs-maths] a calculator, a ruler and shapes on a desk.
+[vs-experiment] a student with safety goggles holding a test tube.
+[vs-music] a student playing a keyboard with music notes.
+[vs-pe] students running on a sports field with a ball.
+[vs-break] a student stretching outside under a tree.
+[vs-lunch] a lunch tray with rice, vegetables and fruit.
+[vs-water] a student drinking from a water bottle.
+[vs-tidy] a student putting books on a shelf and pushing in a chair.
+[vs-lineup] four students standing in a neat line at a door.
+[vs-homework] a backpack with a notebook sticking out and a house in the background.
+[vs-review] a student looking at a checklist with ticks.
+[vs-reward] a student holding a gold star and smiling.
+
+
+============================================================
+3. TEAM CRESTS  (Scoreboard, Buzzer, Class Feud, Escape Rooms)
+============================================================
+STYLE: retro space mission patch, round embroidered badge, bold simple shape, limited colours, thick border stitch, centred, transparent or plain black background, no text, square 1024x1024.
+
+[team-red] a red comet with a flame tail.
+[team-blue] a blue rocket climbing past a moon.
+[team-green] a green alien plant growing on a small planet.
+[team-yellow] a yellow sun with a ring around it.
+[team-purple] a purple nebula shaped like an owl.
+[team-orange] an orange astronaut helmet with a star reflection.
+[team-teal] a teal satellite dish sending signals.
+[team-pink] a pink shooting star over mountains.
+
+
+============================================================
+4. REWARD BADGES  (Rewards tool and Class Points)
+============================================================
+STYLE: shiny collectible game badge, round metal medal with enamel colours, slight 3D bevel, soft glow, space theme, centred, transparent or plain black background, no text, square 1024x1024.
+
+[rw-help] two hands, one lifting the other up.
+[rw-task] a checklist with a big tick.
+[rw-team] four small astronauts linking arms.
+[rw-effort] a rocket booster firing at full power.
+[rw-kind] a heart held inside a small planet orbit.
+[rw-part] a hand raised with a spark above it.
+[rw-hw] a notebook with a rocket launching from the page.
+[rw-idea] a lightbulb shaped like a planet.
+[rw-gold] a big gold star medal with ribbons, top prize.
+[rw-streak] a chain of five small stars in a row, glowing brighter left to right.
+
+
+============================================================
+5. ESCAPE ROOM EXTRAS
+============================================================
+STYLE: match the painted look of the existing escape room pictures, rich painted lighting, detailed, atmospheric, no text, no letters, no numbers.
+
+Victory screens, one per room, wide 1536x1024. The door is open and light pours in.
+[win-haunted] the mansion front door open at dawn, fog lifting, birds flying.
+[win-detective] the detective office with the case board solved, morning sun through blinds.
+[win-space] an airlock opening onto a bright blue planet.
+[win-pirate] a treasure chest open on the ship deck, gold glowing, sunset sea.
+[win-lab] a lab door sliding open, green light, the experiment safe and calm.
+[win-vault] the vault door swung open, light on stacks of gold bars.
+[win-ocean] a submarine hatch opening as the sub rises to a sunny surface.
+[win-tomb] the tomb exit opening onto desert and pyramids at sunrise.
+
+Intro card, tall 1024x1536.
+[esc-intro] a mysterious corridor with eight locked doors and a single lamp, a brass key floating in the light.
+
+Close up clue views, square 1024x1024. These pop up when a student clicks an object.
+[cl-scroll] an old rolled scroll partly open on a wooden table, blank paper.
+[cl-lock] a brass combination padlock with four dials, close up, dials blank.
+[cl-keypad] a glowing sci-fi keypad with blank keys.
+[cl-map] a torn treasure map with no writing, only drawn shapes and a red X.
+[cl-note] a crumpled note pinned to a corkboard, blank paper.
+
+
+============================================================
+6. FEATURED BANNERS FOR THE HOME SCREEN BILLBOARD
+============================================================
+STYLE: cinematic retro sci-fi movie poster painting, wide 1536x1024, subject on the right half, left half dark and empty so the title and buttons fit, no text.
+
+[hero-escape] a glowing locked door in a dark corridor with a key floating beside it.
+[hero-feud] a game show stage with two buzzers and a big glowing answer board.
+[hero-timer] a giant glowing ring timer floating above a planet like an orbit.
+[hero-doodle] a robot holding a paintbrush drawing a rocket in the air with light.
+[hero-wheel] a huge spinning prize wheel made of planets.
+[hero-noise] a calm alien creature resting on a sound wave over a quiet moon.
+[hero-quiz] invader ships made of question marks flying over a classroom.
+[hero-planner] a teacher's planner floating open with paper satellites orbiting it.
+
+
+============================================================
+7. SOUND METER MOOD CREATURE  (5 states of one character)
+============================================================
+STYLE: cute round alien mascot, same character in every image, soft 3D clay look, plain black background, centred, no text, square 1024x1024.
+
+[nz-1] the alien asleep, eyes closed, tiny smile, small Z clouds.
+[nz-2] the alien awake and calm, reading a tiny book.
+[nz-3] the alien looking up, one antenna twitching, slightly worried.
+[nz-4] the alien covering its ears, eyes squeezed.
+[nz-5] the alien spinning with antennas sparking, very upset but still cute.
+
+
+============================================================
+8. BACKGROUNDS
+============================================================
+STYLE: retro sci-fi matte painting, very dark, low detail in the centre so text stays readable, no text.
+
+[bg-launch] wide. View from inside a spaceship lounge window, deep space, a far nebula in teal and orange, a planet edge at the bottom.
+[bg-calm] wide. Slow drifting aurora over a quiet ocean planet at night, for the Calm Corner.
+[bg-arcade] wide. A neon retro space arcade hall, rows of glowing cabinets, purple and cyan light.
+[bg-market] wide. A busy space trading port with stalls and floating cargo crates, for the market game.

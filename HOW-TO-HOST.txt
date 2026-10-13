@@ -1,0 +1,60 @@
+CLASSROOM MISSION CONTROL - HOW TO PUT IT ON YOUR OWN WEBSITE
+
+Why host it yourself
+The microphone tools (Sound Meter, Speech to Text live captions, Speaking Cards recording) only work when the hub runs on its own website. Inside the Claude preview the browser blocks the microphone. Everything else works in both places.
+
+What is in this folder
+index.html   the hub
+ai/          the AI models for voices, captions, cut-outs and Doodle Dash (about 250 MB)
+fonts/       the fonts, so the hub looks right without Google Fonts
+lib/         QR, camera scanning, sketch and Word export libraries
+Keep everything together in one folder. Do not rename the files.
+
+Option 1, for visitors outside mainland China: Netlify Drop
+1. Go to app.netlify.com/drop and sign in.
+2. Drag this whole folder onto the page.
+3. Netlify gives you a link that starts with https. Open it. Done.
+
+Option 2, for visitors in mainland China: Tencent EdgeOne Pages
+1. Create a free Tencent Cloud account and open EdgeOne Pages.
+2. Create a project and upload this folder.
+3. Open the https link it gives you.
+
+Option 3: GitHub Pages or Cloudflare Pages work too. Both can be slow or blocked in mainland China.
+
+After it is online
+1. Open the link on the classroom computer.
+2. Press SOUND CHECK at the top. Test speakers, voices and the microphone.
+3. The first time you use an AI tool it downloads its model. After that it works offline.
+
+Your data
+Class lists, scores and plans are saved in the browser on each computer. Nothing is sent to a server. Use Class Lists > Save backup file to move your data to another computer.
+
+Use it on this computer without a website
+Windows: double-click Start Mission Control.bat.
+Mac: double-click Start Mission Control.command. The first time, right-click it, choose Open, then Open. It needs Python 3. If it asks, open Terminal and type xcode-select --install.
+A small window opens and the hub opens in your browser at http://localhost:8080. The AI tools and the microphone work this way. Keep the small window open while you teach. Close it to stop.
+Opening index.html straight from the folder also works for most tools, but the AI tools and phones cannot work that way.
+
+Students answer Quiz Show on their phones
+1. Start the hub with Start Mission Control on the classroom laptop. The laptop must be on the classroom Wi-Fi.
+2. In Quiz Show choose Answers: Phones and cards, then press Start quiz.
+3. Students scan the QR code on the board, or type the address under it, and tap their name. No app, no account, no internet needed.
+4. Students without a phone hold up their printed card from Answer Card Scanner. You can also click a name to enter an answer.
+
+Use a phone as the card scanner
+1. Start the hub with Start Mission Control.
+2. In Answer Card Scanner press Phone as scanner. Scan the QR code with your phone.
+3. Take photos of the room. Every card in each photo is read and sent to the laptop. Works over plain Wi-Fi with no app.
+
+Phones cannot open the page
+- The first time you start the hub, Windows may ask to allow access. Tick Private networks and press Allow.
+- If you missed that, double-click Allow phones.bat once and say yes when Windows asks.
+- On the board, press Try address 2 if the laptop shows more than one address.
+- Many school Wi-Fi networks block devices from reaching each other. Then turn on the laptop's Mobile hotspot (Windows Settings, Network, Mobile hotspot) and let the phones join that network. The game works without internet.
+
+Files for phones and the local server
+join.html                       the page students see on their phones
+scan.html                       the phone page for scanning answer cards
+start-hub.ps1, Start Mission Control.bat, Allow phones.bat    Windows
+start-hub.py, Start Mission Control.command                   Mac and Linux

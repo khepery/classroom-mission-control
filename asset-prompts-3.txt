@@ -1,0 +1,36 @@
+CLASSROOM MISSION CONTROL - ASSET PROMPTS, BATCH 3 (Data Lab backdrops and 10 more home screen banners)
+
+How to use
+Paste the STYLE line of each section at the end of every prompt in that section.
+Send files back with the names in brackets. Make 2 or 3 first and check they match the set.
+
+============================================================
+1. DATA LAB BACKDROPS  (painted rooms that sit behind the moving apparatus)
+============================================================
+The app draws the apparatus, labels and dials itself and darkens the picture, so keep these calm, dark, low detail, with an empty middle and a flat surface along the bottom fifth. Save these in a folder called lab next to index.html.
+STYLE: painted retro sci-fi illustration, wide 1600x1000, dark navy and teal palette, soft lighting, blurred and out of focus like a photo background, large empty calm area in the centre, a plain workbench or ground along the bottom, no people, no text, no numbers, no apparatus in the middle
+
+[bg-phys] a physics lab inside a space station, metal walls, a round porthole window with stars on the left, shelves with faint dials and meters at the edges.
+[bg-chem] a chemistry lab on a spaceship, a fume cupboard and glassware shelves blurred at the sides, warm amber lamps.
+[bg-bio] a biology lab greenhouse on a space station, potted plants and microscopes blurred at the edges, soft green light.
+[bg-street] a small market street at dusk on a moon colony, shop fronts and glowing signs blurred at the sides, empty pavement in the middle.
+[bg-valley] a wide open valley at dawn under a big sky with faint stars, distant hills only, nothing tall in the middle.
+[bg-games] a retro games room on a starship, a felt table along the bottom, soft neon glow at the edges.
+
+
+============================================================
+2. MORE HOME SCREEN BANNERS  (tools that still show their icon on the billboard)
+============================================================
+Save each as hero/<name>.png next to index.html. These use the same layout as the first eight, so the picture sits on the right and the left stays empty for the title.
+STYLE: Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. Strict layout: main subject entirely on RIGHT HALF. LEFT HALF dark, empty, calm, low detail negative space for app title and buttons added later. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-unique] three exam papers floating in space, each stamped with a different glowing number pattern and a small square code, fanned out like cards.
+[hero-speak] a vintage radio studio microphone on a stand with glowing sound rings and a small crescent moon behind it.
+[hero-revise] a countdown rocket calendar, a glowing planet-sized calendar page with a path of stepping stones leading to a bright finish gate.
+[hero-vsched] a row of five large picture cards floating in a gentle arc, each showing a simple glowing scene such as a sun, a book, a lunch box, a ball and a bed, no words.
+[hero-rewards] a friendly small creature wearing a gold medal and cape standing on a podium of glowing stars, a jar of glowing marbles beside it.
+[hero-graph] a huge glowing graph hovering above a drafting table in space, a curved blue line crossing a straight red line, a brass compass beside it.
+[hero-diagram] a conical flask and a circuit symbol linked by glowing arrows on a floating blueprint sheet, no labels.
+[hero-lab] a glass flask of glowing green liquid on a lab bench inside a space station window, a small line graph of light rising out of it like steam.
+[hero-popsim] a giant petri dish seen at an angle with swirling coloured dots forming wave patterns, a small planet reflected in the glass.
+[hero-flip] a thick flipbook with pages fanning out and a glowing red ball bouncing across the pages in motion, with light trails.

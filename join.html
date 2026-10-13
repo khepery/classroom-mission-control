@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b0b4a">
+<title>Mission Control Join</title>
+<style>
+@font-face{font-family:'Orbitron';font-weight:500;font-display:swap;src:url(/fonts/orbitron-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Orbitron';font-weight:800;font-display:swap;src:url(/fonts/orbitron-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Share Tech Mono';font-weight:400;font-display:swap;src:url(/fonts/share-tech-mono-latin-400-normal.woff2) format('woff2')}
+:root{--bg:#1b0b4a;--y:#ffd23f;--ink:#fff;--soft:#d9ccff;--m:"Share Tech Mono",Consolas,monospace;--tc:#ffd23f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Orbitron",system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+body{background-image:repeating-conic-gradient(from 0deg at 50% 120%,rgba(255,255,255,.045) 0 5deg,transparent 5deg 10deg);display:flex;flex-direction:column;min-height:100dvh;padding:max(10px,env(safe-area-inset-top)) 14px max(12px,env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit}
+.top{display:flex;align-items:center;gap:10px;min-height:40px}
+.top .me{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-size:14px;letter-spacing:.06em;overflow:hidden}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--tc);flex:none;box-shadow:0 0 10px var(--tc)}
+.me b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pts{font-weight:800;color:var(--y);font-size:16px;white-space:nowrap}
+.net{width:10px;height:10px;border-radius:50%;background:#7dff6a;flex:none}
+.net.off{background:#ff6b8a;animation:bl 1s infinite}
+@keyframes bl{50%{opacity:.3}}
+main{flex:1;display:flex;flex-direction:column;gap:12px;min-height:0;padding-top:8px}
+.card{background:rgba(0,0,0,.32);border:2px solid rgba(255,255,255,.12);border-radius:16px;padding:16px}
+.big{font-size:clamp(22px,7vw,40px);font-weight:800;line-height:1.15;margin:0}
+.sub{font-family:var(--m);color:var(--soft);font-size:15px;line-height:1.45;margin:0}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.spin{width:64px;height:64px;border-radius:50%;border:5px solid rgba(255,255,255,.15);border-top-color:var(--y);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(1turn)}}
+.names{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;overflow:auto;padding-bottom:6px}
+.nm{all:unset;cursor:pointer;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 10px;font-family:var(--m);font-size:16px;text-align:center;line-height:1.2}
+.nm:active{transform:scale(.97)}
+.nm[disabled]{opacity:.35;cursor:default}
+.nm small{display:block;font-size:11px;color:var(--soft);margin-top:3px}
+.find{width:100%;font:inherit;font-family:var(--m);font-size:17px;padding:12px 14px;border-radius:12px;border:2px solid #5b3fa8;background:rgba(10,0,40,.7);color:#fff}
+.find:focus{outline:none;border-color:var(--y)}
+.btn{all:unset;cursor:pointer;text-align:center;background:var(--y);color:#1b0b4a;font-weight:800;border-radius:14px;padding:16px;font-size:18px;letter-spacing:.04em;box-shadow:0 6px 0 #a8840f}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #a8840f}
+.btn.ghost{background:none;color:var(--y);border:2px solid var(--y);box-shadow:none;padding:12px;font-size:15px}
+.btn[disabled]{opacity:.4}
+.team{border-radius:20px;padding:26px 18px;background:color-mix(in srgb,var(--tc) 18%,transparent);border:3px solid var(--tc);width:100%;max-width:420px}
+.team .tn{font-size:clamp(34px,12vw,64px);font-weight:800;color:var(--tc);letter-spacing:.06em;text-shadow:0 0 30px color-mix(in srgb,var(--tc) 60%,transparent)}
+.qh{display:flex;justify-content:space-between;align-items:center;font-family:var(--m);color:var(--soft);font-size:14px}
+.clock{font-family:"Orbitron";font-weight:800;color:#1b0b4a;background:var(--y);border-radius:99px;min-width:2.6em;text-align:center;padding:.2em .5em;font-size:18px}
+.clock.hurry{background:#ff3d6e;color:#fff}
+.bar{height:8px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--y);width:100%;transition:width .25s linear}
+.qt{background:#fff;color:#1b0b4a;border-radius:14px;padding:14px;font-weight:800;font-size:clamp(17px,5.2vw,26px);line-height:1.25;text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0}
+.opts.n2{grid-template-columns:1fr}
+.op{all:unset;cursor:pointer;border-radius:16px;background:var(--c);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;min-height:84px;box-shadow:0 6px 0 color-mix(in srgb,var(--c) 55%,#000);font-weight:800;font-size:clamp(15px,4.6vw,22px);text-align:center;line-height:1.2;overflow-wrap:anywhere;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.op svg{width:40px;height:40px}
+.op:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--c) 55%,#000)}
+.op.sel{outline:4px solid #fff;outline-offset:2px}
+.op.off{opacity:.3}
+.inp{width:100%;font:inherit;font-weight:800;font-size:22px;padding:16px;border-radius:14px;border:3px solid var(--y);background:rgba(10,0,40,.75);color:#fff;text-align:center}
+.inp:focus{outline:none;box-shadow:0 0 0 4px rgba(255,210,63,.3)}
+.ord{display:flex;flex-direction:column;gap:8px}
+.oi{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;border-radius:14px;background:var(--c);padding:14px;font-weight:800;font-size:18px;box-shadow:0 5px 0 color-mix(in srgb,var(--c) 55%,#000)}
+.oi em{font-style:normal;min-width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.25)}
+.oi.used{opacity:.3}
+.seq{display:flex;flex-wrap:wrap;gap:6px;min-height:34px;align-items:center;font-family:var(--m);color:var(--soft)}
+.seq span{background:#fff;color:#1b0b4a;border-radius:8px;padding:4px 8px;font-weight:700;font-family:"Orbitron";font-size:13px}
+.pic{position:relative;border-radius:12px;overflow:hidden;border:3px solid var(--y);touch-action:manipulation;align-self:center;width:100%;max-width:100%;line-height:0}
+.pic img{display:block;width:100%;height:auto}
+.pin{position:absolute;width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--tc);border:3px solid #fff;transform:translate(-50%,-100%) rotate(-45deg);box-shadow:0 4px 10px rgba(0,0,0,.6)}
+.res{border-radius:20px;padding:24px 16px;width:100%;max-width:440px}
+.res.ok{background:linear-gradient(#2f9e1a,#1d6b10)}
+.res.part{background:linear-gradient(#c98a00,#8a5c00)}
+.res.no{background:linear-gradient(#d6264f,#8e1232)}
+.res.none{background:rgba(255,255,255,.08)}
+.res .big{font-size:clamp(34px,11vw,58px)}
+.res .gain{font-size:clamp(26px,8vw,44px);font-weight:800;margin-top:6px}
+.key{font-family:var(--m);font-size:16px;margin-top:10px;line-height:1.4}
+.lb{display:flex;flex-direction:column;gap:8px;width:100%;max-width:440px}
+.lr{display:grid;grid-template-columns:2em 1fr auto;align-items:center;gap:8px;border-radius:12px;padding:12px 14px;background:var(--c);color:#1b0b4a;font-weight:800;font-size:18px}
+.lr.mine{outline:4px solid #fff;outline-offset:2px}
+.foot{font-family:var(--m);font-size:12px;color:var(--soft);text-align:center;opacity:.7;padding-top:6px}
+.err{color:#ffc2d4;font-family:var(--m);font-size:14px;min-height:1.2em}
+@media (min-width:700px){body{max-width:720px;margin:0 auto}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><span class="net" id="net" title="Connection"></span><span class="me" id="me"><b>MISSION CONTROL</b></span><span class="pts" id="pts"></span></div>
+<main id="app"><div class="center"><div class="spin"></div><p class="sub">Connecting to the classroom computer</p></div></main>
+<div class="foot">Classroom Mission Control · works on the classroom Wi-Fi, no account needed</div>
+<script>
+(function(){
+var $=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var PODC=['#ff7a1a','#1fa8ff','#ff3da6','#4fc21a','#9b5cff','#e8a400'],LT='ABCDEF';
+var SYM=['<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="10" fill="#fff"/><ellipse cx="20" cy="20" rx="18" ry="5.5" fill="none" stroke="#fff" stroke-width="3" transform="rotate(-22 20 20)"/></svg>','<svg viewBox="0 0 40 40"><path d="M20 3l4.9 11 12 1.1-9.1 7.9 2.8 11.8L20 28.6 9.4 34.8l2.8-11.8L3.1 15.1l12-1.1z" fill="#fff"/></svg>','<svg viewBox="0 0 40 40"><path d="M4 8l22 14-5 5z" fill="#fff" opacity=".55"/><circle cx="27" cy="27" r="9" fill="#fff"/></svg>','<svg viewBox="0 0 40 40"><path d="M26 4a16 16 0 1 0 10 26A13 13 0 0 1 26 4z" fill="#fff"/></svg>'];
+function ord(n){n=+n||0;var v=n%100;return n+((v>10&&v<14)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'))}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem('mcj_'+k);localStorage.setItem('mcj_'+k,v)}catch(e){return null}}
+var pid=ls('pid');if(!pid){pid=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);ls('pid',pid)}
+var S=null,V=0,recvAt=0,view='',sent={},draft={seq:[],pin:null},fails=0,busy=false,filter='',lastRes='';
+function post(o){o.pid=pid;if(S)o.room=S.room;return fetch('/api/send',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(o)})}
+function me(){return S&&S.pl?S.pl[pid]:null}
+function poll(){if(busy)return;busy=true;fetch('/api/state?v='+V,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){fails=0;$('#net').className='net';if(d.s!==undefined){V=d.v;var old=S;S=d.s;recvAt=performance.now();if(!old||!S||old.room!==(S&&S.room))sent={};render()}else tickClock()}).catch(function(){fails++;if(fails>2)$('#net').className='net off'}).then(function(){busy=false})}
+setInterval(poll,900);poll();
+function head(){var m=me(),t=m&&S.teams[m.t];document.documentElement.style.setProperty('--tc',t?t.c:'#ffd23f');$('#me').innerHTML=m?'<span class="dot"></span><b>'+esc(m.nm)+'</b><span style="color:var(--tc)">'+esc(t?t.n:'')+'</span>':'<b>MISSION CONTROL</b>';$('#pts').textContent=m?m.p+' PTS':''}
+function left(){if(!S||S.ph!=='q')return 0;return Math.max(0,S.left-(performance.now()-recvAt)/1000)}
+function tickClock(){var c=$('#clk');if(!c)return;var l=left();c.textContent=Math.ceil(l);c.classList.toggle('hurry',l<=5);var b=$('#tbar');if(b)b.style.width=(100*l/(S.secs||20))+'%'}
+setInterval(tickClock,250);
+function render(){head();var app=$('#app');
+  if(!S||!S.room){view='wait';app.innerHTML='<div class="center"><div class="spin"></div><p class="big">Almost there</p><p class="sub">Your teacher has not started a game yet. Keep this page open.</p></div>';return}
+  var m=me();
+  if(!m){if(view==='pick'&&$('#find'))return paintNames();view='pick';app.innerHTML='<div class="card"><p class="big" style="font-size:24px">Who are you?</p><p class="sub">Tap your name. Then look at the board.</p></div><input class="find" id="find" placeholder="Search your name" autocomplete="off" value="'+esc(filter)+'"><div class="names" id="names"></div><button class="btn ghost" id="other">My name is not on the list</button>';
+    $('#find').oninput=function(e){filter=e.target.value;paintNames()};$('#other').onclick=function(){var n=prompt('Type your name');if(n&&n.trim()){post({k:'join',nm:n.trim().slice(0,40)});wait('Joining')}};paintNames();return}
+  var key=S.ph+'|'+(S.q?S.q.id:'')+'|'+(S.ph==='r'&&m.r?JSON.stringify(m.r):'')+'|'+(S.ph==='b'||S.ph==='f'?JSON.stringify(S.rank):'');
+  if(S.ph==='lobby'){if(view==='lobby'&&key===lastRes)return;view='lobby';lastRes=key;var t=S.teams[m.t];app.innerHTML='<div class="center"><div class="team"><p class="sub">You are on team</p><div class="tn">'+esc(t.n)+'</div><p class="sub" style="margin-top:10px">'+esc(m.nm)+'</p></div><p class="sub">Look at the board. The first question starts soon.</p></div>';return}
+  if(S.ph==='q'){if(view==='q'+S.q.id){tickClock();return}view='q'+S.q.id;draft={seq:[],pin:null};return question()}
+  if(S.ph==='r'){if(view==='r'&&key===lastRes)return;view='r';lastRes=key;return result()}
+  if(S.ph==='b'||S.ph==='f'){if(view===S.ph&&key===lastRes)return;view=S.ph;lastRes=key;return board()}
+}
+function paintNames(){var box=$('#names');if(!box)return;var f=filter.trim().toLowerCase(),taken={};Object.keys(S.pl||{}).forEach(function(k){taken[S.pl[k].n]=1});
+  box.innerHTML=(S.roster||[]).filter(function(r){return!f||r.nm.toLowerCase().indexOf(f)>=0}).map(function(r){return'<button class="nm" data-n="'+r.n+'"'+(taken[r.n]?' disabled':'')+'>'+esc(r.nm)+(taken[r.n]?'<small>joined</small>':r.n<1000?'<small>card '+r.n+'</small>':'')+'</button>'}).join('')||'<p class="sub">No names match. Use the button below.</p>';
+  $$('.nm',box).forEach(function(b){b.onclick=function(){post({k:'join',n:+b.dataset.n});wait('Joining')}})}
+function wait(t){view='wait';$('#app').innerHTML='<div class="center"><div class="spin"></div><p class="big">'+esc(t)+'</p></div>'}
+function question(){var Q=S.q,app=$('#app'),done=sent[Q.id];
+  var h='<div class="qh"><span>QUESTION '+S.qn+' OF '+S.qt+(S.dbl?' <b style="color:#1b0b4a;background:var(--y);border-radius:6px;padding:0 6px">DOUBLE POINTS</b>':'')+'</span><span class="clock" id="clk"></span></div><div class="bar"><i id="tbar"></i></div><div class="qt">'+esc(Q.q)+'</div>';
+  if(done){app.innerHTML=h+'<div class="center"><div class="team" style="padding:20px"><p class="big">Answer locked</p><p class="sub" style="margin-top:8px">'+esc(done)+'</p></div><p class="sub">Watch the board for the answer.</p></div>';tickClock();return}
+  if(Q.t==='mc')h+='<div class="opts n'+Q.o.length+'">'+Q.o.map(function(o,i){return'<button class="op" style="--c:'+PODC[i]+'" data-i="'+i+'">'+(SYM[i]||'')+'<span>'+LT[i]+'. '+esc(o)+'</span></button>'}).join('')+'</div>';
+  else if(Q.t==='type')h+='<input class="inp" id="ans" placeholder="Type your answer" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send"><button class="btn" id="go">Send answer</button>';
+  else if(Q.t==='number')h+='<input class="inp" id="ans" inputmode="decimal" placeholder="Your number" autocomplete="off" enterkeyhint="send"><p class="sub" style="text-align:center">Closest wins'+(Q.tol?'. Within '+Q.tol+' counts as right':'')+'.</p><button class="btn" id="go">Send answer</button>';
+  else if(Q.t==='order')h+='<p class="sub">Tap the items in order, first one first.</p><div class="seq" id="seq"></div><div class="ord">'+Q.it.map(function(x,i){return'<button class="oi" style="--c:'+PODC[i]+'" data-k="'+i+'"><em>'+LT[i]+'</em><span>'+esc(x)+'</span></button>'}).join('')+'</div><div style="display:flex;gap:8px"><button class="btn ghost" id="undo" style="flex:1">Undo</button><button class="btn" id="go" style="flex:2" disabled>Send order</button></div>';
+  else if(Q.t==='spot')h+='<p class="sub" style="text-align:center">Tap the right place on the picture.</p><div class="pic" id="pic"><img id="img" alt=""></div><button class="btn" id="go" disabled>Send my pin</button>';
+  app.innerHTML=h;tickClock();
+  if(Q.t==='mc')$$('.op').forEach(function(b){b.onclick=function(){var i=+b.dataset.i;b.classList.add('sel');$$('.op').forEach(function(x){if(x!==b)x.classList.add('off')});send(i,LT[i]+'. '+Q.o[i])}});
+  if(Q.t==='type'||Q.t==='number'){var a=$('#ans');setTimeout(function(){a.focus()},100);var go=function(){var v=a.value.trim();if(!v)return a.focus();if(Q.t==='number'){var n=+v.replace(/\s/g,'').replace(',','.');if(!isFinite(n)){a.value='';a.placeholder='Numbers only';return}send(n,String(n))}else send(v.slice(0,120),v)};$('#go').onclick=go;a.onkeydown=function(e){if(e.key==='Enter')go()}}
+  if(Q.t==='order'){var paint=function(){$('#seq').innerHTML=draft.seq.length?draft.seq.map(function(k,i){return'<span>'+(i+1)+'. '+esc(Q.it[k])+'</span>'}).join(''):'Nothing yet';$$('.oi').forEach(function(b){b.classList.toggle('used',draft.seq.indexOf(+b.dataset.k)>=0)});$('#go').disabled=draft.seq.length!==Q.it.length};
+    $$('.oi').forEach(function(b){b.onclick=function(){var k=+b.dataset.k;if(draft.seq.indexOf(k)<0){draft.seq.push(k);paint()}}});$('#undo').onclick=function(){draft.seq.pop();paint()};$('#go').onclick=function(){send(draft.seq.map(function(k){return Q.map[k]}),draft.seq.map(function(k){return Q.it[k]}).join(', '))};paint()}
+  if(Q.t==='spot'){var img=$('#img');fetch('/api/blob?id='+encodeURIComponent(Q.img)).then(function(r){return r.ok?r.text():''}).then(function(d){if(d){img.onload=function(){var r=img.naturalHeight/img.naturalWidth;if(r>0){var w=Math.min(1,(innerHeight*.5)/(r*$('#pic').clientWidth||1));$('#pic').style.width=Math.round(w*100)+'%'}};img.src=d}else $('#pic').outerHTML='<p class="err">The picture did not load. Look at the board.</p>'});
+    $('#pic').onclick=function(e){var r=img.getBoundingClientRect();if(!r.width)return;draft.pin={x:Math.round((e.clientX-r.left)/r.width*1000)/10,y:Math.round((e.clientY-r.top)/r.height*1000)/10};var p=$('.pin',$('#pic'));if(!p){p=document.createElement('i');p.className='pin';$('#pic').appendChild(p)}p.style.left=draft.pin.x+'%';p.style.top=draft.pin.y+'%';$('#go').disabled=false};
+    $('#go').onclick=function(){if(draft.pin)send(draft.pin,'Pin dropped')}}
+}
+function send(v,label){var Q=S.q;sent[Q.id]=label;post({k:'ans',qid:Q.id,v:v}).catch(function(){});try{navigator.vibrate&&navigator.vibrate(40)}catch(e){}question()}
+function result(){var m=me(),r=m.r,app=$('#app');var c=!r||r.none?'none':r.f>=1?'ok':r.f>0?'part':'no';
+  var title={none:'No answer',ok:'Right',part:'Part right',no:'Not this time'}[c];
+  app.innerHTML='<div class="center"><div class="res '+c+'"><p class="big">'+title+'</p>'+(r&&r.g?'<div class="gain">+'+r.g+'</div>':'')+'<p class="key">Answer: '+esc(S.key||'')+'</p>'+(r&&r.txt?'<p class="key" style="opacity:.85">You said: '+esc(r.txt)+'</p>':'')+'</div><p class="sub">'+(m.streak>1?'Streak of '+m.streak+'. ':'')+'You have '+m.p+' points. You are '+ord(m.rk)+' of '+m.of+'.</p></div>';
+  try{navigator.vibrate&&navigator.vibrate(c==='ok'?[60,40,60]:120)}catch(e){}}
+function board(){var m=me(),app=$('#app'),R=S.rank||[];
+  app.innerHTML='<div class="center"><p class="big">'+(S.ph==='f'?'Final results':'Team scores')+'</p><div class="lb">'+R.map(function(t,i){return'<div class="lr'+(t.i===m.t?' mine':'')+'" style="--c:'+t.c+'"><span>'+(i+1)+'</span><span>'+esc(t.n)+'</span><span>'+esc(t.s)+'</span></div>'}).join('')+'</div><p class="sub">'+(S.ph==='f'?'You scored '+m.p+' points and came '+ord(m.rk)+' of '+m.of+'.':'You are '+ord(m.rk)+' of '+m.of+' players. Next question soon.')+'</p></div>'}
+})();
+</script>
+</body>
+</html>

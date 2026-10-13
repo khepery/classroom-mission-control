@@ -1,0 +1,51 @@
+CLASSROOM MISSION CONTROL - ASSET PROMPTS 8 (Home banners, batch 8)
+
+How to use
+Same as batch 7. Each prompt below is complete, so paste the whole block as one prompt. Attach two or three of your best earlier banners as style references. Make 2 or 3 first, check they match the set, then do the rest. Save each as hero-<id>.png using the exact name in the heading, then zip them as hero/ and send them back. The names match the tool ids, so nothing needs renaming.
+
+This batch covers 8 tools. After it, 9 tools still have no banner.
+
+COMMON LAYOUT TEXT (already included in every prompt below)
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+
+[hero-sounds]
+Create one standalone Classroom Mission Control home banner. A vintage brass mixing console with a row of large round glowing sound pads in amber, teal and pink, one pad pressed and releasing a ring of light waves, a small brass horn and a pair of cymbals floating above it. No labels, no letters, no numbers on any control.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-board]
+Create one standalone Classroom Mission Control home banner. A large dark green slate chalkboard in a worn brass frame floating in space, covered in glowing chalk doodles of a spiral, a star, an arrow and a simple planet drawn in white and amber chalk, a stick of chalk and an eraser drifting beside it with a little chalk dust. The doodles are abstract shapes only, with no writing.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-message]
+Create one standalone Classroom Mission Control home banner. A long retro scrolling marquee sign made of rows of glowing amber dot lights, mounted on a brass frame floating in space, with a bright wave of lit dots sweeping across it from right to left and a soft trail of sparks behind. The dots form abstract wave shapes only. No readable characters.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-sketch]
+Create one standalone Classroom Mission Control home banner. A brass drafting pen drawing glowing hand-drawn diagram shapes in the air, a few rounded boxes joined by curved arrows and a small branching mind map of circles, drawn in amber and teal light lines with a slightly wobbly pencil feel, faint grid lines behind. Boxes and circles are empty, no writing.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-worksheet]
+Create one standalone Classroom Mission Control home banner. A sheet of cream paper floating in space with a glowing grid puzzle printed on it, one row of squares lit amber like a crossword, a circled cluster of tiles and a few thin lines linking matching shapes, a brass pencil lying across the corner. The grid squares are empty, no letters, no numbers.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-rubric]
+Create one standalone Classroom Mission Control home banner. A brass-framed glass scoring grid floating in space, a table of four rows and four columns of translucent cells, a diagonal path of cells lit from dim teal to bright amber, a small glowing star stamp pressing onto the brightest cell. Cells are empty, no writing.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-lessonplan]
+Create one standalone Classroom Mission Control home banner. A vintage brass spiral-bound planner lying open in space, its pages showing a vertical timeline of three glowing amber nodes joined by a teal path, a small brass compass and a ribbon bookmark resting on it, a soft light rising from the pages. Pages show only abstract bars and dots, no writing.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+[hero-parent]
+Create one standalone Classroom Mission Control home banner. A glowing retro airmail envelope with red and blue striped edges floating in space, a brass wax seal on the flap, a small glowing paper plane leaving it on a curved light trail toward a distant planet, soft sparks along the path. The envelope face is blank, no writing, no stamps with text.
+Strict composition: the entire subject fits inside a compact bounding box occupying x=850 to x=1490 on a 1536x1024 canvas. Do not make it too large. All main objects and bright light trails are contained in the RIGHT HALF. Left 50% stays very dark nearly black navy empty calm low-detail negative space, no objects. Keep all objects fully in frame. Match supplied references only in painted style, colors and lighting.
+Wide landscape 1536x1024. Cinematic retro 1970s sci-fi movie poster painting, polished painted family adventure game art, deep navy and black with warm amber orange and teal accents, subtle film grain, rich soft lighting. No text, no letters, no numbers, no logos, no watermark. No people.
+
+Next up, batch 9 will be: Supply and Demand Lab, Quiz Tic-Tac-Toe, Periodic Table, Report Comments, Print Shop, Speech to Text, Voice Studio, Cut-out Studio.
