@@ -1,0 +1,29 @@
+Local OCR asset inventory
+
+tesseract.js 7.0.0 (Apache-2.0)
+Source: npm package tesseract.js@7.0.0, dist/tesseract.min.js and dist/worker.min.js
+License: ../../lib/tesseract/LICENSE-tesseract.js.txt
+Bundled dependency notices: ../../lib/tesseract/*.LICENSE.txt
+
+tesseract.js-core 7.0.0 (Apache-2.0)
+Source: npm package tesseract.js-core@7.0.0
+License: ../../lib/tesseract/core/LICENSE.txt
+All three LSTM-only core variants are included: baseline, SIMD, relaxed SIMD.
+Each variant includes its .wasm.js loader and .wasm binary.
+
+English and simplified Chinese traineddata:
+Source: @tesseract.js-data/eng@1.0.0 and @tesseract.js-data/chi_sim@1.0.0
+Files: 4.0.0_best_int/{eng,chi_sim}.traineddata.gz
+These are upstream naptha/tessdata / Tesseract traineddata (Apache-2.0).
+License: LICENSE-traineddata.txt
+License source: https://github.com/naptha/tessdata/blob/gh-pages/LICENSE
+The npm metadata labels the packaging MIT; traineddata is distributed under
+the upstream Apache-2.0 license.
+
+All four exact npm package versions were checked against the GitHub advisory
+database before download; no vulnerabilities were reported.
+No npm dependencies or package configuration were added to the project.
+All runtime worker, core, WASM and language paths resolve on the same origin.
+The page CSP disallows cross-origin connections. No images or text are uploaded.
+The worker protocol adapter in tools/ocr.js targets the pinned 7.0.0 release;
+verify initialization, cancellation, and recognition when upgrading it.

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'">
+  <title>Molecule Explorer</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    :root{color-scheme:light}a{color:#155fc1}
+    *{box-sizing:border-box}body{margin:0;padding:20px;font:16px system-ui,sans-serif;color:#182b43;background:#f5f8fc}main{max-width:1100px;margin:auto}h1{margin-top:0}p{line-height:1.5}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:16px 0}label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}select,button,input{font:inherit}button,select{padding:9px;border:1px solid #697b91;border-radius:6px;background:white;color:#182b43}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0762c7;outline-offset:3px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px}#viewer{position:relative;width:100%;height:clamp(320px,65vh,620px);border:1px solid #697b91;border-radius:8px;overflow:hidden;background:#edf2f8}.panel{padding:16px;background:white;border:1px solid #ccd6e4;border-radius:8px}.panel label{margin:16px 0}.panel select{max-width:100%;width:100%}.panel input[type=range]{width:100%;min-height:28px}.rotation{display:flex;gap:8px;flex-wrap:wrap}.error{padding:14px;border:2px solid #b42318;background:#fff0ee;color:#8b1a13}.legend{display:flex;flex-wrap:wrap;gap:12px}.swatch{display:inline-block;width:14px;height:14px;border:1px solid #697b91;border-radius:50%;margin-right:4px}footer{font-size:13px;margin-top:20px}[hidden]{display:none!important}@media(max-width:700px){body{padding:12px}.workspace{grid-template-columns:1fr}#viewer{height:380px}}
+  </style>
+  <script defer src="../lib/3dmol/3Dmol-min.js"></script>
+  <script defer src="molecule.js"></script>
+</head>
+<body>
+<main>
+  <h1 data-i18n="title">Molecule Explorer</h1>
+  <p data-i18n="intro">Explore local example molecules. Drag to rotate, scroll or pinch to zoom, and click an atom to identify it. No uploads or remote data calls.</p>
+  <div id="error" class="error" role="alert" hidden></div>
+  <div class="controls">
+    <label><span data-i18n="molecule">Molecule</span><select id="molecule"><option value="water" data-i18n="water">Water</option><option value="methane" data-i18n="methane">Methane</option><option value="ethanol" data-i18n="ethanol">Ethanol</option></select></label>
+    <label><span data-i18n="style">Style</span><select id="style"><option value="ballstick" data-i18n="ballstick">Ball and stick</option><option value="sphere" data-i18n="sphere">Space-filling spheres</option><option value="stick" data-i18n="stick">Sticks</option></select></label>
+    <button id="reset" type="button" data-i18n="reset">Reset view</button>
+  </div>
+  <div class="workspace">
+    <div id="viewer" role="img" aria-label="Interactive 3D molecule; use the adjacent controls to rotate, zoom and identify atoms"></div>
+    <section class="panel" id="panel" aria-label="Molecule information and accessible controls">
+      <h2 id="molecule-name">Water · H₂O</h2>
+      <p id="description"></p>
+      <div class="legend">
+        <span><i class="swatch" style="background:white"></i><span data-i18n="hydrogen">H: hydrogen</span></span>
+        <span><i class="swatch" style="background:#909090"></i><span data-i18n="carbon">C: carbon</span></span>
+        <span><i class="swatch" style="background:#ff0d0d"></i><span data-i18n="oxygen">O: oxygen</span></span>
+      </div>
+      <label><span data-i18n="atom">Identify atom</span><select id="atom"></select></label>
+      <p id="atom-info" role="status" aria-live="polite" aria-atomic="true" data-i18n="selectAtom">Click an atom or choose one above.</p>
+      <h3 data-i18n="rotate">Rotate</h3>
+      <div class="rotation">
+        <button type="button" id="left" data-i18n="left">Left</button>
+        <button type="button" id="right" data-i18n="right">Right</button>
+        <button type="button" id="up" data-i18n="up">Up</button>
+        <button type="button" id="down" data-i18n="down">Down</button>
+      </div>
+      <label><span data-i18n="zoom">Zoom</span><output id="zoom-value">1.0×</output><input id="zoom" type="range" min="0.5" max="3" value="1" step="0.1"></label>
+      <p data-i18n="modelNote">Illustrative molecular coordinates; these models are for learning, not experimental analysis. Distances are in ångströms (Å).</p>
+    </section>
+  </div>
+  <footer><span data-i18n="powered">Powered by local 3Dmol.js 2.5.5.</span> <a href="../lib/3dmol/LICENSE" data-i18n="license">License</a></footer>
+  <noscript>This tool requires JavaScript and WebGL. 此工具需要启用 JavaScript 和 WebGL。</noscript>
+</main>
+</body>
+</html>

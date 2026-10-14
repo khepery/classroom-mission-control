@@ -3,6 +3,8 @@
 <meta name="theme-color" content="#04070b">
 <title>Classroom Mission Control</title>
 <script src="i18n.js" data-parts="common,hub,search"></script>
+<link rel="stylesheet" href="tools/hub.css">
+<script src="tools/catalogue.js"></script>
 <style>@font-face{font-family:'Michroma';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/michroma-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Michroma';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/michroma-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/share-tech-mono-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -5436,6 +5438,7 @@ const ICS=window.ICS={...IC};'timer,stopwatch,discuss,agenda,noise,meter,picker,
 
 /* ================= APP LIST ================= */
 const APPS=[
+ ...CMCTools.tools,
  {id:'timer',name:'Countdown Timer',ds:'Count down a task. Alarm at zero.',cat:'time',ib:'linear-gradient(#2c3238,#0b0d10)'},
  {id:'stopwatch',name:'Stopwatch',ds:'Time an activity and record laps.',cat:'time',ib:'linear-gradient(#4a2e18,#140904)'},
  {id:'discuss',name:'Discussion Timer',ds:'Think, pair, share stages in order.',cat:'time',ib:'linear-gradient(#0d2556,#020a1c)'},
@@ -5499,6 +5502,7 @@ const APPS=[
  {id:'qr',name:'QR Code Maker',ds:'Turn a link into a code phones scan.',cat:'display',ib:'linear-gradient(#ffffff,#a9dce8)'}
 ];
 const META=Object.fromEntries(APPS.map(a=>[a.id,a]));
+CMCTools.tools.forEach(tool=>{IC[tool.id]=tool.icon});
 META.arcade={id:'arcade',name:'Full Arcade',ds:'Quiz games that use your own questions.',cat:'all',ib:'linear-gradient(#2a0303,#000)'};
 META.launch={id:'launch'};
 META.about={id:'about',name:'About',ds:'Why these tools are free.',cat:'all',ib:'linear-gradient(#2c3238,#0b0d10)'};
@@ -5584,7 +5588,7 @@ A.launch={
     function draw(){
       const q=srch.value.trim().toLowerCase(),favs=store.get('favs',[]),rec=store.get('recent',[]);
       const mine=[...new Set([...favs,...rec])].filter(id=>APPS.some(a=>a.id===id)).map(id=>APPS.find(a=>a.id===id));
-      const list=(cat==='mine'&&!q?mine:APPS.filter(a=>(cat==='all'||cat==='mine'||a.cat===cat)&&(!q||(a.name+' '+a.ds).toLowerCase().includes(q))));
+      const list=(cat==='mine'&&!q?mine:APPS.filter(a=>(cat==='all'||cat==='mine'||a.cat===cat)&&(!q||(a.name+' '+a.ds+' '+RSLang.t(a.name)+' '+RSLang.t(a.ds)+' '+(GUIDE[a.id]?.k||'')).toLowerCase().includes(q))));
       tiles.innerHTML=list.map(a=>`<div class="tw"><button class="tile" data-go="${a.id}"><span class="ic" style="background:${a.ib}">${IC[a.id]}</span><span class="nm">${esc(a.name)}</span><span class="ds">${esc(a.ds)}</span></button><button class="star${favs.includes(a.id)?' on':''}" data-fav="${a.id}" aria-pressed="${favs.includes(a.id)}" aria-label="${favs.includes(a.id)?'Remove from':'Add to'} My tools: ${esc(a.name)}" title="${favs.includes(a.id)?'Remove from My tools':'Add to My tools'}">${favs.includes(a.id)?'★':'☆'}</button></div>`).join('')+
         (cat==='mine'&&!q&&!mine.length?'<p class="hint" style="grid-column:1/-1">Press the star on any tool to keep it here. Tools you open also appear here.</p>':'')+
         (cat==='all'&&!q?`<button class="tile arc" data-go="arcade"><span class="ic" style="background:${META.arcade.ib}">${IC.arcade}</span><span class="nm">Full Arcade</span><span class="ds">Quiz games that use your own questions.</span></button>`:'')+
@@ -10690,6 +10694,7 @@ A.revise={init(){
 /* ================= TOOL GUIDES : plain what, uses, how ================= */
 const MIC_NOTE='Needs a microphone. The browser asks for permission the first time. Inside the Claude preview the microphone is blocked, so open the hub from its website. Press SOUND CHECK at the top to test.';
 const GUIDE={
+...CMCTools.guides,
 timer:{t:'A big countdown clock for any task. It rings when time is up.',u:['Give the class 5 minutes for a starter','Time a test section or a group task','Run a 2 minute tidy-up before the bell'],h:['Pick a preset or use the minus and plus buttons','Press Start, or the space bar','Open another tool. The countdown stays in the corner'],k:'clock countdown alarm minutes'},
 stopwatch:{t:'Counts up from zero and records laps.',u:['Time how long a task really takes','Record each team\'s time in a race or challenge','Time students reading a passage'],h:['Press Start','Press Lap or the L key to save a time','Press Start again to pause, then Reset'],k:'time laps race'},
 discuss:{t:'Runs think, pair and share stages one after another with a timer for each.',u:['Think for 1 minute, talk in pairs for 2, share for 3','Debate rounds with equal speaking time','Gallery walk with timed moves'],h:['Choose a ready-made set or edit the stages','Press Start. Each stage starts when the last one ends','Press Next stage if the class finishes early'],k:'think pair share debate stages'},
@@ -10755,6 +10760,7 @@ arcade:{t:'A look at Retro Education, the full lesson app with four games. It ru
 };
 const FEATURED=['zoom','slides','cards','escape','lab','feud','unique','planner','popsim','quiz','graph','wheel','speak','timer','diagram','doodle','flip','noise','revise','vsched','rewards','mystery','bell','budget','choice','exit','subplan','listen','picker','groups','score','buzzer','brain','calm','econ','grader','stopwatch','discuss','agenda','meter','number','dice','seating','classes','sounds','board','message','sketch','worksheet','rubric','lessonplan','parent','market','ttt','periodic','reports','print','speech','voice','cutout','qr'];const HP=['zoom','cards','mystery','bell','budget','choice','exit','subplan','listen','escape','feud','planner','quiz','wheel','timer','doodle','noise','unique','speak','revise','vsched','rewards','graph','diagram','lab','popsim','flip','slides','picker','groups','score','buzzer','brain','calm','econ','grader','stopwatch','discuss','agenda','meter','number','dice','seating','classes','sounds','board','message','sketch','worksheet','rubric','lessonplan','parent','market','ttt','periodic','reports','print','speech','voice','cutout','qr'];
 const ROWS=[['Start the lesson',['zoom','slides','bell','agenda','timer','vsched','discuss','stopwatch','message','board']],
+ ['Explore, code and discover',['geometry','ocr','molecule','logic','codequest','particles']],
  ['Pick students and make groups',['picker','wheel','groups','seating','number','dice','classes']],
  ['Games with your own questions',['flip','quiz','feud','escape','mystery','ttt','arcade','buzzer','score','doodle']],
  ['Check who understood',['lab','unique','exit','cards','grader','rubric','choice']],
@@ -10766,12 +10772,13 @@ const ROWS=[['Start the lesson',['zoom','slides','bell','agenda','timer','vsched
  ['AI that runs on this computer',['voice','speech','cutout','doodle']]];
 const SUBJ=[['Economics','#f4a261',['econ','market','graph','unique','lab','popsim','budget','diagram','sketch']],
  ['Business','#e76f51',['budget','unique','graph','diagram','lab','popsim','market','sketch']],
- ['Maths','#ffd166',['graph','unique','lab','dice','number','worksheet','sketch','popsim']],
- ['Physics','#4cc9f0',['lab','diagram','unique','graph','sketch','flip']],
- ['Chemistry','#80ed99',['periodic','diagram','lab','unique','graph','sketch']],
- ['Biology','#c77dff',['popsim','diagram','lab','unique','graph','flip','cutout']],
+ ['Maths','#ffd166',['geometry','graph','unique','lab','dice','number','worksheet','sketch','popsim']],
+ ['Physics','#4cc9f0',['logic','particles','lab','diagram','unique','graph','sketch','flip']],
+ ['Chemistry','#80ed99',['molecule','periodic','diagram','lab','unique','graph','sketch']],
+ ['Biology','#c77dff',['molecule','popsim','diagram','lab','unique','graph','flip','cutout']],
  ['Geography','#e9c46a',['lab','popsim','graph','flip','sketch','diagram']],
- ['English and languages','#ef476f',['speak','listen','speech','voice','worksheet','bell','discuss','flip','choice']]];
+ ['English and languages','#ef476f',['ocr','speak','listen','speech','voice','worksheet','bell','discuss','flip','choice']],
+ ['Computing','#62d3ff',['codequest','logic']]];
 const SJF={'Economics':'economics','Business':'business','Maths':'maths','Physics':'physics','Chemistry':'chemistry','Biology':'biology','Geography':'geography','English and languages':'english'};
 const SJB=(l,c)=>SJF[l]?`<img class="${c}" src="subj/${SJF[l]}.webp" alt="" decoding="async" draggable="false" onerror="this.remove()">`:'';
 const ANYSUBJ=['zoom','slides','quiz','feud','escape','worksheet','exit','cards','mystery','ttt','choice','revise','flip','board'];
@@ -13177,6 +13184,19 @@ A.arcade={init(){
   show(){S.hum()}};
 
 /* ================= BOOT ================= */
+CMCTools.install({
+  apps:A,open:id=>openApp(id),current:()=>cur,
+  importText(target,text){
+    const input=$({listen:'#ls-in',worksheet:'#ws-words',slides:'#sx-src'}[target]);
+    if(target==='slides'){
+      $('#sx-buildb').click();
+      $('#sx-build [data-bt="outline"]').click();
+    }
+    input.value=text;
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    input.focus();
+  }
+});
 rosterChanged();
 const start=(location.hash||'').slice(1)||store.get('app','launch');
 openApp(META[start]?start:'launch',true);

@@ -1,0 +1,9 @@
+Authentic SimcirJS by Kazuhiko Arase, MIT license, see LICENSE.
+Unmodified source files downloaded from:
+https://raw.githubusercontent.com/kazuhikoarase/simcirjs/master/simcir.js
+https://raw.githubusercontent.com/kazuhikoarase/simcirjs/master/simcir.css
+https://raw.githubusercontent.com/kazuhikoarase/simcirjs/master/simcir-basicset.js
+https://raw.githubusercontent.com/kazuhikoarase/simcirjs/master/simcir-basicset.css
+https://raw.githubusercontent.com/kazuhikoarase/simcirjs/master/LICENSE
+Retrieved 2026-10-14. No git clone was used.
+The original bilingual classroom wrapper is tools/logic.js.

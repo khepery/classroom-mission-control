@@ -1,0 +1,8 @@
+JSXGraph 1.14.0
+Source: official npm package jsxgraph@1.14.0, https://registry.npmjs.org/jsxgraph
+npm tarball integrity:
+sha512-BXdiVqmSKDKNuLvux6lvio0dY4rQy0G0c+ZAhP2YSuCqobczlzRwOzUn6USmIiJQs6+hvPyrbUeQaeg0d0gbXg==
+Distributed files: distrib/jsxgraphcore.js, distrib/jsxgraph.css,
+distrib/jsxgraphcore.js.LICENSE.txt.
+The package offers dual MIT / LGPL licensing. Both licenses are retained.
+This application uses JSXGraph under the MIT license.
