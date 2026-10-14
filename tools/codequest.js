@@ -259,7 +259,13 @@
   $('remove-last').addEventListener('click',()=>{if(running)return;const location=locationBlock();const block=location&&tail(location);if(block)block.dispose(false);updateBuilder();});
   workspace.addChangeListener(event=>{if(!event.isUiEvent)updateBuilder();});
   const resizeObserver=new ResizeObserver(()=>Blockly.svgResize(workspace));resizeObserver.observe($('workspace'));
-  window.addEventListener('pagehide',()=>{stop();resizeObserver.disconnect();workspace.dispose();});
+  window.addEventListener('pagehide',event=>{
+    stop();
+    if(event.persisted)return;
+    resizeObserver.disconnect();
+    workspace.dispose();
+  });
+  window.addEventListener('pageshow',event=>{if(event.persisted)Blockly.svgResize(workspace);});
   loadLevel(0);
   };
   const messages = document.createElement('script');

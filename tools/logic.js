@@ -160,5 +160,13 @@
   const observer=new MutationObserver(()=>accessibleSwitches());
   observer.observe($('circuit'),{childList:true,subtree:true});
   const readoutTimer=setInterval(updateReadout,200);
-  window.addEventListener('pagehide',()=>{observer.disconnect();clearInterval(readoutTimer);simcir.$($('circuit')).find('.simcir-workspace').trigger('dispose');});
+  window.addEventListener('pagehide',event=>{
+    if(event.persisted)return;
+    observer.disconnect();
+    clearInterval(readoutTimer);
+    simcir.$($('circuit')).find('.simcir-workspace').trigger('dispose');
+  });
+  window.addEventListener('pageshow',event=>{
+    if(event.persisted){accessibleSwitches();updateReadout();}
+  });
 })();

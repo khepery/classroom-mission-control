@@ -154,7 +154,7 @@
           frame.setAttribute('allow', "camera 'none'; microphone 'none'; geolocation 'none'");
           link.href = url();
           section.append(frame);
-          active = { id: tool.id, frame };
+          active = { id: tool.id, frame, link };
         },
         hide() {
           if (active && active.frame === frame) active = null;
@@ -178,6 +178,7 @@
     window.addEventListener('rslangchange', () => {
       if (!active) return;
       active.frame.title = tr(tools.find(tool => tool.id === active.id).name);
+      active.link.href = 'tools/' + active.id + '.html?lang=' + language();
       active.frame.contentWindow.postMessage({ type: 'cmc-language', lang: language() }, location.origin);
     });
   }
