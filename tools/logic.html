@@ -6,35 +6,145 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Logic Circuit Lab</title>
   <link rel="icon" href="../ic/lab.webp">
+  <link rel="stylesheet" href="shared.css">
   <link rel="stylesheet" href="../lib/simcir/simcir.css">
   <link rel="stylesheet" href="../lib/simcir/simcir-basicset.css">
-  <style>
-    *{box-sizing:border-box}body{margin:0;background:#101c2c;color:#eef6ff;font:16px system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:20px}h1{margin:0 0 8px;font-size:1.6rem}p{line-height:1.5}button,select{font:inherit;padding:9px 12px;border-radius:8px;border:1px solid #aac5df;background:#e8f2ff;color:#102237}button{cursor:pointer}button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #ffcf58;outline-offset:3px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0}.canvas{overflow:auto;background:#fff;border-radius:12px;padding:8px;color:#111;min-height:500px}.simcir-basicset-switch-button:focus{stroke:#005bce;stroke-width:4}details,.panel{background:#1b2c43;padding:14px;border-radius:10px;margin-top:14px}summary{cursor:pointer}table{border-collapse:collapse;margin-top:12px}th,td{padding:6px 18px;border:1px solid #547292}a{color:#a9d6ff}.simcir-json-data-area{color:#111;background:#fff}#status{min-height:1.5em}
-  </style>
+  <link rel="stylesheet" href="logic.css">
   <script src="../lib/simcir/simcir.js" defer></script>
   <script src="../lib/simcir/simcir-basicset.js" defer></script>
+  <script src="logic-data.js" defer></script>
   <script src="logic.js" defer></script>
 </head>
-<body><main>
-  <h1 id="title">Logic Circuit Lab</h1>
-  <p id="intro">Build digital circuits, flip switches, and watch the LEDs.</p>
-  <div class="toolbar">
-    <label for="sample" id="sample-label">Sample circuit</label>
-    <select id="sample"><option value="AND">AND</option><option value="OR">OR</option><option value="XOR">XOR</option><option value="adder">Half adder</option></select>
-    <button id="load" type="button">Load sample</button>
-    <button id="reset" type="button">Reset sample</button>
-    <button id="clear" type="button">Clear playground</button>
-    <button id="language" type="button">中文</button>
+<body class="cmc"><main class="cmc-main">
+  <header class="cmc-head cmc-noprint">
+    <div>
+      <h1><span aria-hidden="true">⊕</span> <b id="title-a" data-i18n="title">Logic Circuit Lab</b></h1>
+      <p class="cmc-sub" data-i18n="intro">Flip switches, predict the lights, then test your prediction on a real digital circuit.</p>
+    </div>
+    <div class="cmc-bar">
+      <button id="student-btn" class="cmc-btn cyan" type="button" data-i18n="pick">Pick a student</button>
+      <button id="board-btn" class="cmc-btn" type="button" aria-pressed="false" data-i18n="board">Projector mode</button>
+      <button id="language" class="cmc-btn quiet" type="button">中文</button>
+    </div>
+  </header>
+
+  <nav class="cmc-tabs cmc-noprint" id="modes" role="group" data-i18n-aria="modesAria" aria-label="Activity">
+    <button class="cmc-chip" type="button" data-mode="explore" aria-pressed="true" data-i18n="mExplore">Explore</button>
+    <button class="cmc-chip" type="button" data-mode="predict" aria-pressed="false" data-i18n="mPredict">Predict &amp; test</button>
+    <button class="cmc-chip" type="button" data-mode="read" aria-pressed="false" data-i18n="mRead">Read the circuit</button>
+    <button class="cmc-chip" type="button" data-mode="build" aria-pressed="false" data-i18n="mBuild">Build it yourself</button>
+  </nav>
+
+  <div class="cmc-grid wide-side cmc-noprint">
+    <div class="lg-left">
+      <section class="cmc-panel" id="lesson-panel" aria-labelledby="lesson-title">
+        <div class="lg-pick" id="pick-lesson">
+          <label class="cmc-label" for="lesson-select" data-i18n="lessonLabel">Lesson</label>
+          <select id="lesson-select" class="cmc-field"></select>
+          <button id="lesson-reset" class="cmc-btn quiet" type="button" data-i18n="reload">Reload circuit</button>
+        </div>
+        <div class="lg-pick" id="pick-challenge" hidden>
+          <label class="cmc-label" for="challenge-select" data-i18n="challengeLabel">Challenge</label>
+          <select id="challenge-select" class="cmc-field"></select>
+          <button id="challenge-reset" class="cmc-btn quiet" type="button" data-i18n="restart">Restart template</button>
+        </div>
+        <h2 id="lesson-title"></h2>
+        <p id="story" class="lg-story"></p>
+        <p id="legend" class="lg-legend"></p>
+        <div id="expr-box" class="lg-expr-box">
+          <pre id="expr" class="lg-expr" aria-live="polite"></pre>
+          <button id="expr-toggle" class="cmc-btn quiet" type="button" data-i18n="exprShow">Show expression</button>
+        </div>
+        <details class="cmc-details" id="teach-box">
+          <summary data-i18n="teacherNotes">Teacher notes</summary>
+          <div id="teach"></div>
+        </details>
+      </section>
+
+      <div class="cmc-stage lg-stage"><div id="circuit" class="lg-circuit" role="region" data-i18n-aria="circuitAria" aria-label="Interactive circuit workspace"></div></div>
+
+      <section class="cmc-panel" aria-labelledby="live-title">
+        <h2 id="live-title" data-i18n="liveTitle">Live circuit</h2>
+        <div class="lg-live">
+          <div><span class="cmc-label" data-i18n="switches">Switches</span><div id="switch-list" class="cmc-bar"></div></div>
+          <div><span class="cmc-label" data-i18n="lights">Lights</span><div id="led-list" class="cmc-bar"></div></div>
+        </div>
+        <p id="status" class="cmc-stat" role="status" aria-live="polite"></p>
+      </section>
+
+      <div class="cmc-bar lg-tools" role="group" data-i18n-aria="toolsAria" aria-label="Circuit file tools">
+        <button id="blank-btn" class="cmc-btn quiet" type="button" data-i18n="blank">Blank workspace</button>
+        <button id="save-btn" class="cmc-btn quiet" type="button" data-i18n="save">Save in browser</button>
+        <button id="restore-btn" class="cmc-btn quiet" type="button" data-i18n="restore">Load saved</button>
+        <button id="export-btn" class="cmc-btn quiet" type="button" data-i18n="export">Export JSON</button>
+        <button id="import-btn" class="cmc-btn quiet" type="button" data-i18n="import">Import JSON</button>
+        <button id="sheet-btn" class="cmc-btn quiet" type="button" data-i18n="sheet">Print worksheet</button>
+        <button id="key-btn" class="cmc-btn quiet" type="button" data-i18n="key">Print answer key</button>
+        <input id="import-file" type="file" accept=".json,application/json" hidden>
+      </div>
+    </div>
+
+    <aside class="lg-side">
+      <section class="cmc-panel" id="pane-table" aria-labelledby="table-title">
+        <h2 id="table-title" data-i18n="tableTitle">Truth table</h2>
+        <p id="table-hint" class="lg-hint"></p>
+        <div class="lg-table-wrap"><table id="tt" class="cmc-table lg-tt"></table></div>
+        <p id="table-score" class="cmc-stat" role="status" aria-live="polite"></p>
+        <div class="cmc-bar">
+          <button id="step-btn" class="cmc-btn cyan" type="button" data-i18n="step">Next input row</button>
+          <button id="gen-btn" class="cmc-btn" type="button" data-i18n="gen">Generate full table</button>
+          <button id="check-btn" class="cmc-btn primary" type="button" data-i18n="check">Check my predictions</button>
+          <button id="clear-btn" class="cmc-btn quiet" type="button" data-i18n="clearTable">Clear</button>
+          <button id="copy-btn" class="cmc-btn quiet" type="button" data-i18n="copy">Copy table</button>
+        </div>
+        <div id="seq-box" hidden></div>
+      </section>
+
+      <section class="cmc-panel" id="pane-read" aria-labelledby="read-title" hidden>
+        <h2 id="read-title" data-i18n="readTitle">Which expression matches?</h2>
+        <p id="read-q"></p>
+        <div id="read-opts" class="lg-opts" role="group" data-i18n-aria="optsAria" aria-label="Answer options"></div>
+        <p id="read-fb" class="lg-fb" role="status" aria-live="polite"></p>
+        <div class="cmc-bar">
+          <button id="read-next" class="cmc-btn primary" type="button" data-i18n="nextQ">New question</button>
+          <button id="read-reveal" class="cmc-btn quiet" type="button" data-i18n="revealQ">Show answer</button>
+        </div>
+        <p id="read-score" class="cmc-stat"></p>
+      </section>
+
+      <section class="cmc-panel" id="pane-build" aria-labelledby="build-title" hidden>
+        <h2 id="build-title" data-i18n="buildTitle">Your mission</h2>
+        <p id="build-task" class="lg-story"></p>
+        <p id="build-rules" class="lg-legend"></p>
+        <div class="cmc-bar">
+          <button id="build-check" class="cmc-btn primary" type="button" data-i18n="buildCheck">Check my circuit</button>
+          <button id="build-hint" class="cmc-btn quiet" type="button" data-i18n="hint">Hint</button>
+          <button id="build-sol" class="cmc-btn quiet" type="button" data-i18n="solution">Show a solution</button>
+        </div>
+        <p id="build-hint-text" class="cmc-note" hidden></p>
+        <div id="build-result" class="lg-result" role="status" aria-live="polite"></div>
+        <div class="cmc-note"><b data-i18n="ruleHead">Labelling rule</b><span data-i18n="ruleBody">Rename each Toggle switch to its input name (A, B, C…) and each LED to its output name, by double-clicking the label under the device. Connect the DC power source to every switch input. A single output LED is accepted whatever it is called.</span></div>
+      </section>
+    </aside>
   </div>
-  <p id="status" role="status" aria-live="polite"></p>
-  <div id="circuit" class="canvas" aria-label="Interactive circuit playground"></div>
-  <section class="panel" aria-labelledby="test-title">
-    <h2 id="test-title">Test the sample</h2>
-    <div class="toolbar"><button id="switch-a" type="button">Toggle A</button><button id="switch-b" type="button">Toggle B</button></div>
-    <p id="readout" role="status" aria-live="polite"></p>
-    <p id="table-note">Prediction table (the LEDs above show your actual circuit):</p>
-    <div id="truth-table"></div>
-  </section>
-  <details><summary id="help-title">Help & keyboard controls</summary><div id="help"></div></details>
-  <p id="credit">Powered by authentic SimcirJS by Kazuhiko Arase, MIT licensed. Runs locally; no accounts, uploads, or saved student data. <a href="../lib/simcir/LICENSE">License</a></p>
+
+  <details class="cmc-details cmc-noprint" id="help">
+    <summary data-i18n="helpTitle">How to use &amp; keyboard shortcuts</summary>
+    <div id="help-body" class="lg-help"></div>
+  </details>
+  <p class="cmc-note warn cmc-noprint"><b data-i18n="limitHead">Digital logic only</b><span data-i18n="limit">This is a digital logic playground, not an analogue electrical simulator: there are no voltages, currents or resistors, only 0 and 1.</span></p>
+  <p class="cmc-foot cmc-noprint" id="credit"><span data-i18n="credit">Powered by authentic SimcirJS by Kazuhiko Arase, MIT licensed. Runs locally; no accounts or uploads. Saved circuits stay in this browser only.</span> <a href="../lib/simcir/LICENSE" data-i18n="license">License</a></p>
+
+  <section id="worksheet" class="cmc-print-only" aria-hidden="true"></section>
+  <div id="student-overlay" class="lg-overlay cmc-noprint" role="dialog" aria-modal="true" aria-labelledby="student-label" hidden>
+    <div class="lg-overlay-card">
+      <p id="student-label" class="cmc-label" data-i18n="studentHead">Next up</p>
+      <p id="student-name" class="lg-student" aria-live="assertive"></p>
+      <div class="cmc-bar">
+        <button id="student-again" class="cmc-btn cyan" type="button" data-i18n="again">Pick again</button>
+        <button id="student-close" class="cmc-btn" type="button" data-i18n="close">Close</button>
+      </div>
+    </div>
+  </div>
+  <div id="toast" class="cmc-toast cmc-noprint" role="status" aria-live="polite" hidden></div>
 </main></body></html>

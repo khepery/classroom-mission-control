@@ -6,51 +6,161 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Code Quest</title>
   <link rel="icon" href="../ic/brain.webp">
-  <style>
-    *{box-sizing:border-box}body{margin:0;background:#101c2c;color:#eef6ff;font:16px system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:18px}h1{font-size:1.6rem;margin:0 0 8px}p{line-height:1.5}button,select,input{font:inherit;padding:8px;border:1px solid #aac5df;border-radius:7px;background:#e8f2ff;color:#102237}button{cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #ffce56;outline-offset:3px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px}.panel,details{background:#1b2c43;padding:14px;border-radius:10px}.board{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;aspect-ratio:1}.cell{display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:#466479;border-radius:5px;position:relative}.wall{background:#0c1522}.goal{background:#74631b}.robot{background:#126658;outline:2px solid #82ffe1}.goal-mark{position:absolute;font-size:1rem;right:2px;top:0}#workspace{height:510px;border-radius:10px;overflow:hidden;background:#fff}.feedback{min-height:3em}details{margin-top:15px}summary{cursor:pointer}a{color:#a9d6ff}#program-list{line-height:1.7;white-space:pre-wrap;font-family:monospace}.builder button{font-size:.92rem}@media(max-width:780px){.layout{grid-template-columns:1fr}.board{max-width:310px;margin:auto}#workspace{height:420px}}
-  </style>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="codequest-style.css">
   <script src="../lib/blockly/blockly_compressed.js" defer></script>
   <script src="../lib/blockly/msg/en.js" defer></script>
+  <script src="codequest-core.js" defer></script>
+  <script src="codequest-levels.js" defer></script>
+  <script src="codequest-text.js" defer></script>
   <script src="codequest.js" defer></script>
 </head>
-<body><main>
-  <h1 id="title">Code Quest</h1>
-  <p id="intro">Program a robot using sequencing, loops, and conditions. Original classroom puzzles with official Blockly.</p>
-  <div class="toolbar">
-    <label for="level" id="level-label">Challenge</label>
-    <select id="level"></select>
-    <button id="run" type="button">Run</button>
-    <button id="reset" type="button">Reset robot</button>
-    <button id="restart" type="button">Clear program</button>
-    <button id="next" type="button" disabled>Next challenge</button>
-    <button id="language" type="button">中文</button>
-  </div>
-  <div class="layout">
-    <section class="panel" aria-labelledby="challenge-title">
-      <h2 id="challenge-title"></h2><p id="mission"></p>
-      <div id="board" class="board" role="img" aria-label="Robot puzzle board"></div>
-      <p id="position" aria-live="polite"></p>
-      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
-      <p id="limits"></p>
-    </section>
-    <section aria-label="Blockly program editor">
-      <div id="workspace"></div>
-      <details open class="builder"><summary id="builder-title">Keyboard-friendly program builder</summary>
-        <p id="builder-help">Choose an insertion location, then add blocks. This edits the same Blockly program.</p>
-        <div class="toolbar"><label for="target" id="target-label">Insert into</label><select id="target"></select></div>
-        <div class="toolbar">
-          <button id="add-move" type="button">Forward</button>
-          <button id="add-left" type="button">Turn left</button>
-          <button id="add-right" type="button">Turn right</button>
-          <label for="repeat-count" id="repeat-label">Times</label><input id="repeat-count" type="number" min="1" max="10" value="3" style="width:65px">
-          <button id="add-repeat" type="button">Repeat</button>
-          <button id="add-if" type="button">If path ahead / else</button>
-          <button id="remove-last" type="button">Remove last in location</button>
+<body class="cmc" id="body">
+<main class="cmc-main" id="main">
+<div class="cq-screen" id="screen">
+  <header class="cmc-head">
+    <div>
+      <h1><i id="title-a">Code</i> <span id="title-b">Quest</span></h1>
+      <p class="cmc-sub" data-w="sub">Program a robot with blocks: sequences, loops, conditions, nested loops and routines. 23 original puzzles in 5 units.</p>
+    </div>
+    <div class="cmc-bar" role="toolbar" aria-label="Views" data-wl="bar_label">
+      <button type="button" id="tab-play" class="cmc-btn quiet" aria-pressed="true" data-w="tab_play">Play</button>
+      <button type="button" id="tab-map" class="cmc-btn quiet" aria-pressed="false" data-w="tab_map">Mission map</button>
+      <button type="button" id="tab-teacher" class="cmc-btn quiet" aria-pressed="false" data-w="tab_teacher">Teacher</button>
+      <button type="button" id="btn-class" class="cmc-btn cyan" aria-pressed="false" data-w="class_mode">Class mode</button>
+      <button type="button" id="language" class="cmc-btn quiet">中文</button>
+    </div>
+  </header>
+
+  <section class="cmc-panel" id="class-panel" hidden aria-labelledby="class-h">
+    <h2 id="class-h" data-w="class_h">Class mode</h2>
+    <div class="cq-row">
+      <div class="cmc-field-row"><label class="cmc-label" for="class-level" data-w="level">Level</label><select class="cmc-field" id="class-level"></select></div>
+      <div class="cmc-field-row" id="roster-wrap"><label class="cmc-label" for="class-roster" data-w="class_roster">Class</label><select class="cmc-field" id="class-roster"></select></div>
+      <div class="cmc-field-row" id="size-wrap"><label class="cmc-label" for="class-size" data-w="class_size">Students (no roster found)</label><input class="cmc-field cmc-num" id="class-size" type="number" min="2" max="60" value="30"></div>
+      <button type="button" class="cmc-btn primary" id="btn-pick" data-w="pick">Pick a student to give the next instruction</button>
+      <button type="button" class="cmc-btn quiet" id="btn-pick-reset" data-w="pick_reset">New round</button>
+      <button type="button" class="cmc-btn quiet" id="btn-human-class" data-w="print_human">Print human-robot sheet</button>
+    </div>
+    <div class="cq-pick"><span class="cmc-label" data-w="pick_label">Next instruction from</span><div class="cq-pick-name" id="pick-name" aria-live="polite">—</div><div class="cmc-sub" id="pick-count"></div></div>
+    <p class="cmc-note" data-w="class_note">Ask the picked student for one instruction, then add the block with the builder buttons under the workspace. Press Run when the class thinks it is finished. Stars are not saved in class mode.</p>
+  </section>
+
+  <section id="view-map" hidden aria-labelledby="map-h" class="cmc-panel">
+    <div class="cq-map-head"><h2 id="map-h" data-w="tab_map">Mission map</h2>
+      <div class="cmc-stat" id="map-stat"></div>
+      <button type="button" class="cmc-btn" id="btn-continue" data-w="continue">Continue</button>
+    </div>
+    <div id="map-units" class="cq-map-units"></div>
+  </section>
+
+  <div id="view-play">
+    <div class="cq-play">
+      <section class="cmc-panel" aria-labelledby="level-title">
+        <div class="cq-level-head">
+          <div class="cmc-label" id="level-kicker"></div>
+          <div class="cmc-bar">
+            <button type="button" class="cmc-btn quiet" id="btn-prev" data-w="prev">◀ Prev</button>
+            <button type="button" class="cmc-btn quiet" id="btn-next" data-w="next">Next ▶</button>
+          </div>
         </div>
-        <div id="program-list" aria-label="Program outline"></div>
-      </details>
+        <h2 id="level-title"></h2>
+        <p class="cq-goal" id="goal"></p>
+        <p class="cmc-note warn" id="require" hidden></p>
+        <div class="cmc-stage cq-stagebox" id="stage"></div>
+        <details class="cmc-details"><summary data-w="map_text">Text description of the map</summary><p id="map-desc"></p></details>
+        <div class="cq-controls" role="group" data-wl="controls_label" aria-label="Run controls">
+          <button type="button" class="cmc-btn primary" id="btn-run" data-w="run">▶ Run</button>
+          <button type="button" class="cmc-btn cyan" id="btn-step" data-w="step">Step</button>
+          <button type="button" class="cmc-btn" id="btn-reset" data-w="reset">↺ Reset</button>
+          <button type="button" class="cmc-btn quiet" id="btn-slow" data-w="slow">Slow run</button>
+          <label class="cq-speed"><span class="cmc-label" data-w="speed">Speed</span><input type="range" id="speed" min="1" max="5" step="1" value="3" aria-describedby="speed-out"><output id="speed-out" class="cmc-label"></output></label>
+        </div>
+        <p class="cq-status" id="status"></p>
+        <div class="cmc-sr" id="live" aria-live="polite" role="status"></div>
+        <div class="cmc-stat" id="stats"></div>
+        <div class="cq-result" id="result" hidden>
+          <strong id="result-text"></strong><span class="cq-stars" id="result-stars"></span>
+          <button type="button" class="cmc-btn primary" id="btn-result-next" data-w="next_level">Next level ▶</button>
+        </div>
+        <div class="cmc-bar">
+          <button type="button" class="cmc-btn quiet" id="btn-hint" data-w="hint">Hint</button>
+          <button type="button" class="cmc-btn quiet" id="btn-solution" data-w="solution">Show solution</button>
+        </div>
+        <p class="cmc-note" id="hint-box" hidden></p>
+      </section>
+
+      <section class="cmc-panel" aria-label="Block editor" data-wl="editor_label">
+        <div class="cmc-bar">
+          <button type="button" class="cmc-btn quiet" id="btn-code" aria-pressed="true" data-w="code_toggle">Show code</button>
+          <button type="button" class="cmc-btn quiet" id="btn-startover" data-w="startover">Start over</button>
+          <span id="blocks-info" class="cmc-stat cq-gap"></span>
+        </div>
+        <div id="workspace"></div>
+        <div class="cq-codewrap" id="codewrap">
+          <div class="cmc-bar" role="group" data-wl="codeformat_label" aria-label="Code format">
+            <button type="button" class="cmc-chip" id="fmt-js" aria-pressed="true">JavaScript</button>
+            <button type="button" class="cmc-chip" id="fmt-pseudo" aria-pressed="false" data-w="pseudo">Pseudo-code</button>
+            <button type="button" class="cmc-btn quiet" id="btn-copy" data-w="copy_code">Copy</button>
+          </div>
+          <pre class="cq-code" id="code" tabindex="0" data-wl="code_label" aria-label="Your program as text"></pre>
+          <p class="cmc-sub" data-w="code_note">The text is a read-only translation of your blocks. Code Quest runs the blocks directly and never runs this text.</p>
+        </div>
+        <details class="cmc-details" id="builder">
+          <summary data-w="builder_h">Keyboard-friendly program builder</summary>
+          <p class="cmc-sub" data-w="builder_help">Choose where to insert, then add blocks. This edits the same program as the drag-and-drop workspace.</p>
+          <div class="cq-build">
+            <label class="cmc-label" for="target" data-w="insert_into">Insert into</label><select class="cmc-field" id="target"></select>
+            <span class="cq-build" id="wrap-cond"><label class="cmc-label" for="cond" data-w="condition">Condition</label><select class="cmc-field" id="cond"></select></span>
+            <span class="cq-build" id="wrap-times"><label class="cmc-label" for="times" data-w="times">Times</label><input class="cmc-field cmc-num" id="times" type="number" min="1" max="10" value="3"></span>
+          </div>
+          <div class="cq-build" id="build-btns" role="group" data-wl="add_label" aria-label="Add a block"></div>
+          <div class="cq-build"><button type="button" class="cmc-btn quiet" id="remove-last" data-w="remove_last">Remove last block in location</button></div>
+        </details>
+      </section>
+    </div>
+  </div>
+
+  <div id="view-teacher" hidden>
+    <section class="cmc-panel cq-notes" aria-labelledby="notes-h">
+      <h2 id="notes-h" data-w="notes_h">Lesson notes</h2>
+      <div class="cmc-chips" id="unit-chips" role="group" data-wl="unit_label" aria-label="Unit"></div>
+      <div id="unit-notes"></div>
+      <div class="cmc-bar"><button type="button" class="cmc-btn" id="btn-print-notes" data-w="print_notes">Print lesson notes</button><button type="button" class="cmc-btn" id="btn-print-human" data-w="print_human">Print human-robot sheet</button></div>
+    </section>
+    <section class="cmc-panel" aria-labelledby="prog-h" style="margin-top:14px">
+      <h2 id="prog-h" data-w="prog_h">Progress &amp; certificates</h2>
+      <p class="cmc-sub" data-w="prog_note">Progress is saved in this browser only, for whoever uses this computer. Export a file for each student, or reset between users.</p>
+      <div class="cq-row">
+        <div class="cmc-field-row"><label class="cmc-label" for="student" data-w="student">Student name</label><input class="cmc-field" id="student" maxlength="60" autocomplete="off"></div>
+        <button type="button" class="cmc-btn" id="btn-cert" data-w="print_cert">Print certificate</button>
+        <button type="button" class="cmc-btn" id="btn-summary" data-w="print_summary">Print progress summary</button>
+      </div>
+      <div class="cq-row">
+        <button type="button" class="cmc-btn cyan" id="btn-export" data-w="export">Export progress</button>
+        <button type="button" class="cmc-btn cyan" id="btn-import" data-w="import">Import progress</button>
+        <input type="file" id="import-file" accept="application/json,.json" hidden>
+        <button type="button" class="cmc-btn quiet" id="btn-reset-progress" data-w="reset_progress">Reset progress</button>
+      </div>
+      <div class="cmc-stat" id="prog-stat"></div>
     </section>
   </div>
-  <details><summary id="help-title">How to play</summary><p id="help"></p></details>
-  <p id="credit">Original puzzles, not Blockly Games. Blockly © Google LLC and contributors, Apache 2.0. <a href="../lib/blockly/LICENSE">Library license</a>. Local only: no account, network, or student-data storage.</p>
-</main></body></html>
+
+  <details class="cmc-details" style="margin-top:14px"><summary data-w="help_h">How to play</summary>
+    <p id="help1"></p><p id="help2"></p><p id="limits"></p>
+  </details>
+  <p class="cmc-foot" id="credit">Original puzzles, not Blockly Games. Blockly © Google LLC and contributors, Apache 2.0. <a href="../lib/blockly/LICENSE">Library license</a>. Local only: no account or network; progress stays in this browser.</p>
+</div>
+
+<div class="cq-print" id="print-human"></div>
+<div class="cq-print" id="print-cert"></div>
+<div class="cq-print" id="print-summary"></div>
+<div class="cq-print" id="print-notes"></div>
+</main>
+<dialog class="cq-dialog" id="dialog" aria-labelledby="dialog-text">
+  <p id="dialog-text"></p>
+  <div class="cmc-bar"><button type="button" class="cmc-btn quiet" id="dialog-cancel" data-w="cancel">Cancel</button><button type="button" class="cmc-btn primary" id="dialog-ok" data-w="ok">OK</button></div>
+</dialog>
+<div class="cmc-toast" id="toast" role="status" hidden></div>
+</body>
+</html>

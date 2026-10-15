@@ -1,0 +1,115 @@
+/* Logic Circuit Lab: tool-specific rules. SimcirJS stays unmodified in lib/simcir; its SVG is themed from here. */
+.cmc-head h1 b{font-weight:400}
+.lg-left,.lg-side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.lg-pick{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lg-pick select{flex:1 1 220px;min-width:0}
+.lg-story{font-size:1.02rem;color:var(--text)}
+.lg-legend,.lg-hint{color:var(--soft);font-size:.86rem}
+.lg-expr-box{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lg-expr{margin:0;flex:1 1 240px;padding:6px 10px;background:#06090d;border:1px solid var(--grid);color:var(--amber);font:inherit;font-size:1rem;white-space:pre-wrap;min-height:2.4em}
+.lg-stage{padding:0;overflow:hidden}
+.lg-circuit{overflow:auto;max-width:100%;padding:0}
+.lg-circuit .simcir-body{display:block}
+.lg-circuit textarea.simcir-json-data-area{background:#06090d;color:var(--text);border-color:var(--grid);font:12px var(--f-mono)}
+.lg-live{display:flex;flex-wrap:wrap;gap:12px 28px}
+.lg-live>div{display:flex;flex-direction:column;gap:6px}
+.lg-sw{min-width:64px}
+.lg-sw b{font-weight:400;color:var(--cyan)}
+.lg-sw[aria-pressed="true"] b{color:#1a1206}
+.lg-led{display:inline-flex;align-items:center;gap:8px;padding:.3em .7em;border:1px solid var(--grid);font-size:.9rem}
+.lg-led i{width:14px;height:14px;border-radius:50%;background:#2a1c08;border:1px solid #5a4020;display:inline-block}
+.lg-led.on{border-color:var(--amber);color:var(--amber)}
+.lg-led.on i{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.lg-tt{width:100%}
+.lg-tt td,.lg-tt th{min-width:2.4em}
+.lg-tt td.in{color:var(--soft)}
+.lg-tt td.sep,.lg-tt th.sep{border-left:2px solid var(--cyan)}
+.lg-tt td.out{color:var(--amber)}
+.lg-tt td.ok{background:rgba(125,255,176,.12);color:var(--green)}
+.lg-tt td.bad{background:rgba(255,90,74,.14);color:var(--red)}
+.lg-tt small{display:block;font-size:.66rem;color:var(--soft)}
+.lg-cell{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;min-width:2.4em;min-height:32px;line-height:32px;text-align:center;color:inherit}
+.lg-cell:hover{background:rgba(98,211,255,.12)}
+.lg-cell:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.lg-cell.empty{color:var(--dim)}
+.lg-table-wrap{overflow:auto;max-width:100%}
+.lg-opts{display:flex;flex-direction:column;gap:8px}
+.lg-opt{all:unset;box-sizing:border-box;cursor:pointer;display:block;padding:.6em .8em;border:1px solid var(--grid);background:rgba(0,0,0,.3);color:var(--text);font-size:.95rem;overflow-wrap:anywhere}
+.lg-opt:hover{border-color:var(--cyan)}
+.lg-opt:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.lg-opt[aria-pressed="true"]{border-color:var(--amber);background:rgba(255,178,62,.08)}
+.lg-opt.ok{border-color:var(--green);background:rgba(125,255,176,.1)}
+.lg-opt.bad{border-color:var(--red);background:rgba(255,90,74,.1)}
+.lg-opt b{color:var(--cyan);font-weight:400;margin-right:.6em}
+.lg-fb{min-height:1.4em}
+.lg-result .cmc-note{margin-top:6px}
+.lg-help{font-size:.9rem;display:flex;flex-direction:column;gap:6px}
+.lg-help kbd{border:1px solid var(--dim);padding:0 .4em;color:var(--amber);font:inherit;font-size:.82rem}
+.lg-overlay{position:fixed;inset:0;z-index:60;background:rgba(4,7,11,.9);display:flex;align-items:center;justify-content:center;padding:20px}
+.lg-overlay-card{background:var(--hull);border:1px solid var(--amber);padding:clamp(18px,4vw,48px);text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center;max-width:92vw}
+.lg-student{margin:0;font:400 clamp(28px,7vw,88px)/1.15 var(--f-display);color:var(--amber);overflow-wrap:anywhere}
+body.cmc-board .lg-expr{font-size:1.4rem}
+body.cmc-board .lg-story{font-size:1.3rem}
+body.cmc-board .lg-tt{font-size:1.25rem}
+body.cmc-board .lg-cell{min-height:44px;line-height:44px}
+body.cmc-board .lg-led{font-size:1.15rem}
+body.cmc-board .cmc-grid.wide-side{grid-template-columns:minmax(0,1fr) minmax(320px,420px)}
+body.cmc-board .cmc-sub,body.cmc-board #help,body.cmc-board .cmc-foot,body.cmc-board .lg-tools{display:none}
+
+/* SimcirJS, dark theme */
+.lg-circuit .simcir-workspace{background:#06090d;border:0}
+.lg-circuit .simcir-pin-hole{fill:#1c2e3a}
+.lg-circuit .simcir-toolbox{fill:#0c1620}
+.lg-circuit .simcir-scrollbar{fill:#0a1118}
+.lg-circuit .simcir-scrollbar-bar{fill:#2a4454}
+.lg-circuit .simcir-scrollbar-bar:hover{fill:#3d6277}
+.lg-circuit .simcir-connector{stroke:#3d6277;stroke-width:2}
+.lg-circuit .simcir-connector-hot{stroke:var(--amber)}
+.lg-circuit .simcir-device{fill:#10202b;stroke:#5a7c8e;stroke-width:2}
+.lg-circuit .simcir-device-selected{stroke:var(--cyan)}
+.lg-circuit .simcir-device-label{fill:var(--text);stroke:none;font-family:var(--f-mono)}
+.lg-circuit .simcir-selection-rect{stroke:var(--cyan)}
+.lg-circuit .simcir-node{stroke:#04070b}
+.lg-circuit .simcir-node-type-in{fill:#7a5a22}
+.lg-circuit .simcir-node-type-out{fill:#8fa9b8}
+.lg-circuit .simcir-node-hot{stroke:var(--amber);fill:var(--amber)}
+.lg-circuit .simcir-node-hover{stroke:var(--cyan)}
+.lg-circuit .simcir-node-label{fill:var(--soft)}
+.lg-circuit .simcir-basicset-symbol{stroke:var(--text)}
+.lg-circuit .simcir-basicset-dc{fill:#3a2810}
+.lg-circuit .simcir-basicset-switch{fill:#12303f}
+.lg-circuit .simcir-basicset-switch-button{fill:#294b5d;stroke:#8fa9b8;cursor:pointer}
+.lg-circuit .simcir-basicset-switch-button-pressed{fill:var(--amber);stroke:#ffe2b0}
+.lg-circuit .simcir-basicset-switch-button:focus,.lg-circuit .simcir-basicset-switch-button:focus-visible{stroke:var(--cyan);stroke-width:4;outline:none}
+.lg-circuit .simcir-basicset-osc{fill:#3a2810}
+/* SimcirJS dialogs (label editor) are appended to body */
+.simcir-dialog{background:var(--hull2,#0f1a24);border:2px solid #ffb23e;color:#cfe4ec;font:14px "Share Tech Mono",monospace}
+.simcir-dialog-close-button{fill:#ffb23e}
+.simcir-dialog-close-button:hover{fill:#ffc467}
+.simcir-dialog-close-button-symbol{stroke:#1a1206}
+.simcir-label-editor{background:#04070b;color:#cfe4ec;border:1px solid #62d3ff;font:inherit;padding:4px 6px;width:140px}
+
+/* Worksheet printing */
+#worksheet{color:#000;font:12pt/1.45 "Share Tech Mono","Consolas",monospace}
+#worksheet h1{font:700 18pt/1.2 Arial,sans-serif;margin:0 0 4pt;color:#000}
+#worksheet h2{font:700 12pt/1.2 Arial,sans-serif;margin:12pt 0 4pt;color:#000}
+#worksheet .ws-meta{display:flex;justify-content:space-between;gap:20pt;border-bottom:1px solid #000;padding-bottom:6pt;margin-bottom:10pt}
+#worksheet .ws-box{border:1px dashed #666;min-height:200pt;display:flex;align-items:center;justify-content:center;color:#888}
+#worksheet svg{max-width:100%;height:auto;border:1px solid #999;background:#fff}
+#worksheet table{border-collapse:collapse;margin:6pt 0}
+#worksheet th,#worksheet td{border:1px solid #000;padding:5pt 14pt;text-align:center;min-width:34pt;height:22pt;color:#000;background:#fff}
+#worksheet .simcir-pin-hole{fill:#ddd}
+#worksheet .simcir-toolbox,#worksheet .simcir-scrollbar{fill:#fff}
+#worksheet .simcir-connector,#worksheet .simcir-connector-hot{stroke:#000;stroke-width:1.5}
+#worksheet .simcir-device{fill:#fff;stroke:#000}
+#worksheet .simcir-device-label,#worksheet .simcir-node-label{fill:#000}
+#worksheet .simcir-node{stroke:#000}
+#worksheet .simcir-node-type-in,#worksheet .simcir-node-type-out,#worksheet .simcir-node-hot{fill:#fff;stroke:#000}
+#worksheet .simcir-basicset-symbol{stroke:#000}
+#worksheet .simcir-basicset-switch,#worksheet .simcir-basicset-dc{fill:#eee}
+#worksheet .simcir-basicset-switch-button,#worksheet .simcir-basicset-switch-button-pressed{fill:#fff;stroke:#000}
+@media print{
+  @page{margin:14mm}
+  body.cmc,.cmc-main{display:block!important;padding:0!important}
+  #worksheet{display:block!important}
+}

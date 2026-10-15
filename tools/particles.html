@@ -6,45 +6,258 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'">
   <link rel="icon" href="data:,">
   <title>Particle Sandbox</title>
+  <link rel="stylesheet" href="shared.css">
   <style>
-    :root { color-scheme: dark; font: 16px system-ui,sans-serif; background:#101827; color:#edf3fa }
-    * { box-sizing:border-box } body { margin:0; padding:1rem } main { max-width:950px; margin:auto }
-    h1 { margin:.2rem 0 } p { line-height:1.5 } a { color:#97dcff } button,select,input { font:inherit }
-    button,select { padding:.55rem .75rem; background:#24364d; color:inherit; border:1px solid #7e95b0; border-radius:.4rem }
-    button { cursor:pointer } button:disabled { opacity:.5; cursor:wait } :focus-visible { outline:3px solid #ffdd73; outline-offset:3px }
-    .controls { display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; margin:1rem 0 }
-    .controls label { display:flex; gap:.45rem; align-items:center } .stage { position:relative; width:min(100%,560px); aspect-ratio:1; background:#090d14; border:1px solid #7e95b0 }
-    canvas { display:block; width:100%; height:100%; touch-action:none; image-rendering:pixelated }
-    #fluid-canvas { position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen; opacity:.55 }
-    #status { min-height:1.5em } .note { color:#c9d7e8; font-size:.95rem } li { margin:.6rem 0 }
-    @media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto } }
+    .pt-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:14px;align-items:start}
+    .pt-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+    .pt-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:8px 12px;border:1px solid var(--grid);background:var(--hull)}
+    .pt-strip .pt-title{flex:1 1 180px;min-width:0;font-size:.9rem;color:var(--text)}
+    .pt-strip .pt-title b{display:block;color:var(--amber);font-weight:400;letter-spacing:.12em;font-size:.72rem;text-transform:uppercase}
+    .pt-goal{flex:1 1 220px;font-size:.88rem;font-variant-numeric:tabular-nums;min-width:0}
+    .pt-goal.ok{color:var(--green)}
+    .pt-timer{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .pt-clock{font:400 1.4rem/1 var(--f-display);letter-spacing:.06em;color:var(--cyan);font-variant-numeric:tabular-nums;min-width:4.3em;text-align:center}
+    .pt-clock.low{color:var(--red)}
+    .pt-bar{height:4px;background:var(--grid);margin-top:-6px}
+    .pt-bar i{display:block;height:100%;width:0;background:var(--cyan);transition:width .25s linear}
+    .pt-bar i.low{background:var(--red)}
+    .pt-stage{width:min(100%,620px,max(380px,calc(100vh - 270px)));aspect-ratio:1;background:#fdfcfc;touch-action:none;line-height:0}
+    .pt-stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+    .pt-stage canvas#sand-canvas{touch-action:none;cursor:crosshair}
+    #fluid-canvas{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.55}
+    .pt-zone{position:absolute;border:2px dashed #0a7fb4;pointer-events:none;box-shadow:0 0 0 1px rgba(255,255,255,.6)}
+    .pt-zone.ok{border-color:#1fbf6a}
+    .pt-zone span{position:absolute;left:-2px;top:-1.7em;padding:1px 6px;background:rgba(4,7,11,.88);color:var(--cyan);font-size:.7rem;line-height:1.4;white-space:nowrap;letter-spacing:.06em}
+    .pt-zone.ok span{color:var(--green)}
+    .pt-cursor{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border:2px solid #e0245e;border-radius:50%;pointer-events:none;display:none}
+    .pt-big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(4,7,11,.86);color:var(--amber);text-align:center;line-height:1.2;cursor:pointer;padding:16px}
+    .pt-big small{color:var(--text);font-size:clamp(.9rem,2vw,1.3rem)}
+    .pt-big strong{font:400 clamp(1.8rem,7vw,4rem)/1.1 var(--f-display);overflow-wrap:anywhere}
+    .pt-offline{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--soft);background:#10161d;line-height:1.5;font-size:.95rem}
+    .pt-controls{gap:6px}
+    .pt-controls .cmc-btn{min-width:44px;padding:.45em .8em}
+    .pt-brush{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+    .pt-brush .cmc-field-row{flex:1 1 200px}
+    #status{min-height:1.5em;margin:0;color:var(--soft);font-size:.88rem}
+    .pt-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+    .pt-mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px}
+    button.pt-mat{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:7px;min-height:42px;padding:4px 7px;border:1px solid var(--grid);font-size:.78rem;color:var(--soft);position:relative}
+    button.pt-mat:hover{border-color:var(--cyan);color:var(--text)}
+    button.pt-mat[aria-pressed="true"]{border-color:var(--amber);color:var(--amber);background:rgba(255,178,62,.1)}
+    button.pt-mat:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+    button.pt-mat.sug{box-shadow:inset 0 -3px 0 var(--cyan)}
+    .pt-sw{flex:none;width:22px;height:22px;border:1px solid rgba(255,255,255,.4);border-radius:3px}
+    .pt-mat kbd{margin-left:auto;font:inherit;font-size:.68rem;color:var(--dim)}
+    .pt-desc{min-height:2.7em;color:var(--text);font-size:.9rem}
+    .pt-desc b{color:var(--amber);font-weight:400}
+    .pt-counts{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.8rem;color:var(--soft);font-variant-numeric:tabular-nums}
+    .pt-counts span{display:inline-flex;align-items:center;gap:5px}
+    .pt-counts .pt-sw{width:11px;height:11px}
+    .pt-chlist{display:flex;flex-direction:column;gap:4px}
+    .pt-chlist .cmc-chip{display:block;text-align:left;text-transform:none;letter-spacing:.03em;font-size:.82rem;padding:.4em .7em}
+    .pt-chdetail{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--grid);padding-top:10px}
+    .pt-chdetail h3{margin:0}
+    .pt-vocab{display:flex;flex-wrap:wrap;gap:4px}
+    .pt-vocab span{border:1px solid var(--grid);padding:1px 8px;font-size:.78rem;color:var(--cyan)}
+    .pt-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+    .pt-roster-pick{display:flex;flex-direction:column;gap:6px}
+    .pt-picked{font:400 1.2rem/1.2 var(--f-display);color:var(--amber);min-height:1.3em;overflow-wrap:anywhere}
+    .pt-keys{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:.82rem;margin:0}
+    .pt-keys dt{color:var(--amber)}.pt-keys dd{margin:0;color:var(--soft)}
+    .pt-sheet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .pt-sheet-grid textarea{min-height:130px;resize:vertical}
+    .pt-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+    .pt-shot{display:flex;flex-direction:column;gap:6px;border:1px solid var(--grid);padding:6px;background:var(--void)}
+    .pt-shot img{width:100%;height:auto;display:block;image-rendering:pixelated}
+    .pt-shot .pt-row .cmc-btn{min-height:34px;padding:.3em .6em;font-size:.72rem}
+    .pt-empty{color:var(--dim);font-size:.85rem}
+    .pt-printsheet h2{font-size:15pt;margin:0 0 6px}
+    .pt-printsheet .pt-line{display:flex;gap:30px;margin:12px 0}
+    .pt-printsheet .pt-line span{flex:1;border-bottom:1px solid #000;min-height:1.6em}
+    .pt-printsheet .pt-box{border:1px solid #666;min-height:90pt;padding:6px;margin:4px 0 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+    .pt-printsheet .pt-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .pt-printsheet .pt-imgs img{width:100%;border:1px solid #999}
+    /* Projector mode: the canvas fills the screen height and only the essentials stay */
+    body.pt-board .pt-hide-board{display:none!important}
+    body.pt-board .cmc-main{max-width:none}
+    body.pt-board .pt-layout{grid-template-columns:auto minmax(260px,1fr)}
+    body.pt-board .pt-stage{width:min(calc(100vh - 230px),calc(100vw - 380px));min-width:320px}
+    body.pt-board .pt-clock{font-size:2rem}
+    body.pt-board .pt-strip .pt-title{font-size:1.1rem}
+    body.pt-board button.pt-mat{min-height:52px;font-size:.95rem}
+    body.pt-board .pt-sw{width:28px;height:28px}
+    @media(max-width:900px){.pt-layout,body.pt-board .pt-layout{grid-template-columns:1fr}.pt-sheet-grid{grid-template-columns:1fr}body.pt-board .pt-stage{width:100%;min-width:0}}
+    @media print{
+      .pt-screen,.pt-live{display:none!important}
+      .pt-printsheet{color:#000}
+    }
   </style>
 </head>
-<body>
-<main>
-  <h1 data-text="title">Particle Sandbox</h1>
-  <p data-text="intro">Paint playful materials and discover surprising patterns. Everything stays on this device.</p>
-  <div class="controls">
-    <label><span data-text="material">Material</span><select id="material" disabled></select></label>
-    <label><span data-text="brush">Brush size</span><input id="brush" type="range" min="2" max="24" value="8" disabled><output id="brush-value" for="brush">8</output></label>
-    <button id="pause" type="button" disabled data-text="pause">Pause</button>
-    <button id="clear" type="button" disabled data-text="clear">Clear</button>
-    <button id="reset" type="button" disabled data-text="reset">Reset example</button>
+<body class="cmc">
+<main class="cmc-main">
+  <header class="cmc-head pt-screen">
+    <div>
+      <h1><span>Particle</span> Sandbox</h1>
+      <p class="cmc-sub pt-hide-board" data-t="sub">Predict, paint, run and observe. A falling-sand lab with ready-made challenges and observation sheets.</p>
+    </div>
+    <div class="cmc-bar cmc-noprint">
+      <button class="cmc-btn cyan" id="board-btn" type="button" aria-pressed="false" data-t="board">Projector mode</button>
+    </div>
+  </header>
+
+  <div class="cmc-error pt-screen" id="gl-error" role="alert" hidden>
+    <b data-t="errHead">The simulation can't start here</b><br>
+    <span id="gl-error-text"></span>
+    <div class="pt-row" style="margin-top:8px">
+      <button class="cmc-btn cyan" type="button" id="err-challenges" data-t="errGo">Open the challenges</button>
+      <button class="cmc-btn quiet" type="button" id="err-sheet" data-t="errSheet">Go to observation sheet</button>
+    </div>
   </div>
-  <div class="stage">
-    <canvas id="sand-canvas" tabindex="0" aria-label="Particle canvas" aria-describedby="instructions"></canvas>
-    <canvas id="fluid-canvas" aria-hidden="true"></canvas>
+
+  <div class="pt-layout">
+    <section class="pt-col pt-screen" aria-label="Simulation" id="stagecol">
+      <div class="pt-strip" id="strip">
+        <div class="pt-title"><b data-t="activity">Activity</b><span id="strip-title"></span></div>
+        <div class="pt-goal" id="strip-goal"></div>
+        <div class="pt-timer">
+          <span class="pt-clock" id="clock" role="timer" aria-label="Timer">05:00</span>
+          <button class="cmc-btn cyan" type="button" id="timer-toggle" data-t="timerStart">Start</button>
+          <button class="cmc-btn quiet" type="button" id="pick-strip" data-t="pickShort">Pick student</button>
+        </div>
+      </div>
+      <div class="pt-bar" aria-hidden="true"><i id="timer-bar"></i></div>
+
+      <div class="cmc-stage pt-stage" id="stage">
+        <canvas id="sand-canvas" tabindex="0" aria-label="Particle canvas" aria-describedby="instructions"></canvas>
+        <canvas id="fluid-canvas" aria-hidden="true"></canvas>
+        <div class="pt-zone" id="zone" hidden><span id="zone-label"></span></div>
+        <div class="pt-cursor" id="kcursor"></div>
+        <div class="pt-big" id="bigname" hidden role="button" tabindex="0"></div>
+        <div class="pt-offline" id="offline" hidden></div>
+      </div>
+
+      <div class="cmc-bar pt-controls" role="group" aria-label="Playback">
+        <button class="cmc-btn primary" type="button" id="pause" data-need="engine" data-t="pause">Pause</button>
+        <button class="cmc-btn" type="button" id="step" data-need="engine" data-t="step">Step</button>
+        <label class="cmc-label" for="speed" data-t="speed">Speed</label>
+        <select class="cmc-field" id="speed" data-need="engine">
+          <option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option>
+        </select>
+        <button class="cmc-btn quiet" type="button" id="undo" data-need="engine" data-t="undo">Undo</button>
+        <button class="cmc-btn quiet" type="button" id="rewind" data-need="engine" data-t="rewind">Back to start</button>
+        <button class="cmc-btn quiet" type="button" id="clear" data-need="engine" data-t="clear">Clear</button>
+        <button class="cmc-btn cyan" type="button" id="snap" data-need="engine" data-t="snap">Snapshot</button>
+      </div>
+      <div class="pt-brush pt-hide-board">
+        <div class="cmc-field-row">
+          <label for="brush"><span data-t="brush">Brush size</span><output id="brush-value" for="brush">8</output></label>
+          <input id="brush" type="range" min="2" max="30" value="8" data-need="engine">
+        </div>
+        <div class="cmc-field-row">
+          <span class="cmc-label" id="shape-label" data-t="shape">Brush shape</span>
+          <div class="pt-row" role="group" aria-labelledby="shape-label" id="shapes"></div>
+        </div>
+      </div>
+      <p id="status" role="status" aria-live="polite" data-t="loading">Loading local Sandspiel engine…</p>
+      <div class="cmc-note warn pt-screen pt-hide-board" id="disclaimer"><b data-t="noteHead">Playful simulation</b><span data-t="disclaimer">A creative toy, not accurate chemistry or a scientific model. Its rules are playful; do not use it to predict real-world reactions.</span></div>
+      <p id="instructions" class="cmc-sub pt-hide-board" data-t="instructions">Drag on the canvas to paint. Keyboard: focus the canvas, use the arrow keys to move the brush and Enter to paint. Space pauses.</p>
+    </section>
+
+    <aside class="pt-side pt-screen" aria-label="Tools">
+      <div class="cmc-tabs pt-hide-board" role="tablist" id="tabs" aria-label="Panels">
+        <button class="cmc-chip" role="tab" type="button" id="tab-mat" data-tab="mat" aria-selected="true" aria-controls="panel-mat" data-t="tabMat">Materials</button>
+        <button class="cmc-chip" role="tab" type="button" id="tab-ch" data-tab="ch" aria-selected="false" aria-controls="panel-ch" tabindex="-1" data-t="tabCh">Challenges</button>
+        <button class="cmc-chip" role="tab" type="button" id="tab-cls" data-tab="cls" aria-selected="false" aria-controls="panel-cls" tabindex="-1" data-t="tabCls">Class</button>
+      </div>
+
+      <div class="cmc-panel" id="panel-mat" role="tabpanel" aria-labelledby="tab-mat">
+        <h2 data-t="matHead">Materials</h2>
+        <div class="pt-mats" id="mats" role="group" aria-label="Materials"></div>
+        <p class="pt-desc" id="mat-desc"></p>
+        <h3 class="pt-hide-board" data-t="onCanvas">On the canvas</h3>
+        <div class="pt-counts pt-hide-board" id="counts"></div>
+      </div>
+
+      <div class="cmc-panel" id="panel-ch" role="tabpanel" aria-labelledby="tab-ch" hidden>
+        <h2 data-t="chHead">Challenges</h2>
+        <div class="pt-chlist" id="chlist"></div>
+        <div class="pt-chdetail" id="chdetail"></div>
+      </div>
+
+      <div class="cmc-panel" id="panel-cls" role="tabpanel" aria-labelledby="tab-cls" hidden>
+        <h2 data-t="clsHead">Class tools</h2>
+        <div class="pt-roster-pick">
+          <h3 data-t="pickHead">Pick a student</h3>
+          <div class="cmc-field-row" id="cls-wrap">
+            <label for="cls-select" data-t="classLabel">Class</label>
+            <select class="cmc-field" id="cls-select"></select>
+          </div>
+          <div class="pt-row">
+            <button class="cmc-btn primary" type="button" id="pick" data-t="pick">Pick a student</button>
+            <button class="cmc-btn" type="button" id="randmat" data-need="engine" data-t="randMat">Random material</button>
+          </div>
+          <p class="pt-picked" id="picked" aria-live="polite"></p>
+          <p class="cmc-sub" id="roster-msg"></p>
+        </div>
+        <h3 data-t="timerHead">Countdown timer</h3>
+        <div class="pt-row">
+          <label class="cmc-label" for="minutes" data-t="minutes">Minutes</label>
+          <input class="cmc-field cmc-num" id="minutes" type="number" min="1" max="60" step="1" value="5" inputmode="numeric">
+          <span class="cmc-chips" id="presets"></span>
+        </div>
+        <div class="pt-row">
+          <button class="cmc-btn cyan" type="button" id="timer-toggle2" data-t="timerStart">Start</button>
+          <button class="cmc-btn quiet" type="button" id="timer-reset" data-t="timerReset">Reset</button>
+        </div>
+        <label class="pt-row"><input type="checkbox" id="beep"> <span data-t="beepLabel">Soft beep when time is up</span></label>
+        <label class="pt-row"><input type="checkbox" id="freeze" checked> <span data-t="freezeLabel">Pause the simulation when time is up</span></label>
+        <details class="cmc-details">
+          <summary data-t="keysHead">Keyboard shortcuts</summary>
+          <dl class="pt-keys" id="keys"></dl>
+        </details>
+      </div>
+    </aside>
   </div>
-  <p id="status" role="status" aria-live="polite" data-text="loading">Loading local Sandspiel engine…</p>
-  <p id="instructions" class="note" data-text="instructions">Drag to paint. Keyboard: focus the canvas, use arrow keys to move the brush, and Space or Enter to paint. Eraser removes materials. Pause lets you draw a still scene.</p>
-  <h2 data-text="challenges">Try a challenge</h2>
-  <ul>
-    <li data-text="challenge1">Build a wall with a gap. Can you guide sand into a small container?</li>
-    <li data-text="challenge2">Make a pond, plant some seeds, then predict what will happen.</li>
-    <li data-text="challenge3">Compare ice, water and lava. Pause, predict, then resume!</li>
-  </ul>
-  <p class="note" data-text="disclaimer">A creative toy, not accurate chemistry or a scientific model. Its rules are playful; do not use it to predict real-world reactions.</p>
-  <p class="note"><span data-text="credit">Powered by authentic Sandspiel by Max Bittker, MIT licensed. No accounts, uploads, sharing or online services.</span> <a href="../lib/sandspiel/LICENSE" data-text="license">License</a></p>
+
+  <section class="cmc-panel pt-screen pt-hide-board" id="sheet-panel" aria-labelledby="sheet-h">
+    <h2 id="sheet-h" data-t="sheetHead">Observation sheet</h2>
+    <p class="cmc-sub" id="sheet-for"></p>
+    <div class="pt-live">
+      <div class="cmc-field-row" style="max-width:420px;margin-bottom:10px">
+        <label for="who" data-t="who">Name / group</label>
+        <input class="cmc-field" id="who" type="text" maxlength="60" autocomplete="off">
+      </div>
+      <div class="pt-sheet-grid">
+        <div class="cmc-field-row"><label for="n-h" data-t="hypo">Hypothesis (what I think will happen)</label><textarea class="cmc-field" id="n-h" maxlength="2000"></textarea></div>
+        <div class="cmc-field-row"><label for="n-o" data-t="obs">Observation (what I saw)</label><textarea class="cmc-field" id="n-o" maxlength="2000"></textarea></div>
+        <div class="cmc-field-row"><label for="n-x" data-t="expl">Explanation (why it happened)</label><textarea class="cmc-field" id="n-x" maxlength="2000"></textarea></div>
+      </div>
+    </div>
+    <div class="cmc-bar cmc-noprint">
+      <button class="cmc-btn" type="button" id="print" data-t="print">Print sheet</button>
+      <button class="cmc-btn cyan" type="button" id="copy" data-t="copy">Copy as text</button>
+      <button class="cmc-btn quiet" type="button" id="sheet-clear" data-t="sheetClear">Clear this sheet</button>
+      <span class="cmc-label" id="saved" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section class="cmc-panel pt-screen pt-hide-board" id="gallery-panel" aria-labelledby="gal-h">
+    <h2 id="gal-h" data-t="galHead">Snapshots</h2>
+    <p class="cmc-sub" data-t="galSub">Up to 6 snapshots are kept in memory while this page is open. Download them individually, or all together as one image.</p>
+    <div class="pt-gallery" id="gallery"></div>
+    <div class="cmc-bar cmc-noprint">
+      <button class="cmc-btn cyan" type="button" id="gal-all" data-t="galAll">Download all as one image</button>
+      <button class="cmc-btn quiet" type="button" id="gal-clear" data-t="galClear">Delete all</button>
+    </div>
+  </section>
+
+  <div class="pt-printsheet cmc-print-only" id="printsheet" aria-hidden="true"></div>
+
+  <footer class="cmc-foot pt-screen">
+    <span data-t="credit">Powered by authentic Sandspiel by Max Bittker, MIT licensed. No accounts, uploads, sharing or online services.</span>
+    <a href="../lib/sandspiel/LICENSE" data-t="license">License</a> ·
+    <a href="../lib/sandspiel/PROVENANCE.txt" data-t="third">Third-party notices</a>
+  </footer>
 </main>
 <script type="module" src="./particles.js"></script>
 </body>

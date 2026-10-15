@@ -1,5 +1,6 @@
 .local-tool{padding:0!important;gap:0!important;min-height:0}
-.local-tool-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;font:13px/1.4 sans-serif;color:#d6e4ed;background:#101b28}
-.local-tool-bar a{color:#8ae7ff;text-decoration:underline}
-.local-tool-bar a:focus-visible{outline:2px solid #ffdb80;outline-offset:3px}
-.local-tool iframe{display:block;width:100%;flex:1;min-height:300px;border:0;background:#0b1420}
+.local-tool-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:6px max(16px,1.4vmin);font:.72em/1.4 var(--f-mono);letter-spacing:.08em;color:#8fa9b8;background:#060a0e;border-bottom:1px solid var(--grid)}
+.local-tool-bar a{color:var(--cyan);text-decoration:none;border:1px solid var(--grid);padding:4px 10px;text-transform:uppercase}
+.local-tool-bar a:hover{border-color:var(--cyan)}
+.local-tool-bar a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.local-tool iframe{display:block;width:100%;flex:1;min-height:300px;border:0;background:var(--void)}
