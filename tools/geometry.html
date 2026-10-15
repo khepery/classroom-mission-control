@@ -7,49 +7,75 @@
   <title>Geometry Playground</title>
   <link rel="stylesheet" href="shared.css">
   <link rel="stylesheet" href="../lib/jsxgraph/jsxgraph.css">
-  <style>
-    :root{color-scheme:light}a{color:#155fc1}
-    *{box-sizing:border-box}body{margin:0;padding:20px;font:16px system-ui,sans-serif;color:#182b43;background:#f5f8fc}main{max-width:1100px;margin:auto}h1{margin-top:0}p{line-height:1.5}.controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:16px 0}label{display:flex;gap:8px;align-items:center;flex-wrap:wrap}select,button,input{font:inherit}button,select,input[type=number]{padding:8px;border:1px solid #697b91;border-radius:6px;background:white;color:#182b43}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0762c7;outline-offset:3px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px}.jxgbox{height:clamp(320px,65vh,620px);width:100%;border:1px solid #697b91;background:white}.panel{padding:16px;background:white;border:1px solid #ccd6e4;border-radius:8px}.panel label{margin:12px 0}.panel input[type=range]{width:100%;min-height:28px}.coords{display:grid;grid-template-columns:1fr 1fr;gap:8px}.coords input{width:100%;min-width:0}.error{padding:14px;border:2px solid #b42318;background:#fff0ee;color:#8b1a13}output{font-variant-numeric:tabular-nums}footer{margin-top:20px;font-size:13px}fieldset{border:0;padding:0;margin:16px 0}legend{font-weight:bold}[hidden]{display:none!important}@media(max-width:700px){body{padding:12px}.workspace{grid-template-columns:1fr}.jxgbox{height:380px}}
-  </style>
+  <link rel="stylesheet" href="geometry-ui.css">
   <script defer src="../lib/jsxgraph/jsxgraphcore.js"></script>
+  <script defer src="geometry-text.js"></script>
   <script defer src="geometry.js"></script>
 </head>
-<body>
-<main>
-  <h1 data-i18n="title">Geometry Playground</h1>
-  <p data-i18n="intro">Drag triangle vertices, explore transformations, or adjust a quadratic function. All work stays on this device.</p>
-  <div id="error" class="error" role="alert" hidden></div>
-  <div class="controls">
-    <label><span data-i18n="mode">Mode</span><select id="mode"><option value="triangle" data-i18n="triangle">Triangle</option><option value="transform" data-i18n="transform">Transformations</option><option value="function" data-i18n="function">Function plot</option></select></label>
-    <button id="reset" type="button" data-i18n="reset">Reset</button>
-  </div>
-  <div class="workspace">
-    <div id="board" class="jxgbox" role="img" aria-label="Interactive geometry graph"></div>
-    <section class="panel" aria-label="Graph controls and measurements" id="panel">
-      <div id="triangle-controls">
-        <p data-i18n="vertexHint">Move A, B, and C by dragging or entering coordinates below.</p>
-        <div id="coordinates"></div>
-        <h2 data-i18n="measurements">Measurements</h2>
-        <div id="measurements" role="status" aria-live="polite" aria-atomic="true"></div>
+<body class="cmc">
+<main class="cmc-main" id="main">
+  <header class="cmc-head cmc-noprint">
+    <div>
+      <h1><span data-i18n="title1">Geometry</span> <span class="gm-amber" data-i18n="title2">Playground</span></h1>
+      <p class="cmc-sub gm-hide-board" data-i18n="intro">Drag points, explore transformations, plot functions and test theorems. Everything stays on this device.</p>
+    </div>
+    <div class="cmc-bar">
+      <button id="btn-board" class="cmc-btn cyan" type="button" aria-pressed="false" data-i18n="board" data-i18n-title="boardTip">Projector</button>
+      <button id="btn-panel" class="cmc-btn quiet" type="button" aria-pressed="false" data-i18n="panelBtn">Hide controls</button>
+      <button id="btn-pick" class="cmc-btn" type="button" data-i18n="pick">Pick a student</button>
+      <button id="btn-reset" class="cmc-btn quiet" type="button" data-i18n="reset">Reset</button>
+    </div>
+  </header>
+  <div id="error" class="cmc-error" role="alert" hidden></div>
+  <div id="pick-out" class="gm-pick cmc-noprint" role="status" aria-live="polite" hidden></div>
+  <div id="modes" class="cmc-tabs cmc-noprint" role="group" data-i18n-label="modeLabel" aria-label="Mode"></div>
+
+  <div class="cmc-grid wide-side gm-work" id="work">
+    <div class="gm-left">
+      <div class="cmc-stage gm-stage">
+        <div id="board" class="jxgbox" role="img" aria-label="Interactive geometry graph"></div>
       </div>
-      <div id="transform-controls" hidden>
-        <label><span data-i18n="operation">Transformation</span><select id="operation"><option value="rotate" data-i18n="rotate">Rotate about origin</option><option value="translate" data-i18n="translate">Translate</option><option value="reflect" data-i18n="reflect">Reflect across y-axis</option><option value="scale" data-i18n="scale">Scale about origin</option></select></label>
-        <label id="angle-control"><span data-i18n="rotation">Rotation (degrees)</span><output id="angle-value">45</output><input id="angle" type="range" min="-180" max="180" value="45" step="1"></label>
-        <label id="dx-control" hidden><span data-i18n="dx">Horizontal shift</span><output id="dx-value">2</output><input id="dx" type="range" min="-5" max="5" value="2" step="0.1"></label>
-        <label id="dy-control" hidden><span data-i18n="dy">Vertical shift</span><output id="dy-value">1</output><input id="dy" type="range" min="-5" max="5" value="1" step="0.1"></label>
-        <label id="scale-control" hidden><span data-i18n="factor">Scale factor</span><output id="scale-value">1.5</output><input id="scale" type="range" min="0.2" max="2" value="1.5" step="0.1"></label>
-        <p data-i18n="transformHint">Blue: original triangle. Orange: transformed triangle. Drag the blue vertices to compare.</p>
-      </div>
-      <div id="function-controls" hidden>
-        <h2>y = ax² + bx + c</h2>
-        <label>a <output id="a-value">1</output><input id="a" type="range" min="-3" max="3" step="0.1" value="1"></label>
-        <label>b <output id="b-value">0</output><input id="b" type="range" min="-5" max="5" step="0.1" value="0"></label>
-        <label>c <output id="c-value">0</output><input id="c" type="range" min="-5" max="5" step="0.1" value="0"></label>
-        <p id="formula" role="status" aria-live="polite"></p>
-      </div>
+      <div id="task" class="cmc-note warn gm-task cmc-noprint" hidden></div>
+      <div id="describe" class="cmc-note gm-describe" data-i18n-label="describeLabel"></div>
+    </div>
+    <section class="cmc-panel gm-panel cmc-noprint" id="panel" aria-label="Graph controls and measurements">
+      <div id="controls"></div>
+      <div id="readout" class="gm-readout"></div>
     </section>
   </div>
-  <footer><span data-i18n="powered">Powered by local JSXGraph 1.14.0.</span> <a href="../lib/jsxgraph/LICENSE.MIT" data-i18n="license">License</a></footer>
+
+  <section class="cmc-panel gm-acts cmc-noprint gm-hide-board" id="acts" aria-labelledby="acts-h">
+    <h2 id="acts-h" data-i18n="actsTitle">Ready-made activities</h2>
+    <p class="gm-dim" data-i18n="actsHint">Choose a task: the board is set up for you and the student prompt appears under the graph. Teacher notes stay hidden until you reveal them.</p>
+    <div id="act-list" class="cmc-chips"></div>
+    <div id="act-detail"></div>
+  </section>
+
+  <details class="cmc-details cmc-noprint gm-hide-board" id="share">
+    <summary data-i18n="shareTitle">Save, share &amp; export</summary>
+    <div class="cmc-bar gm-share-bar">
+      <button id="btn-save" class="cmc-btn" type="button" data-i18n="save">Save</button>
+      <button id="btn-restore" class="cmc-btn" type="button" data-i18n="restore">Restore</button>
+      <button id="btn-code" class="cmc-btn cyan" type="button" data-i18n="copyCode">Copy state code</button>
+      <button id="btn-text" class="cmc-btn cyan" type="button" data-i18n="copyText">Copy description</button>
+      <button id="btn-png" class="cmc-btn cyan" type="button" data-i18n="png">Download PNG</button>
+      <button id="btn-print" class="cmc-btn primary" type="button" data-i18n="print">Print worksheet</button>
+    </div>
+    <div class="gm-code-row">
+      <label class="cmc-label" for="code-in" data-i18n="codeLabel">Paste a state code to load it</label>
+      <div class="cmc-bar"><input id="code-in" class="cmc-field gm-code" type="text" autocomplete="off" spellcheck="false"><button id="btn-load" class="cmc-btn quiet" type="button" data-i18n="load">Load</button></div>
+    </div>
+    <p class="gm-dim" id="save-note" data-i18n="saveNote">Your work is also saved automatically in this browser and comes back next time.</p>
+  </details>
+
+  <section class="cmc-print-only gm-print" id="print-area" aria-hidden="true"></section>
+
+  <footer class="cmc-foot cmc-noprint">
+    <p class="gm-hide-board" data-i18n="keys">Keys: 1–5 modes · P projector · R reveal / hide · Esc leave projector. Classification of dragged triangles allows a small tolerance (0.05 units, 0.5°); switch on snap to grid for exact results.</p>
+    <span data-i18n="powered">Powered by local JSXGraph 1.14.0.</span> <a href="../lib/jsxgraph/LICENSE.MIT" data-i18n="license">License</a>
+  </footer>
+  <div id="toast" class="cmc-toast" role="status" aria-live="polite" hidden></div>
+  <div id="live" class="cmc-sr" role="status" aria-live="polite" aria-atomic="true"></div>
   <noscript>This tool requires JavaScript. 此工具需要启用 JavaScript。</noscript>
 </main>
 </body>

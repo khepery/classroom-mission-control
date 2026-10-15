@@ -5,60 +5,266 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; img-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'">
   <title>Photo → Editable Text</title>
+  <link rel="stylesheet" href="shared.css">
   <style>
-    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-    body { max-width: 960px; margin: auto; padding: 24px; background: #132033; color: #eef4ff; }
-    h1 { font-size: 1.7rem; }
-    p { line-height: 1.5; }
-    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 0; }
-    button, select, input { font: inherit; }
-    button, select { padding: 10px 14px; border: 1px solid #7793b4; border-radius: 8px; background: #233d5d; color: #fff; }
-    button:not(:disabled) { cursor: pointer; }
-    button:disabled { opacity: .5; }
-    button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #67d9ff; outline-offset: 3px; }
-    #preview { display: block; max-width: 100%; max-height: 380px; margin: 16px auto; object-fit: contain; background: white; }
-    #preview[hidden] { display: none; }
-    textarea { box-sizing: border-box; width: 100%; min-height: 260px; padding: 14px; font: 1.05rem/1.5 system-ui, sans-serif; color: #172235; background: white; border-radius: 8px; }
-    progress { width: 100%; height: 16px; }
-    #status { min-height: 1.5em; }
-    #status[data-error="true"] { color: #ffb5aa; }
-    .note { color: #bed0e7; font-size: .94rem; }
+    #app { display: flex; flex-direction: column; gap: 14px; }
+    .ocr-drop { border: 2px dashed #36505e; padding: 14px; display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; transition: border-color .12s, background .12s; }
+    .ocr-drop.over { border-color: var(--amber); background: rgba(255, 178, 62, .08); }
+    .ocr-drop p { color: var(--soft); font-size: .9rem; }
+    .ocr-check { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: .88rem; }
+    .ocr-check input { accent-color: var(--amber); width: 18px; height: 18px; }
+    .ocr-val { color: var(--amber); }
+    .ocr-stage { display: flex; align-items: center; justify-content: center; min-height: 180px; padding: 8px; }
+    #view { max-width: 100%; max-height: 440px; object-fit: contain; background: #fff; }
+    .ocr-chip { display: inline-flex; align-items: center; gap: 8px; padding: .25em .7em .25em .25em; }
+    .ocr-chip canvas { width: 40px; height: 40px; object-fit: cover; background: #fff; }
+    progress { appearance: none; -webkit-appearance: none; width: 100%; height: 10px; border: 1px solid var(--grid); background: #06090d; color: var(--amber); }
+    progress::-webkit-progress-bar { background: #06090d; }
+    progress::-webkit-progress-value { background: var(--amber); }
+    progress::-moz-progress-bar { background: var(--amber); }
+    .ocr-status { min-height: 1.5em; color: var(--soft); font-size: .9rem; }
+    .ocr-status[data-error="true"] { color: #ffb5aa; }
+    .ocr-meter { display: inline-block; width: 140px; height: 8px; background: var(--grid); vertical-align: middle; }
+    .ocr-meter span { display: block; height: 100%; background: var(--green); }
+    .ocr-meter.fair span { background: var(--amber); }
+    .ocr-meter.low span { background: var(--red); }
+    .ocr-proof { border: 1px solid var(--grid); background: rgba(0, 0, 0, .4); padding: 12px; max-height: 440px; overflow: auto; line-height: 2; font-size: 1.05rem; }
+    .ocr-proof p { margin: 0 0 .8em; }
+    .ocr-proof h3 { margin: 0 0 .4em; }
+    .ocr-doubt { all: unset; box-sizing: border-box; cursor: pointer; background: rgba(255, 178, 62, .22); border-bottom: 2px solid var(--amber); padding: 0 2px; }
+    .ocr-doubt.bad { background: rgba(255, 90, 74, .25); border-bottom-color: var(--red); }
+    .ocr-doubt:hover { background: rgba(255, 178, 62, .4); }
+    .ocr-doubt:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .ocr-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+    .ocr-out { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid var(--grid); background: rgba(0, 0, 0, .4); padding: 10px; line-height: 1.9; max-height: 340px; overflow: auto; min-height: 3em; }
+    .ocr-gap { color: var(--amber); }
+    .ocr-gap.shown { color: var(--green); }
+    .ocr-opts { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; }
+    .ocr-hist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .ocr-hist li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; border: 1px solid var(--grid); padding: 6px 10px; }
+    .ocr-hist .ocr-snip { flex: 1 1 260px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--soft); }
+    .ocr-hist small { color: var(--dim); display: block; }
+    #print pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 13pt/1.8 Georgia, "Times New Roman", serif; color: #000; }
+    #print h2 { font: 16pt Georgia, serif; color: #000; }
+    body.cmc-board .ocr-out, body.cmc-board .ocr-proof { font-size: 1.3rem; max-height: none; }
+    body.cmc-board textarea.cmc-field { font-size: 1.25rem; }
+    @media (max-width: 820px) { .ocr-two { grid-template-columns: 1fr; } }
   </style>
   <script src="ocr.js" defer></script>
 </head>
-<body>
-  <main>
-    <h1 data-i18n="title">Photo → Editable Text</h1>
-    <p data-i18n="privacy">All recognition happens on this device. Images and text are never uploaded.</p>
-    <label for="image" data-i18n="imageLabel">Choose a PNG, JPG or WebP image (maximum 10 MB)</label>
-    <div class="controls">
-      <input id="image" type="file" accept="image/png,image/jpeg,image/webp">
-      <label for="language" data-i18n="languageLabel">Text language</label>
-      <select id="language">
-        <option value="eng" data-i18n="english">English</option>
-        <option value="chi_sim" data-i18n="chinese">Simplified Chinese</option>
-        <option value="eng+chi_sim" data-i18n="combined">English + Simplified Chinese</option>
-      </select>
-      <button id="recognize" disabled data-i18n="recognize">Recognize text</button>
-      <button id="cancel" disabled data-i18n="cancel">Cancel</button>
+<body class="cmc">
+  <main class="cmc-main">
+    <div id="app" class="cmc-noprint">
+      <header class="cmc-head">
+        <div>
+          <h1><span data-i18n="titleA">Photo →</span> <span data-i18n="titleB">Editable Text</span></h1>
+          <p class="cmc-sub" data-i18n="sub">Turn a photo of a textbook page, worksheet or board into text you can edit, then reuse it as a word list, gap-fill, dictation or slides.</p>
+        </div>
+        <div class="cmc-bar">
+          <button type="button" id="bigBtn" class="cmc-btn quiet" aria-pressed="false" data-i18n="big" data-i18n-title="bigTip">Big text</button>
+        </div>
+      </header>
+
+      <div class="cmc-note">
+        <b data-i18n="privacyHead">Private by design</b>
+        <span data-i18n="privacy">All recognition happens on this device. Images and text are never uploaded.</span>
+        <span data-i18n="pdfNote">PDF files are not supported: take a photo or a screenshot of the page instead.</span>
+      </div>
+
+      <div class="cmc-grid wide-side">
+        <section class="cmc-panel" aria-labelledby="h-photos">
+          <h2 id="h-photos" data-i18n="hPhotos">1 · Photos</h2>
+          <div id="drop" class="ocr-drop">
+            <div class="cmc-bar" style="justify-content:center">
+              <button type="button" id="pick" class="cmc-btn primary" data-i18n="pick">Choose photos</button>
+              <button type="button" id="camera" class="cmc-btn cyan" data-i18n="camera">Take a photo</button>
+            </div>
+            <p data-i18n="dropHint">…or drag photos here, or paste an image with Ctrl+V. PNG, JPG or WebP, up to 10 MB each, up to 10 pages.</p>
+            <input id="image" type="file" multiple accept="image/png,image/jpeg,image/webp" hidden>
+            <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
+          </div>
+          <div id="queue" class="cmc-chips" role="group"></div>
+          <div id="pageTools" class="cmc-bar" hidden>
+            <button type="button" id="rotL" class="cmc-btn quiet" data-i18n="rotL" data-i18n-title="rotLTip">⟲ 90°</button>
+            <button type="button" id="rotR" class="cmc-btn quiet" data-i18n="rotR" data-i18n-title="rotRTip">⟳ 90°</button>
+            <button type="button" id="moveL" class="cmc-btn quiet" data-i18n="moveL">← Earlier</button>
+            <button type="button" id="moveR" class="cmc-btn quiet" data-i18n="moveR">Later →</button>
+            <button type="button" id="remove" class="cmc-btn quiet" data-i18n="remove">Remove page</button>
+            <button type="button" id="removeAll" class="cmc-btn quiet" data-i18n="removeAll">Remove all</button>
+          </div>
+          <div class="cmc-stage ocr-stage">
+            <canvas id="view" hidden></canvas>
+            <p id="emptyView" class="cmc-sub" data-i18n="emptyView">No photo yet. Choose, drop or paste one to begin.</p>
+          </div>
+          <p id="imageInfo" class="cmc-sub"></p>
+        </section>
+
+        <section class="cmc-panel" aria-labelledby="h-settings">
+          <h2 id="h-settings" data-i18n="hSettings">Settings</h2>
+          <div class="cmc-field-row">
+            <label for="language" class="cmc-label" data-i18n="languageLabel">Text language</label>
+            <select id="language" class="cmc-field">
+              <option value="eng" data-i18n="english">English</option>
+              <option value="chi_sim" data-i18n="chinese">Simplified Chinese</option>
+              <option value="eng+chi_sim" data-i18n="combined">English + Simplified Chinese</option>
+            </select>
+          </div>
+          <h3 data-i18n="hPre">Make the photo easier to read</h3>
+          <label class="ocr-check"><input type="checkbox" id="grey"> <span data-i18n="grey">Greyscale</span></label>
+          <div class="cmc-field-row">
+            <label for="contrast"><span data-i18n="contrast">Contrast</span> <b id="contrastVal" class="ocr-val">0</b></label>
+            <input type="range" id="contrast" min="-50" max="100" value="0" step="5">
+          </div>
+          <div class="cmc-field-row">
+            <label for="thr"><span data-i18n="thr">Black and white threshold</span> <b id="thrVal" class="ocr-val"></b></label>
+            <input type="range" id="thr" min="0" max="255" value="0" step="5">
+          </div>
+          <label class="ocr-check"><input type="checkbox" id="applyAll" checked> <span data-i18n="applyAll">Apply these to all pages</span></label>
+          <div class="cmc-bar">
+            <button type="button" id="auto" class="cmc-btn quiet" disabled data-i18n="auto" data-i18n-title="autoTip">Auto black &amp; white</button>
+            <button type="button" id="resetFx" class="cmc-btn quiet" disabled data-i18n="resetFx">Reset</button>
+          </div>
+          <div class="cmc-bar">
+            <button type="button" id="recognize" class="cmc-btn primary" disabled data-i18n="recognize" data-i18n-title="recognizeTip">Recognize text</button>
+            <button type="button" id="cancel" class="cmc-btn quiet" disabled data-i18n="cancel">Cancel</button>
+          </div>
+          <progress id="progress" max="1" value="0"></progress>
+          <p id="pct" class="cmc-stat" aria-hidden="true"></p>
+          <p id="status" class="ocr-status" role="status" aria-live="polite"></p>
+          <p class="cmc-sub" data-i18n="tip">Use a clear, upright, well-lit photo. Large images are reduced to at most 2400 pixels per side. The first recognition may take a moment to load the bundled language model.</p>
+        </section>
+      </div>
+
+      <section class="cmc-panel" aria-labelledby="h-text">
+        <h2 id="h-text" data-i18n="hText">2 · Text</h2>
+        <div id="confBox" class="cmc-stat" hidden></div>
+        <div class="cmc-note warn">
+          <b data-i18n="warnHead">Proofread before use</b>
+          <span data-i18n="resultLabel">Editable text — check recognition before using it</span>
+        </div>
+        <div class="cmc-bar">
+          <button type="button" id="tabEdit" class="cmc-chip" aria-pressed="true" data-i18n="tabEdit">Edit</button>
+          <button type="button" id="tabProof" class="cmc-chip" aria-pressed="false"></button>
+          <span id="counts" class="cmc-stat" style="margin-left:auto"></span>
+        </div>
+        <div id="editPane">
+          <label for="result" class="cmc-sr" data-i18n="resultLabel">Editable text — check recognition before using it</label>
+          <textarea id="result" class="cmc-field" rows="12" spellcheck="false" data-i18n-ph="resultPh"></textarea>
+          <div class="cmc-bar" style="margin-top:8px" role="group" data-i18n-aria="cleanLabel">
+            <span class="cmc-label" data-i18n="clean">Clean up</span>
+            <button type="button" id="cJoin" class="cmc-btn quiet" data-i18n="cJoin" data-i18n-title="cJoinTip">Join lines</button>
+            <button type="button" id="cHyph" class="cmc-btn quiet" data-i18n="cHyph" data-i18n-title="cHyphTip">Fix hyphenation</button>
+            <button type="button" id="cTidy" class="cmc-btn quiet" data-i18n="cTidy" data-i18n-title="cTidyTip">Tidy spaces</button>
+            <button type="button" id="cConf" class="cmc-btn quiet" data-i18n="cConf" data-i18n-title="cConfTip">Fix l/1 O/0</button>
+            <button type="button" id="undo" class="cmc-btn quiet" disabled data-i18n="undo">Undo</button>
+            <button type="button" id="clearText" class="cmc-btn quiet" data-i18n="clearText">Clear text</button>
+            <button type="button" id="nextDoubt" class="cmc-btn cyan" disabled data-i18n="nextDoubt" data-i18n-title="nextDoubtTip">Next word to check</button>
+          </div>
+          <div class="cmc-bar" style="margin-top:8px" role="group" data-i18n-aria="findLabel">
+            <input id="find" class="cmc-field" type="text" data-i18n-ph="findPh" data-i18n-aria="findPh" style="width:11em">
+            <input id="repl" class="cmc-field" type="text" data-i18n-ph="replPh" data-i18n-aria="replPh" style="width:11em">
+            <label class="ocr-check"><input type="checkbox" id="matchCase"> <span data-i18n="matchCase">Match case</span></label>
+            <button type="button" id="findNext" class="cmc-btn quiet" data-i18n="findNext">Find next</button>
+            <button type="button" id="replAll" class="cmc-btn quiet" data-i18n="replAll">Replace all</button>
+            <span id="findCount" class="cmc-stat"></span>
+          </div>
+        </div>
+        <div id="proofPane" hidden>
+          <div class="cmc-bar" style="margin-bottom:8px">
+            <label for="doubtLevel" class="cmc-label" data-i18n="doubtLevel">Highlight words below</label>
+            <select id="doubtLevel" class="cmc-field">
+              <option value="60">60%</option><option value="70">70%</option><option value="80" selected>80%</option><option value="90">90%</option>
+            </select>
+          </div>
+          <p class="cmc-sub" data-i18n="proofHint">This shows the text as first recognised. Click a highlighted word to find it in the editor.</p>
+          <div id="proof" class="ocr-proof"></div>
+        </div>
+        <div class="cmc-bar" role="group" data-i18n-aria="outLabel">
+          <button type="button" id="copy" class="cmc-btn primary" disabled data-i18n="copy">Copy text</button>
+          <button type="button" id="save" class="cmc-btn quiet" disabled data-i18n="save">Save .txt</button>
+          <button type="button" id="printText" class="cmc-btn quiet" disabled data-i18n="printText">Print</button>
+          <button type="button" class="cmc-btn cyan" data-target="listen" disabled data-i18n="toListen">Send to Dictation &amp; Listening</button>
+          <button type="button" class="cmc-btn cyan" data-target="worksheet" disabled data-i18n="toWorksheet">Send to Worksheet Maker</button>
+          <button type="button" class="cmc-btn cyan" data-target="slides" disabled data-i18n="toSlides">Send to Slide Studio</button>
+        </div>
+        <p id="transferHint" class="cmc-sub" data-i18n="standalone" hidden>Open this tool inside Mission Control to send text.</p>
+      </section>
+
+      <section aria-labelledby="h-make">
+        <h2 id="h-make" class="cmc-label" style="margin:0 0 8px" data-i18n="hMake">3 · Make something for your class</h2>
+        <div class="ocr-two">
+          <div class="cmc-panel">
+            <h2 data-i18n="hWords">Word list</h2>
+            <p class="cmc-sub" data-i18n="wordsHint">Picks the most useful unique vocabulary, skipping very common words.</p>
+            <div class="ocr-opts">
+              <div class="cmc-field-row"><label for="wlMax" class="cmc-label" data-i18n="wlMax">How many</label><input id="wlMax" class="cmc-field cmc-num" type="number" min="3" max="200" value="20"></div>
+              <div class="cmc-field-row"><label for="wlMin" class="cmc-label" data-i18n="wlMin">Min letters</label><input id="wlMin" class="cmc-field cmc-num" type="number" min="2" max="12" value="4"></div>
+              <div class="cmc-field-row"><label for="wlOrder" class="cmc-label" data-i18n="wlOrder">Order</label>
+                <select id="wlOrder" class="cmc-field"><option value="text" data-i18n="ordText">As they appear</option><option value="az" data-i18n="ordAz">A to Z</option><option value="long" data-i18n="ordLong">Longest first</option></select></div>
+              <label class="ocr-check"><input type="checkbox" id="wlNames" checked> <span data-i18n="wlNames">Skip names</span></label>
+            </div>
+            <div class="cmc-bar"><button type="button" id="wlMake" class="cmc-btn primary" disabled data-i18n="wlMake">Make word list</button></div>
+            <label for="wlOut" class="cmc-sr" data-i18n="wlOutLabel">Word list, one word per line</label>
+            <textarea id="wlOut" class="cmc-field" rows="8" spellcheck="false" data-i18n-ph="wlPh"></textarea>
+            <p id="wlCount" class="cmc-stat"></p>
+            <div class="cmc-bar">
+              <button type="button" id="wlCopy" class="cmc-btn quiet" disabled data-i18n="copyList">Copy list</button>
+              <button type="button" id="wlSave" class="cmc-btn quiet" disabled data-i18n="save">Save .txt</button>
+              <button type="button" id="wlPrint" class="cmc-btn quiet" disabled data-i18n="printText">Print</button>
+              <button type="button" id="wlSend" class="cmc-btn cyan" disabled data-i18n="toWorksheet">Send to Worksheet Maker</button>
+            </div>
+          </div>
+
+          <div class="cmc-panel">
+            <h2 data-i18n="hCloze">Gap-fill (cloze) text</h2>
+            <p class="cmc-sub" data-i18n="clozeHint">Blanks words in your text and makes an answer key. Use it on screen or print it.</p>
+            <div class="ocr-opts">
+              <div class="cmc-field-row"><label for="clMode" class="cmc-label" data-i18n="clMode">Blank</label>
+                <select id="clMode" class="cmc-field"><option value="nth" data-i18n="clNth">Every Nth word</option><option value="list" data-i18n="clList">Words in my word list</option></select></div>
+              <div class="cmc-field-row" id="clNWrap"><label for="clN" class="cmc-label" data-i18n="clN">N</label><input id="clN" class="cmc-field cmc-num" type="number" min="2" max="20" value="7"></div>
+              <label class="ocr-check"><input type="checkbox" id="clSkip" checked> <span data-i18n="clSkip">Skip common words</span></label>
+              <label class="ocr-check"><input type="checkbox" id="clFirst" checked> <span data-i18n="clFirst">Keep first sentence</span></label>
+              <label class="ocr-check"><input type="checkbox" id="clBank" checked> <span data-i18n="clBank">Word bank</span></label>
+            </div>
+            <div class="cmc-bar">
+              <button type="button" id="clMake" class="cmc-btn primary" disabled data-i18n="clMake">Make gap-fill</button>
+              <button type="button" id="clReveal" class="cmc-btn quiet" aria-pressed="false" disabled data-i18n="clReveal">Show answers</button>
+            </div>
+            <div id="clOut" class="ocr-out" aria-live="polite"></div>
+            <p id="clCount" class="cmc-stat"></p>
+            <div class="cmc-bar">
+              <button type="button" id="clCopy" class="cmc-btn quiet" disabled data-i18n="clCopy">Copy student text</button>
+              <button type="button" id="clCopyKey" class="cmc-btn quiet" disabled data-i18n="clCopyKey">Copy answer key</button>
+              <button type="button" id="clPrint" class="cmc-btn quiet" disabled data-i18n="clPrint">Print student sheet</button>
+              <button type="button" id="clPrintKey" class="cmc-btn quiet" disabled data-i18n="clPrintKey">Print answer key</button>
+              <button type="button" id="clSend" class="cmc-btn cyan" disabled data-i18n="toSlides">Send to Slide Studio</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <details class="cmc-details" id="histBox">
+        <summary id="histSummary"></summary>
+        <p class="cmc-sub" data-i18n="histPrivacy">Photos are never uploaded or stored. Only the recognised text of your last few scans is kept in this browser, and you can clear it at any time.</p>
+        <ul id="histList" class="ocr-hist"></ul>
+        <div class="cmc-bar" style="margin-top:8px"><button type="button" id="histClear" class="cmc-btn quiet" disabled data-i18n="histClear">Clear history</button></div>
+      </details>
+
+      <details class="cmc-details">
+        <summary data-i18n="keysHead">Keyboard shortcuts</summary>
+        <p class="cmc-sub" data-i18n="keys">Ctrl+V paste a photo · Ctrl+Enter recognise · Esc cancel · F8 next word to check · Alt+B big text</p>
+      </details>
+
+      <footer class="cmc-foot">
+        <span data-i18n="credits">Text recognition by Tesseract.js and Tesseract OCR (Apache-2.0), running locally with bundled English and Simplified Chinese models.</span>
+        <a href="../lib/tesseract/LICENSE-tesseract.js.txt" target="_blank" rel="noopener" data-i18n="licJs">Tesseract.js licence</a> ·
+        <a href="../lib/tesseract/core/LICENSE.txt" target="_blank" rel="noopener" data-i18n="licCore">Core licence</a> ·
+        <a href="../ai/ocr/LICENSE-traineddata.txt" target="_blank" rel="noopener" data-i18n="licData">Language data licence</a>
+      </footer>
     </div>
-    <img id="preview" hidden alt="Selected image preview">
-    <p id="imageInfo" class="note"></p>
-    <progress id="progress" max="1" value="0" aria-label="OCR progress"></progress>
-    <p id="status" role="status" aria-live="polite"></p>
-    <label for="result" data-i18n="resultLabel">Editable text — check recognition before using it</label>
-    <textarea id="result" spellcheck="false"></textarea>
-    <div class="controls">
-      <button id="copy" disabled data-i18n="copy">Copy text</button>
-      <button id="save" disabled data-i18n="save">Save .txt</button>
-    </div>
-    <div class="controls" id="integration">
-      <button data-target="listen" disabled>Send to Listen / 发送到听读</button>
-      <button data-target="worksheet" disabled>Send to Worksheet / 发送到练习单</button>
-      <button data-target="slides" disabled>Send to Slides / 发送到幻灯片</button>
-    </div>
-    <p id="transferHint" class="note" data-i18n="standalone" hidden>Open this tool inside Mission Control to send text.</p>
-    <p class="note" data-i18n="tip">Use a clear, upright photo. Large images are reduced to at most 2400 pixels per side. The first recognition may take a moment to load the bundled language model.</p>
+
+    <div id="print" class="cmc-print-only"><h2 id="prTitle"></h2><pre id="prBody"></pre></div>
+    <div id="toast" class="cmc-toast" role="status" hidden></div>
   </main>
 </body>
 </html>

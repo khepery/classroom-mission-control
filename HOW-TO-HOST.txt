@@ -39,12 +39,13 @@ A small window opens and the hub opens in your browser at http://localhost:8080.
 Opening index.html straight from the folder also works for most tools, but the AI tools and phones cannot work that way.
 
 New local classroom tools
-- Geometry Playground: move triangle points, explore transformations and change function sliders.
-- Photo → Editable Text: choose a clear photo of printed English or simplified Chinese. Recognise, then proofread and edit the text. Copy or save it, or send it to Dictation and Listening, Worksheet Maker or Slide Studio. Sending asks before replacing the destination text. Worksheet Maker still needs one word or word/meaning pair per line; edit a passage into a word list first. PDF files are not supported.
-- Molecule Explorer: rotate the included models, change the rendering style and select atoms.
-- Logic Circuit Lab: connect switches, digital gates and lights. This is not an analogue electrical simulator.
-- Code Quest: solve visual programming challenges with sequences, loops and conditions. These are original classroom puzzles using Blockly, not a bundled copy of Blockly Games.
-- Particle Sandbox: paint interacting materials. This is a playful simulation, not accurate chemistry.
+All six tools share the hub look, work in English and Chinese, have a Projector mode, and keep their settings and progress in the browser (they are included in Class Lists > Save backup file). Most have a Pick a student button that uses your saved class list, and a print or copy option.
+- Geometry Playground: five modes (triangle, transformations, functions, Pythagoras, circle theorems). 15 ready activities with teacher notes, predict-then-reveal, PNG download and a printable worksheet.
+- Photo -> Editable Text: queue several photos, tidy them, recognise English and/or simplified Chinese, proofread with low-confidence highlighting, then copy, save or send the text to Dictation and Listening, Worksheet Maker or Slide Studio. Also makes word lists and gap-fill sheets. Sending asks before replacing the destination text. PDF files are not supported.
+- Molecule Explorer: 23 molecules with shape, polarity and uses, bond and angle measuring, predict-first, compare and quiz modes, and a printable fact sheet.
+- Logic Circuit Lab: 17 sample circuits with story problems, predict-then-test truth tables, 12 build challenges, printable worksheets and answer keys, circuit export and import. This is digital logic, not an analogue electrical simulator.
+- Code Quest: 23 block-coding missions in five units with a live JavaScript view, teacher lesson notes, Class mode, printable human-robot activity, certificates and progress export. These are original classroom puzzles using Blockly, not a bundled copy of Blockly Games.
+- Particle Sandbox: 19 materials, 10 challenges with a live goal tracker, a printable observation sheet, snapshots and a timer. This is a playful simulation, not accurate chemistry.
 
 Run these tools through the local launcher or your own website, not by opening their files directly. Their engines, models and recognition data are included: no account, CDN or external service is needed. They do not upload photos or text. They load only when opened, so they do not slow down the other tools. Leaving a tool closes its embedded page and releases its engine: save or copy work before leaving. English and Chinese interfaces follow the hub language. Particle Sandbox and Molecule Explorer need WebGL; performance depends on the classroom computer.
 

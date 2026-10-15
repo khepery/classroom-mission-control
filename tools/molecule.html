@@ -7,46 +7,146 @@
   <title>Molecule Explorer</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-    :root{color-scheme:light}a{color:#155fc1}
-    *{box-sizing:border-box}body{margin:0;padding:20px;font:16px system-ui,sans-serif;color:#182b43;background:#f5f8fc}main{max-width:1100px;margin:auto}h1{margin-top:0}p{line-height:1.5}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:16px 0}label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}select,button,input{font:inherit}button,select{padding:9px;border:1px solid #697b91;border-radius:6px;background:white;color:#182b43}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0762c7;outline-offset:3px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px}#viewer{position:relative;width:100%;height:clamp(320px,65vh,620px);border:1px solid #697b91;border-radius:8px;overflow:hidden;background:#edf2f8}.panel{padding:16px;background:white;border:1px solid #ccd6e4;border-radius:8px}.panel label{margin:16px 0}.panel select{max-width:100%;width:100%}.panel input[type=range]{width:100%;min-height:28px}.rotation{display:flex;gap:8px;flex-wrap:wrap}.error{padding:14px;border:2px solid #b42318;background:#fff0ee;color:#8b1a13}.legend{display:flex;flex-wrap:wrap;gap:12px}.swatch{display:inline-block;width:14px;height:14px;border:1px solid #697b91;border-radius:50%;margin-right:4px}footer{font-size:13px;margin-top:20px}[hidden]{display:none!important}@media(max-width:700px){body{padding:12px}.workspace{grid-template-columns:1fr}#viewer{height:380px}}
+    .mol-layout{display:grid;grid-template-columns:230px minmax(0,1fr) minmax(300px,390px);grid-template-areas:"lib center side";gap:14px;align-items:start}
+    .mol-lib{grid-area:lib}.mol-center{grid-area:center;display:flex;flex-direction:column;gap:10px;min-width:0}.mol-side{grid-area:side}
+    .mol-stage{height:clamp(300px,58vh,660px);overflow:hidden;background:#06090d}
+    #viewer,.mol-flat{position:absolute;inset:0;width:100%;height:100%}
+    .mol-flat{touch-action:none}
+    .mol-flat circle[data-atom]{cursor:pointer}
+    .mol-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;color:var(--dim)}
+    .mol-legend span{display:inline-flex;align-items:center;gap:6px}
+    .mol-legend span.on{color:var(--text)}
+    .mol-swatch{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid #36505e}
+    .mol-search{width:100%}
+    .mol-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;max-height:min(52vh,520px);overflow:auto}
+    .mol-item{all:unset;box-sizing:border-box;display:flex;justify-content:space-between;align-items:baseline;gap:8px;width:100%;padding:.35em .6em;border:1px solid transparent;cursor:pointer;font-size:.85rem;color:var(--soft)}
+    .mol-item:hover{border-color:var(--cyan);color:var(--text)}
+    .mol-item[aria-current="true"]{border-color:var(--amber);color:var(--amber);background:rgba(255,178,62,.08)}
+    .mol-item:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+    .mol-item b{font-weight:400;color:var(--cyan);white-space:nowrap}
+    .mol-formula{font:400 clamp(1.5rem,3vw,2.1rem)/1.1 var(--f-display);color:var(--amber);letter-spacing:.04em}
+    .mol-name{margin:0;font-size:1.05rem;color:var(--text)}.mol-name small{color:var(--dim);font-size:.8rem;margin-left:8px}
+    .mol-facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 12px;margin:0;font-size:.88rem}
+    .mol-facts dt{color:var(--dim);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding-top:.2em}
+    .mol-facts dd{margin:0;overflow-wrap:anywhere}
+    .mol-tag{display:inline-block;padding:0 .6em;border:1px solid var(--cyan);color:var(--cyan);font-size:.8rem}
+    .mol-tag.np{border-color:var(--amber);color:var(--amber)}
+    .mol-cover{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#10202c,#06090d 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;text-align:center;z-index:3;overflow:auto}
+    .mol-cover .mol-formula{font-size:clamp(2.4rem,7vw,4.6rem)}
+    .mol-guess{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .mol-pick{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:4;background:var(--hull2);border:1px solid var(--amber);padding:10px 18px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.6);max-width:92%}
+    .mol-pick .big{font:400 clamp(1.4rem,4vw,2.6rem)/1.2 var(--f-display);color:var(--amber);overflow-wrap:anywhere}
+    .mol-opts{display:flex;flex-direction:column;gap:6px}
+    .mol-opt{justify-content:flex-start!important;text-align:left!important;text-transform:none!important;letter-spacing:.02em!important;font-size:.95rem!important}
+    .mol-opt.ok{border-color:var(--green);color:var(--green);background:rgba(125,255,176,.08)}
+    .mol-opt.bad{border-color:var(--red);color:var(--red);background:rgba(255,90,74,.08)}
+    .mol-opt kbd,.mol-keys kbd{font:inherit;border:1px solid var(--grid);padding:0 .45em;margin-right:.6em;color:var(--cyan)}
+    .mol-keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px;margin:0;padding:0;list-style:none;font-size:.86rem}
+    .mol-table-wrap{overflow-x:auto}
+    .mol-table{width:100%;text-align:left}.mol-table th,.mol-table td{text-align:left;vertical-align:top}
+    .mol-lessons{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+    .mol-prompts{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px;font-size:.86rem}
+    .mol-prompts i{color:var(--green);font-style:normal}
+    .mol-sheet{color:#000;font-family:Arial,sans-serif}.mol-sheet h1{font-size:22pt;margin:0 0 4pt}.mol-sheet table{border-collapse:collapse;width:100%;margin-top:10pt}.mol-sheet th,.mol-sheet td{border:1px solid #888;padding:5pt 8pt;text-align:left;vertical-align:top;font-size:11pt}.mol-sheet th{width:28%;background:#eee}.mol-sheet img,.mol-sheet svg{display:block;margin:8pt auto;max-width:100%;max-height:230pt;background:#06090d}.mol-sheet .line{display:inline-block;min-width:150pt;border-bottom:1px solid #000}
+    body.cmc-board .cmc-main{max-width:none}
+    body.cmc-board .mol-lib,body.cmc-board .cmc-sub,body.cmc-board .mol-hide-board{display:none!important}
+    body.cmc-board .mol-layout{grid-template-areas:"center side";grid-template-columns:minmax(0,1fr) minmax(340px,460px)}
+    body.cmc-board .mol-stage{height:clamp(380px,68vh,820px)}
+    body.mol-quiz .mol-lib{display:none}
+    body.mol-quiz .mol-layout{grid-template-areas:"center side";grid-template-columns:minmax(0,1fr) minmax(300px,390px)}
+    @media(max-width:1180px){.mol-layout{grid-template-columns:minmax(0,1fr) minmax(300px,390px);grid-template-areas:"center side" "lib lib"}.mol-list{max-height:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}}
+    @media(max-width:820px){.mol-layout,body.cmc-board .mol-layout,body.mol-quiz .mol-layout{grid-template-columns:1fr;grid-template-areas:"center" "side" "lib"}.mol-stage{height:clamp(260px,50vh,420px)}}
+    @media print{.mol-sheet{display:block!important}}
   </style>
   <script defer src="../lib/3dmol/3Dmol-min.js"></script>
+  <script defer src="molecule-data.js"></script>
   <script defer src="molecule.js"></script>
 </head>
-<body>
-<main>
-  <h1 data-i18n="title">Molecule Explorer</h1>
-  <p data-i18n="intro">Explore local example molecules. Drag to rotate, scroll or pinch to zoom, and click an atom to identify it. No uploads or remote data calls.</p>
-  <div id="error" class="error" role="alert" hidden></div>
-  <div class="controls">
-    <label><span data-i18n="molecule">Molecule</span><select id="molecule"><option value="water" data-i18n="water">Water</option><option value="methane" data-i18n="methane">Methane</option><option value="ethanol" data-i18n="ethanol">Ethanol</option></select></label>
-    <label><span data-i18n="style">Style</span><select id="style"><option value="ballstick" data-i18n="ballstick">Ball and stick</option><option value="sphere" data-i18n="sphere">Space-filling spheres</option><option value="stick" data-i18n="stick">Sticks</option></select></label>
-    <button id="reset" type="button" data-i18n="reset">Reset view</button>
-  </div>
-  <div class="workspace">
-    <div id="viewer" role="img" aria-label="Interactive 3D molecule; use the adjacent controls to rotate, zoom and identify atoms"></div>
-    <section class="panel" id="panel" aria-label="Molecule information and accessible controls">
-      <h2 id="molecule-name">Water · H₂O</h2>
-      <p id="description"></p>
-      <div class="legend">
-        <span><i class="swatch" style="background:white"></i><span data-i18n="hydrogen">H: hydrogen</span></span>
-        <span><i class="swatch" style="background:#909090"></i><span data-i18n="carbon">C: carbon</span></span>
-        <span><i class="swatch" style="background:#ff0d0d"></i><span data-i18n="oxygen">O: oxygen</span></span>
+<body class="cmc">
+<main class="cmc-main">
+  <header class="cmc-head cmc-noprint">
+    <div>
+      <h1><span aria-hidden="true">⚛</span> <span data-i18n="title" style="color:inherit">Molecule Explorer</span></h1>
+      <p class="cmc-sub" data-i18n="intro">Rotate illustrative 3D molecules, measure bonds and angles, predict shapes, compare molecules and run a quick quiz. Everything runs offline.</p>
+    </div>
+    <div class="cmc-bar">
+      <div class="cmc-tabs" id="modes" role="group" data-i18n-aria="modes" aria-label="Mode">
+        <button type="button" class="cmc-chip" data-mode="explore" data-i18n="modeExplore">Explore</button>
+        <button type="button" class="cmc-chip" data-mode="predict" data-i18n="modePredict">Predict first</button>
+        <button type="button" class="cmc-chip" data-mode="quiz" data-i18n="modeQuiz">Quiz</button>
+        <button type="button" class="cmc-chip" data-mode="compare" data-i18n="modeCompare">Compare</button>
       </div>
-      <label><span data-i18n="atom">Identify atom</span><select id="atom"></select></label>
-      <p id="atom-info" role="status" aria-live="polite" aria-atomic="true" data-i18n="selectAtom">Click an atom or choose one above.</p>
-      <h3 data-i18n="rotate">Rotate</h3>
-      <div class="rotation">
-        <button type="button" id="left" data-i18n="left">Left</button>
-        <button type="button" id="right" data-i18n="right">Right</button>
-        <button type="button" id="up" data-i18n="up">Up</button>
-        <button type="button" id="down" data-i18n="down">Down</button>
-      </div>
-      <label><span data-i18n="zoom">Zoom</span><output id="zoom-value">1.0×</output><input id="zoom" type="range" min="0.5" max="3" value="1" step="0.1"></label>
-      <p data-i18n="modelNote">Illustrative molecular coordinates; these models are for learning, not experimental analysis. Distances are in ångströms (Å).</p>
+      <button type="button" class="cmc-btn cyan" id="board" aria-pressed="false" data-i18n="projector">Projector mode</button>
+      <button type="button" class="cmc-btn quiet" id="pick" data-i18n="pick">Pick a student</button>
+    </div>
+  </header>
+  <div id="error" class="cmc-error cmc-noprint" role="alert" hidden></div>
+
+  <div class="mol-layout">
+    <section class="cmc-panel mol-lib cmc-noprint" aria-labelledby="lib-title">
+      <h2 id="lib-title" data-i18n="library">Molecule library</h2>
+      <label class="cmc-field-row"><span class="cmc-label" data-i18n="search">Search</span>
+        <input id="search" class="cmc-field mol-search" type="search" autocomplete="off" data-i18n-ph="searchPh" placeholder="Name, formula…"></label>
+      <div class="cmc-chips" id="groups" role="group" data-i18n-aria="topics" aria-label="Topics"></div>
+      <ul class="mol-list" id="list"></ul>
+      <p class="cmc-label" id="count" role="status" aria-live="polite"></p>
     </section>
+
+    <div class="mol-center">
+      <div class="cmc-stage mol-stage cmc-noprint" id="stage">
+        <div id="viewer" role="img" aria-label="Interactive 3D molecule"></div>
+        <svg id="flat" class="mol-flat" viewBox="-200 -150 400 300" preserveAspectRatio="xMidYMid meet" role="img" hidden></svg>
+        <div id="cover" class="mol-cover" hidden></div>
+        <div id="pick-card" class="mol-pick" role="status" aria-live="polite" hidden></div>
+      </div>
+      <div class="cmc-bar cmc-noprint" id="viewbar">
+        <button type="button" class="cmc-btn quiet mol-hide-board" id="prev"><span aria-hidden="true">‹</span> <span data-i18n="prev">Prev</span></button>
+        <button type="button" class="cmc-btn quiet mol-hide-board" id="next"><span data-i18n="next">Next</span> <span aria-hidden="true">›</span></button>
+        <select id="style" class="cmc-field" data-i18n-aria="style" aria-label="Style">
+          <option value="ballstick" data-i18n="ballstick">Ball and stick</option>
+          <option value="sphere" data-i18n="sphere">Space-filling spheres</option>
+          <option value="stick" data-i18n="stick">Sticks</option>
+        </select>
+        <button type="button" class="cmc-btn" id="labels" aria-pressed="false" data-i18n="labels">Labels</button>
+        <button type="button" class="cmc-btn" id="lengths" aria-pressed="false" data-i18n="bondLengths">Bond lengths</button>
+        <button type="button" class="cmc-btn" id="measure" aria-pressed="false" data-i18n="measure">Measure</button>
+        <button type="button" class="cmc-btn" id="spin" aria-pressed="false" data-i18n="spin">Auto-rotate</button>
+      </div>
+      <div class="cmc-bar cmc-noprint mol-hide-board">
+        <span class="cmc-bar" role="group" data-i18n-aria="rotate" aria-label="Rotate">
+          <button type="button" class="cmc-btn quiet" id="left" data-i18n="left">Left</button>
+          <button type="button" class="cmc-btn quiet" id="right" data-i18n="right">Right</button>
+          <button type="button" class="cmc-btn quiet" id="up" data-i18n="up">Up</button>
+          <button type="button" class="cmc-btn quiet" id="down" data-i18n="down">Down</button>
+        </span>
+        <label class="cmc-bar" style="gap:6px"><span class="cmc-label" data-i18n="zoom">Zoom</span><input id="zoom" type="range" min="0.5" max="3" value="1" step="0.1" style="width:130px"><output id="zoom-value" class="cmc-label">1.0×</output></label>
+        <button type="button" class="cmc-btn quiet" id="reset" data-i18n="reset">Reset view</button>
+        <button type="button" class="cmc-btn cyan" id="snap" data-i18n="snapshot">Save PNG</button>
+        <button type="button" class="cmc-btn cyan" id="copy" data-i18n="copy">Copy summary</button>
+        <button type="button" class="cmc-btn cyan" id="print" data-i18n="print">Print fact sheet</button>
+      </div>
+      <section class="cmc-panel cmc-noprint" aria-labelledby="atoms-title">
+        <h2 id="atoms-title" data-i18n="atomsTitle">Atoms</h2>
+        <div class="cmc-chips" id="atoms" role="group" data-i18n-aria="atomsTitle" aria-label="Atoms"></div>
+        <p class="cmc-note" id="readout" role="status" aria-live="polite" aria-atomic="true"></p>
+        <div class="mol-legend" id="legend"></div>
+      </section>
+    </div>
+
+    <aside class="cmc-panel mol-side cmc-noprint" id="side" aria-label="Molecule information"></aside>
   </div>
-  <footer><span data-i18n="powered">Powered by local 3Dmol.js 2.5.5.</span> <a href="../lib/3dmol/LICENSE" data-i18n="license">License</a></footer>
+
+  <details class="cmc-details cmc-noprint mol-hide-board">
+    <summary data-i18n="helpTitle">Keyboard shortcuts and lesson ideas</summary>
+    <ul class="mol-keys" id="keys"></ul>
+    <h3 style="margin:12px 0 6px;color:var(--cyan);font-weight:400;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase" data-i18n="lessonsTitle">Lesson ideas</h3>
+    <ol class="mol-lessons" id="lessons"></ol>
+  </details>
+
+  <div class="cmc-note warn cmc-noprint"><b data-i18n="noteLabel">Model note</b><span data-i18n="modelNote">Illustrative molecular coordinates; these models are for learning, not experimental analysis. Distances are in ångströms (Å).</span></div>
+  <section id="sheet" class="cmc-print-only mol-sheet" aria-hidden="true"></section>
+  <div id="toast" class="cmc-toast cmc-noprint" role="status" aria-live="polite" hidden></div>
+  <footer class="cmc-foot cmc-noprint"><span data-i18n="powered">Powered by local 3Dmol.js 2.5.5.</span> <a href="../lib/3dmol/LICENSE" data-i18n="license">License</a></footer>
   <noscript>This tool requires JavaScript and WebGL. 此工具需要启用 JavaScript 和 WebGL。</noscript>
 </main>
 </body>
