@@ -1,0 +1,8 @@
+Blockly 13.4.0, official npm package "blockly".
+Source: https://github.com/google/blockly
+Package: https://registry.npmjs.org/blockly/-/blockly-13.4.0.tgz
+License: Apache-2.0, see LICENSE.
+Bundled: compressed core, English/Chinese messages, upstream media.
+Original Code Quest puzzles and interpreter are in tools/codequest.js.
+This is not a distribution of Blockly Games or its game code.
+GitHub advisory scan of blockly 13.4.0: no known advisories returned.

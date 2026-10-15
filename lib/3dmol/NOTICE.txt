@@ -1,0 +1,11 @@
+3Dmol.js 2.5.5
+Source: official npm package 3dmol@2.5.5, https://registry.npmjs.org/3dmol
+npm tarball integrity:
+sha512-kqNHouGqq3YfW58174tdERvm0XYTmP0tavQKOqIw1ouc2OJ7epkXEFrtEkVXV0clBZT2Ze2xHRC/qxX0u0qCdw==
+Distributed files: build/3Dmol-min.js, build/3Dmol-min.js.LICENSE.txt.
+BSD-3-Clause license retained in LICENSE; bundled third-party notices retained
+in 3Dmol-min.js.LICENSE.txt.
+
+The water, methane, and ethanol XYZ coordinates in tools/molecule.js are
+original illustrative educational models, not experimental structure data.
+No remote molecule services are used.

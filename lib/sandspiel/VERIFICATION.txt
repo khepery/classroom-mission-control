@@ -1,0 +1,22 @@
+Verified 2026-10-14 using the existing Chromium 154 / ChromeDriver,
+headless SwiftShader WebGL, served by Python's local HTTP server.
+
+PASS: authentic Rust/WASM engine built with cargo --locked --release;
+isolated npm build produced the local WebGL bundle.
+PASS: engine paint/readback for all 19 material choices (including eraser);
+falling sand, stationary wall, erasing, clear and nonzero WebGL pixel output.
+PASS: English and Chinese UI, brush output, pause/resume, reset, clear,
+keyboard brush movement/painting, reduced-motion initial pause.
+PASS: mobile 390px viewport without horizontal overflow.
+PASS: browser request log contained only localhost HTML/JS/WASM resources.
+PASS: loaded tool remained functional with browser networking disabled.
+PASS: removing an active iframe fired pagehide and stopped animation;
+callback count stayed unchanged after removal.
+PASS: no browser console errors during the successful verification run.
+PASS: same-origin parent cmc-language messages switch English/Chinese in
+both directions without changing selected material, brush, paused state or
+the exact WebGL canvas screenshot. Wrong-origin/source messages and invalid
+language codes are rejected; all labels and document language update.
+
+The browser tests exercised the real bundled engine, not a mock simulator.
+No gallery, authentication, upload or sharing code is bundled.

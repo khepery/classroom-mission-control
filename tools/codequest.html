@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob:; font-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Code Quest</title>
+  <link rel="icon" href="../ic/brain.webp">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#101c2c;color:#eef6ff;font:16px system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:18px}h1{font-size:1.6rem;margin:0 0 8px}p{line-height:1.5}button,select,input{font:inherit;padding:8px;border:1px solid #aac5df;border-radius:7px;background:#e8f2ff;color:#102237}button{cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #ffce56;outline-offset:3px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px}.panel,details{background:#1b2c43;padding:14px;border-radius:10px}.board{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;aspect-ratio:1}.cell{display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:#466479;border-radius:5px;position:relative}.wall{background:#0c1522}.goal{background:#74631b}.robot{background:#126658;outline:2px solid #82ffe1}.goal-mark{position:absolute;font-size:1rem;right:2px;top:0}#workspace{height:510px;border-radius:10px;overflow:hidden;background:#fff}.feedback{min-height:3em}details{margin-top:15px}summary{cursor:pointer}a{color:#a9d6ff}#program-list{line-height:1.7;white-space:pre-wrap;font-family:monospace}.builder button{font-size:.92rem}@media(max-width:780px){.layout{grid-template-columns:1fr}.board{max-width:310px;margin:auto}#workspace{height:420px}}
+  </style>
+  <script src="../lib/blockly/blockly_compressed.js" defer></script>
+  <script src="../lib/blockly/msg/en.js" defer></script>
+  <script src="codequest.js" defer></script>
+</head>
+<body><main>
+  <h1 id="title">Code Quest</h1>
+  <p id="intro">Program a robot using sequencing, loops, and conditions. Original classroom puzzles with official Blockly.</p>
+  <div class="toolbar">
+    <label for="level" id="level-label">Challenge</label>
+    <select id="level"></select>
+    <button id="run" type="button">Run</button>
+    <button id="reset" type="button">Reset robot</button>
+    <button id="restart" type="button">Clear program</button>
+    <button id="next" type="button" disabled>Next challenge</button>
+    <button id="language" type="button">中文</button>
+  </div>
+  <div class="layout">
+    <section class="panel" aria-labelledby="challenge-title">
+      <h2 id="challenge-title"></h2><p id="mission"></p>
+      <div id="board" class="board" role="img" aria-label="Robot puzzle board"></div>
+      <p id="position" aria-live="polite"></p>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <p id="limits"></p>
+    </section>
+    <section aria-label="Blockly program editor">
+      <div id="workspace"></div>
+      <details open class="builder"><summary id="builder-title">Keyboard-friendly program builder</summary>
+        <p id="builder-help">Choose an insertion location, then add blocks. This edits the same Blockly program.</p>
+        <div class="toolbar"><label for="target" id="target-label">Insert into</label><select id="target"></select></div>
+        <div class="toolbar">
+          <button id="add-move" type="button">Forward</button>
+          <button id="add-left" type="button">Turn left</button>
+          <button id="add-right" type="button">Turn right</button>
+          <label for="repeat-count" id="repeat-label">Times</label><input id="repeat-count" type="number" min="1" max="10" value="3" style="width:65px">
+          <button id="add-repeat" type="button">Repeat</button>
+          <button id="add-if" type="button">If path ahead / else</button>
+          <button id="remove-last" type="button">Remove last in location</button>
+        </div>
+        <div id="program-list" aria-label="Program outline"></div>
+      </details>
+    </section>
+  </div>
+  <details><summary id="help-title">How to play</summary><p id="help"></p></details>
+  <p id="credit">Original puzzles, not Blockly Games. Blockly © Google LLC and contributors, Apache 2.0. <a href="../lib/blockly/LICENSE">Library license</a>. Local only: no account, network, or student-data storage.</p>
+</main></body></html>

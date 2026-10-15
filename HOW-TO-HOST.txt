@@ -8,6 +8,8 @@ index.html   the hub
 ai/          the AI models for voices, captions, cut-outs and Doodle Dash (about 250 MB)
 fonts/       the fonts, so the hub looks right without Google Fonts
 lib/         QR, camera scanning, sketch and Word export libraries
+tools/       six local classroom tools and their hub integration
+ai/ocr/      English and simplified Chinese recognition data for Photo → Editable Text
 Keep everything together in one folder. Do not rename the files.
 
 Option 1, for visitors outside mainland China: Netlify Drop
@@ -35,6 +37,18 @@ Windows: double-click Start Mission Control.bat.
 Mac: double-click Start Mission Control.command. The first time, right-click it, choose Open, then Open. It needs Python 3. If it asks, open Terminal and type xcode-select --install.
 A small window opens and the hub opens in your browser at http://localhost:8080. The AI tools and the microphone work this way. Keep the small window open while you teach. Close it to stop.
 Opening index.html straight from the folder also works for most tools, but the AI tools and phones cannot work that way.
+
+New local classroom tools
+- Geometry Playground: move triangle points, explore transformations and change function sliders.
+- Photo → Editable Text: choose a clear photo of printed English or simplified Chinese. Recognise, then proofread and edit the text. Copy or save it, or send it to Dictation and Listening, Worksheet Maker or Slide Studio. Sending asks before replacing the destination text. Worksheet Maker still needs one word or word/meaning pair per line; edit a passage into a word list first. PDF files are not supported.
+- Molecule Explorer: rotate the included models, change the rendering style and select atoms.
+- Logic Circuit Lab: connect switches, digital gates and lights. This is not an analogue electrical simulator.
+- Code Quest: solve visual programming challenges with sequences, loops and conditions. These are original classroom puzzles using Blockly, not a bundled copy of Blockly Games.
+- Particle Sandbox: paint interacting materials. This is a playful simulation, not accurate chemistry.
+
+Run these tools through the local launcher or your own website, not by opening their files directly. Their engines, models and recognition data are included: no account, CDN or external service is needed. They do not upload photos or text. They load only when opened, so they do not slow down the other tools. Leaving a tool closes its embedded page and releases its engine: save or copy work before leaving. English and Chinese interfaces follow the hub language. Particle Sandbox and Molecule Explorer need WebGL; performance depends on the classroom computer.
+
+Keep the complete lib/, ai/ and tools/ folders when copying or hosting the app. The individual third-party license and provenance notices are included beside each bundled engine. Keep those notices when redistributing the app.
 
 Students answer Quiz Show on their phones
 1. Start the hub with Start Mission Control on the classroom laptop. The laptop must be on the classroom Wi-Fi.

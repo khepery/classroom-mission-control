@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; img-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'">
+  <title>Photo → Editable Text</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 960px; margin: auto; padding: 24px; background: #132033; color: #eef4ff; }
+    h1 { font-size: 1.7rem; }
+    p { line-height: 1.5; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 0; }
+    button, select, input { font: inherit; }
+    button, select { padding: 10px 14px; border: 1px solid #7793b4; border-radius: 8px; background: #233d5d; color: #fff; }
+    button:not(:disabled) { cursor: pointer; }
+    button:disabled { opacity: .5; }
+    button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #67d9ff; outline-offset: 3px; }
+    #preview { display: block; max-width: 100%; max-height: 380px; margin: 16px auto; object-fit: contain; background: white; }
+    #preview[hidden] { display: none; }
+    textarea { box-sizing: border-box; width: 100%; min-height: 260px; padding: 14px; font: 1.05rem/1.5 system-ui, sans-serif; color: #172235; background: white; border-radius: 8px; }
+    progress { width: 100%; height: 16px; }
+    #status { min-height: 1.5em; }
+    #status[data-error="true"] { color: #ffb5aa; }
+    .note { color: #bed0e7; font-size: .94rem; }
+  </style>
+  <script src="ocr.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1 data-i18n="title">Photo → Editable Text</h1>
+    <p data-i18n="privacy">All recognition happens on this device. Images and text are never uploaded.</p>
+    <label for="image" data-i18n="imageLabel">Choose a PNG, JPG or WebP image (maximum 10 MB)</label>
+    <div class="controls">
+      <input id="image" type="file" accept="image/png,image/jpeg,image/webp">
+      <label for="language" data-i18n="languageLabel">Text language</label>
+      <select id="language">
+        <option value="eng" data-i18n="english">English</option>
+        <option value="chi_sim" data-i18n="chinese">Simplified Chinese</option>
+        <option value="eng+chi_sim" data-i18n="combined">English + Simplified Chinese</option>
+      </select>
+      <button id="recognize" disabled data-i18n="recognize">Recognize text</button>
+      <button id="cancel" disabled data-i18n="cancel">Cancel</button>
+    </div>
+    <img id="preview" hidden alt="Selected image preview">
+    <p id="imageInfo" class="note"></p>
+    <progress id="progress" max="1" value="0" aria-label="OCR progress"></progress>
+    <p id="status" role="status" aria-live="polite"></p>
+    <label for="result" data-i18n="resultLabel">Editable text — check recognition before using it</label>
+    <textarea id="result" spellcheck="false"></textarea>
+    <div class="controls">
+      <button id="copy" disabled data-i18n="copy">Copy text</button>
+      <button id="save" disabled data-i18n="save">Save .txt</button>
+    </div>
+    <div class="controls" id="integration">
+      <button data-target="listen" disabled>Send to Listen / 发送到听读</button>
+      <button data-target="worksheet" disabled>Send to Worksheet / 发送到练习单</button>
+      <button data-target="slides" disabled>Send to Slides / 发送到幻灯片</button>
+    </div>
+    <p id="transferHint" class="note" data-i18n="standalone" hidden>Open this tool inside Mission Control to send text.</p>
+    <p class="note" data-i18n="tip">Use a clear, upright photo. Large images are reduced to at most 2400 pixels per side. The first recognition may take a moment to load the bundled language model.</p>
+  </main>
+</body>
+</html>
