@@ -108,6 +108,8 @@ Remaining checks and limitations
   classroom QR code, create a room, call /api/state or /api/send, or require a
   second device. Hosted sharing uses the current demo.html entry URL; on
   localhost it does not offer a remotely shareable link.
+- Direct file:// opening is not supported; use the local launcher or an HTTP
+  static server so iframe messaging and browser storage behave consistently.
 - Screen-reader testing, physical touch-device testing, browser-native storage
   denial, and a public deployment were not performed. The clipboard denial
   path was exercised with a rejected clipboard promise. Normal hub backup/
