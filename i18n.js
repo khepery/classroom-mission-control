@@ -6,18 +6,19 @@
   'use strict';
   if (window.RSLang) return;
 
-  var KEY = 'retroSuite.lang';
+  var script = document.currentScript;
+  var demoMode = !!(script && script.hasAttribute('data-demo'));
+  var KEY = demoMode ? 'mc_demo_retroSuite.lang' : 'retroSuite.lang';
   var AVAILABLE = [['en', 'English', 'EN'], ['zh', '中文', '中'], ['ru', 'Русский', 'RU']];
   var HTML_LANG = { en: 'en', zh: 'zh-CN', ru: 'ru' };
   var ATTRS = ['placeholder', 'title', 'aria-label', 'alt', 'label'];
 
-  var script = document.currentScript;
   var parts = ((script && script.getAttribute('data-parts')) || 'common').split(',');
   var base = (script && script.src) ? script.src.replace(/[^\/]*$/, '') : 'shared/';
 
   function has(code) { for (var i = 0; i < AVAILABLE.length; i++) if (AVAILABLE[i][0] === code) return true; return false; }
   function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function debugOn() { try { return localStorage.getItem('retroSuite.langDebug') === '1'; } catch (e) { return false; } }
+  function debugOn() { if (demoMode) return false; try { return localStorage.getItem('retroSuite.langDebug') === '1'; } catch (e) { return false; } }
 
   var lang = stored();
   if (!lang) {
