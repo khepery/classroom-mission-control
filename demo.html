@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-title-en="Classroom Mission Control demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob:; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'">
+  <meta name="theme-color" content="#04070b">
+  <title>Classroom Mission Control demo</title>
+  <script src="i18n.js" data-parts="common,demo" data-demo></script>
+  <link rel="stylesheet" href="tools/shared.css">
+  <link rel="stylesheet" href="lib/driverjs/driver.css">
+  <link rel="stylesheet" href="demo.css">
+  <script defer src="lib/driverjs/driver.js.iife.js"></script>
+  <script defer src="demo.js"></script>
+</head>
+<body class="cmc demo-page">
+  <header class="demo-header">
+    <a class="demo-brand" href="demo.html" aria-label="Classroom Mission Control demo">CMC <span>// DEMO</span></a>
+    <div class="demo-controls" id="demo-controls" aria-label="Demo controls">
+      <div id="lang-slot" aria-label="Language"></div>
+      <button class="cmc-btn primary" id="start-tour" type="button" data-i18n="Start tour">Start tour</button>
+      <button class="cmc-btn cyan" id="explore" type="button" data-i18n="Explore freely">Explore freely</button>
+      <button class="cmc-btn quiet" id="restart" type="button" data-i18n="Restart demo">Restart demo</button>
+    </div>
+  </header>
+  <main class="demo-main">
+    <section class="demo-intro" id="demo-intro" aria-labelledby="demo-title">
+      <p class="demo-eyebrow" data-i18n="DEMO MODE · FICTIONAL DATA">DEMO MODE · FICTIONAL DATA</p>
+      <h1 id="demo-title" data-i18n="A calmer way to run classroom activities.">A calmer way to run classroom activities.</h1>
+      <p class="demo-lede" data-i18n="Meet a fictional class, try a real Geometry Playground activity, and see how it fits a lesson.">Meet a fictional class, try a real Geometry Playground activity, and see how it fits a lesson.</p>
+      <p class="demo-assurance" data-i18n="No account. No real classroom session.">No account. No real classroom session.</p>
+      <p id="demo-status" class="demo-status" role="status" aria-live="polite" aria-atomic="true" data-i18n="Demo ready. Fictional class loaded.">Demo ready. Fictional class loaded.</p>
+    </section>
+
+    <div class="demo-grid">
+      <section class="demo-card class-card" id="class-card" aria-labelledby="class-title">
+        <p class="demo-eyebrow" data-i18n="SAMPLE CLASS">SAMPLE CLASS</p>
+        <h2 id="class-title" data-i18n="Ms. Rivera’s Year 8 Science">Ms. Rivera’s Year 8 Science</h2>
+        <p data-i18n="Six fictional learners, ready for a sample lesson.">Six fictional learners, ready for a sample lesson.</p>
+        <ul class="demo-roster" aria-label="Fictional sample class">
+          <li>Alex Chen</li><li>Maya Patel</li><li>Sam Rivera</li>
+          <li>Jordan Lee</li><li>Taylor Okafor</li><li>Casey Morgan</li>
+        </ul>
+        <p class="demo-note" data-i18n="Demo roster — these are not real students.">Demo roster — these are not real students.</p>
+      </section>
+
+      <section class="demo-card activity-card" id="activity-card" aria-labelledby="activity-title">
+        <p class="demo-eyebrow" data-i18n="TRY A REAL ACTIVITY">TRY A REAL ACTIVITY</p>
+        <h2 id="activity-title" data-i18n="Geometry Playground">Geometry Playground</h2>
+        <p data-i18n="Move points, predict an answer, and reveal it.">Move points, predict an answer, and reveal it.</p>
+        <div class="activity-launch">
+          <button class="cmc-btn cyan" id="open-activity" type="button" data-i18n="Open Geometry Playground">Open Geometry Playground</button>
+          <p class="demo-note" data-i18n="This embedded activity saves only inside the demo namespace.">This embedded activity saves only inside the demo namespace.</p>
+        </div>
+        <div class="activity-host" id="activity-host" hidden>
+          <iframe id="geometry-frame" title="Interactive Geometry Playground demo" allow="camera 'none'; microphone 'none'; geolocation 'none'"></iframe>
+        </div>
+        <p class="demo-note" id="activity-placeholder" data-i18n="The interactive activity appears here when opened.">The interactive activity appears here when opened.</p>
+      </section>
+
+      <section class="demo-card" id="teacher-card" aria-labelledby="teacher-title">
+        <p class="demo-eyebrow" data-i18n="TEACHER-READY">TEACHER-READY</p>
+        <h2 id="teacher-title" data-i18n="Ready for the front of the room">Ready for the front of the room</h2>
+        <p data-i18n="Use projector mode, load a ready-made task, or pick a student from this demo roster.">Use projector mode, load a ready-made task, or pick a student from this demo roster.</p>
+        <p class="demo-note" data-i18n="The embedded activity uses only the fictional demo roster.">The embedded activity uses only the fictional demo roster.</p>
+      </section>
+
+      <section class="demo-card" id="participation-card" aria-labelledby="participation-title">
+        <p class="demo-eyebrow" data-i18n="PHONE + QR PARTICIPATION">PHONE + QR PARTICIPATION</p>
+        <h2 id="participation-title" data-i18n="Explain the flow without starting a real session">Explain the flow without starting a real session</h2>
+        <p data-i18n="In a live class, a teacher can show a QR code for students to join. This demo never creates a room or calls the classroom API.">In a live class, a teacher can show a QR code for students to join. This demo never creates a room or calls the classroom API.</p>
+        <div class="share-box">
+          <label for="share-url" data-i18n="Shareable demo entry">Shareable demo entry</label>
+          <button class="cmc-btn" id="copy-link" type="button" data-i18n="Copy demo link">Copy demo link</button>
+          <textarea id="share-url" rows="2" readonly hidden aria-label="Demo share link"></textarea>
+        </div>
+        <p class="demo-note" data-i18n="A local link opens only on this computer. Host demo.html before sharing it with others.">A local link opens only on this computer. Host demo.html before sharing it with others.</p>
+      </section>
+    </div>
+    <p class="demo-limit" data-i18n="Free exploration is limited to Geometry Playground and these sample lesson cards. Other classroom tools and live phone sessions are not launched from this demo.">Free exploration is limited to Geometry Playground and these sample lesson cards. Other classroom tools and live phone sessions are not launched from this demo.</p>
+  </main>
+  <footer class="demo-footer">
+    <span data-i18n="Fictional data only · all demo saves use a separate browser namespace.">Fictional data only · all demo saves use a separate browser namespace.</span>
+    <a href="HOW-TO-HOST.txt" data-i18n="How to host">How to host</a>
+  </footer>
+</body>
+</html>

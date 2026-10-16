@@ -38,6 +38,9 @@ Mac: double-click Start Mission Control.command. The first time, right-click it,
 A small window opens and the hub opens in your browser at http://localhost:8080. The AI tools and the microphone work this way. Keep the small window open while you teach. Close it to stop.
 Opening index.html straight from the folder also works for most tools, but the AI tools and phones cannot work that way.
 
+Interactive product demo
+Open demo.html for the fictional, no-signup product demo. It uses a separate browser-storage namespace and does not start a real phone session. A localhost link works only on that computer; to share the demo, host this folder and share its demo.html URL. See DEMO-TESTING.txt for isolation details, test results and remaining limitations.
+
 New local classroom tools
 All six tools share the hub look, work in English and Chinese, have a Projector mode, and keep their settings and progress in the browser (they are included in Class Lists > Save backup file). Most have a Pick a student button that uses your saved class list, and a print or copy option.
 - Geometry Playground: five modes (triangle, transformations, functions, Pythagoras, circle theorems). 15 ready activities with teacher notes, predict-then-reveal, PNG download and a printable worksheet.
