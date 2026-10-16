@@ -62,7 +62,6 @@ RSLang.add("zh", {
   "This local demo link only works on this computer. Host demo.html before sharing it.": "此本地演示链接只能在这台电脑上使用。请先托管 demo.html 再分享。",
   "Demo link copied.": "演示链接已复制。",
   "Clipboard access was denied. The demo link is selected below; copy it manually.": "剪贴板访问被拒绝。下方已选中演示链接，请手动复制。",
-  "Tour complete. Explore freely or restart the demo.": "导览结束。可自由探索或重新开始演示。",
   "Tour ended. Explore freely or restart the demo.": "导览已结束。可自由探索或重新开始演示。",
   "Preparing the interactive activity for the tour…": "正在为导览准备互动活动…",
   "Unknown demo scenario. The fictional classroom scenario was opened.": "演示场景未知，已打开虚构课堂场景。",

@@ -62,7 +62,6 @@ RSLang.add("ru", {
   "This local demo link only works on this computer. Host demo.html before sharing it.": "Эта локальная ссылка работает только на этом компьютере. Разместите demo.html на сайте, чтобы поделиться ею.",
   "Demo link copied.": "Ссылка на демонстрацию скопирована.",
   "Clipboard access was denied. The demo link is selected below; copy it manually.": "Нет доступа к буферу обмена. Ссылка выделена ниже — скопируйте её вручную.",
-  "Tour complete. Explore freely or restart the demo.": "Обзор завершён. Исследуйте приложение или перезапустите демонстрацию.",
   "Tour ended. Explore freely or restart the demo.": "Обзор завершён. Исследуйте приложение или перезапустите демонстрацию.",
   "Preparing the interactive activity for the tour…": "Подготовка интерактивного занятия к обзору…",
   "Unknown demo scenario. The fictional classroom scenario was opened.": "Неизвестный сценарий. Открыт демонстрационный вымышленный класс.",

@@ -189,24 +189,15 @@
       { element: '#demo-controls', popover: makePopover('Your demo, your pace', 'Explore Geometry Playground freely, change language, or restart to reseed the fictional class and clear demo state.', 'bottom') }
     ];
   }
-  function stopTour(restoreFocus) {
+  function stopTour() {
     tourStartId++;
     const active = tour;
     tour = null;
     restoreFocusOnDestroy = false;
     if (active && active.isActive()) active.destroy();
-    if (restoreFocus) {
-      const request = tourStartId;
-      requestAnimationFrame(() => {
-        if (request === tourStartId && (!tour || !tour.isActive())) {
-          tour = null;
-          $('start-tour').focus();
-        }
-      });
-    }
   }
   async function startTour(at = 0) {
-    stopTour(false);
+    stopTour();
     const request = ++tourStartId;
     if (!window.driver || !window.driver.js || typeof window.driver.js.driver !== 'function') {
       setStatus('Guided tour could not load. Use Explore freely to continue.');
@@ -242,17 +233,16 @@
       prevBtnText: tr('Back'),
       doneBtnText: tr('Done'),
       closeBtnLabel: tr('Skip tour'),
-      onDestroyed: (_element, _step, options) => {
+      onDestroyed: () => {
         if (tour === instance) tour = null;
-        if (options.reason === 'done') setStatus('Tour complete. Explore freely or restart the demo.');
-        else setStatus('Tour ended. Explore freely or restart the demo.');
+        setStatus('Tour ended. Explore freely or restart the demo.');
       }
     });
     tour = instance;
     instance.drive(Math.min(at, demoSteps(available).length - 1));
   }
   function restartDemo() {
-    stopTour(false);
+    stopTour();
     closeActivity();
     const cleared = clearDemoStorage();
     const seeded = seedClass();
@@ -323,8 +313,7 @@
     if (!restoreFocusOnDestroy) return;
     restoreFocusOnDestroy = false;
     setStatus('Tour ended. Explore freely or restart the demo.');
-    const request = tourStartId;
-    if (request === tourStartId && (!tour || !tour.isActive())) {
+    if (!tour || !tour.isActive()) {
       tour = null;
       $('start-tour').focus();
     }
