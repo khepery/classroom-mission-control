@@ -3,7 +3,8 @@
   const TEXT = window.GM_TEXT || { words: {}, acts: {} };
   const words = TEXT.words, ACT_TEXT = TEXT.acts;
   let zh = new URLSearchParams(location.search).get('lang') === 'zh';
-  const KEY = 'mc_tool_geometry_';
+  const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+  const KEY = DEMO ? 'mc_demo_tool_geometry_' : 'mc_tool_geometry_';
   const MODES = ['triangle', 'transform', 'function', 'pythag', 'circle'];
   const MODE_KEY = { triangle: 'tri', transform: 'tr', function: 'fn', pythag: 'py', circle: 'ci' };
   const P = { amber: '#ffb23e', cyan: '#62d3ff', green: '#7dffb0', pink: '#ff6f91', text: '#cfe4ec', axis: '#8fa9b8', grid: '#1a2a36' };
@@ -19,6 +20,11 @@
     if (vars) s = s.replace(/\{(\w+)\}/g, (m, n) => (n in vars ? vars[n] : m));
     return s;
   };
+  function demoReady(status) {
+    if (DEMO && window.parent !== window) {
+      window.parent.postMessage({ type: 'cmc-demo-ready', version: 1, status }, location.origin);
+    }
+  }
   const tx = pair => pair[zh ? 1 : 0];
   const fmt = (n, d = 2) => (Number.isFinite(n) ? String(+n.toFixed(d)) : '—');
   const r6 = n => Math.round(n * 1e6) / 1e6;
@@ -977,7 +983,7 @@
   let pickPool = [], pickKey = '';
   function roster() {
     try {
-      const data = JSON.parse(localStorage.getItem('mc_classes'));
+      const data = JSON.parse(localStorage.getItem(DEMO ? 'mc_demo_classes' : 'mc_classes'));
       const list = data && Array.isArray(data.list) ? data.list : [];
       const cls = list.find(c => c && c.id === data.active) || list[0];
       return cls && Array.isArray(cls.names) ? cls.names.filter(n => typeof n === 'string' && n.trim()).map(n => n.trim()) : [];
@@ -1102,7 +1108,7 @@
 
   /* ---------- start-up ---------- */
   function init() {
-    if (typeof JXG === 'undefined') { fail(new Error('JSXGraph missing')); return; }
+    if (typeof JXG === 'undefined') { fail(new Error('JSXGraph missing')); demoReady('unavailable'); return; }
     JXG.Options.text.display = 'internal';
     JXG.Options.label.display = 'internal';
     applyLanguage();
@@ -1122,7 +1128,11 @@
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       const tag = (e.target.tagName || '').toLowerCase();
       if (['input', 'textarea', 'select'].includes(tag) && e.key !== 'Escape') return;
-      if (e.key === 'Escape') { if (document.body.classList.contains('cmc-board')) setProjector(false); return; }
+      if (e.key === 'Escape') {
+        if (DEMO && window.parent !== window) window.parent.postMessage({ type: 'cmc-demo-escape', version: 1 }, location.origin);
+        if (document.body.classList.contains('cmc-board')) setProjector(false);
+        return;
+      }
       const k = e.key.toLowerCase();
       if (/^[1-5]$/.test(k)) setMode(MODES[+k - 1]);
       else if (k === 'p') setProjector(!document.body.classList.contains('cmc-board'));
@@ -1143,6 +1153,7 @@
     build();
     renderActs();
     if (restored) toast(t('autoBack'));
+    demoReady(board ? 'ready' : 'unavailable');
   }
   window.addEventListener('DOMContentLoaded', init);
 })();

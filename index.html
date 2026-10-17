@@ -6007,12 +6007,12 @@ A.classes={init(){
   $('#c-back').onclick=()=>openApp(backTarget());
   $$('#a-classes [data-cv]').forEach(b=>b.onclick=()=>{view(b.dataset.cv);S.lcars()});
   $('#c-allin').onclick=()=>{ABS.c[cls().id]=[];store.set('absent',ABS);here();stat();rosterChanged();S.lcars()};
-  $('#bk-save').onclick=()=>{const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('mc_'))data[k]=localStorage.getItem(k)}
+  $('#bk-save').onclick=()=>{const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('mc_')&&!k.startsWith('mc_demo_'))data[k]=localStorage.getItem(k)}
     const blob=new Blob([JSON.stringify({app:'mission-control',v:1,saved:new Date().toISOString(),data},null,1)],{type:'application/json'});
     saveFile('mission-control-backup-'+todayStr()+'.json',blob).then(r=>{$('#bk-msg').textContent=r==='saved'?Object.keys(data).length+' ITEMS SAVED. KEEP THE FILE SAFE.':r==='declined'?'SAVE CANCELLED':'THIS VIEW CANNOT SAVE FILES. OPEN THE SITE IN A NORMAL BROWSER TAB.'});S.lcars()};
   let bkArm=null;
-  $('#bk-load').onclick=()=>{if(bkArm){Object.entries(bkArm).forEach(([k,v])=>{if(k.startsWith('mc_'))try{localStorage.setItem(k,v)}catch(e){}});$('#bk-msg').textContent='LOADED. RESTARTING.';setTimeout(()=>location.reload(),600);return}$('#bk-file').click()};
-  $('#bk-file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(j.app!=='mission-control'||!j.data)throw 0;bkArm=j.data;$('#bk-load').textContent='Press again to replace this computer\'s data';$('#bk-msg').textContent=Object.keys(j.data).length+' ITEMS IN FILE FROM '+String(j.saved||'').slice(0,10);S.lcarsLow()}catch(x){$('#bk-msg').textContent='THAT FILE IS NOT A MISSION CONTROL BACKUP';S.lcarsLow()}};r.readAsText(f);e.target.value=''};
+  $('#bk-load').onclick=()=>{if(bkArm){Object.entries(bkArm).forEach(([k,v])=>{if(k.startsWith('mc_')&&!k.startsWith('mc_demo_'))try{localStorage.setItem(k,v)}catch(e){}});$('#bk-msg').textContent='LOADED. RESTARTING.';setTimeout(()=>location.reload(),600);return}$('#bk-file').click()};
+  $('#bk-file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(j.app!=='mission-control'||!j.data)throw 0;bkArm=j.data;$('#bk-load').textContent='Press again to replace this computer\'s data';$('#bk-msg').textContent=Object.keys(j.data).filter(k=>k.startsWith('mc_')&&!k.startsWith('mc_demo_')).length+' ITEMS IN FILE FROM '+String(j.saved||'').slice(0,10);S.lcarsLow()}catch(x){$('#bk-msg').textContent='THAT FILE IS NOT A MISSION CONTROL BACKUP';S.lcarsLow()}};r.readAsText(f);e.target.value=''};
   side();load();view(cview)},show(){side();load();const b=$('#c-back');b.hidden=!retTo;if(retTo)b.textContent='Done. Back to '+META[retTo].name}};
 }
 

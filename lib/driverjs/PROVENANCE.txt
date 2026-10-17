@@ -1,0 +1,19 @@
+Driver.js distribution provenance
+
+Package: driver.js 1.10.1
+License: MIT; see LICENSE (full upstream package license).
+Canonical source: https://github.com/nilbuild/driver.js
+Upstream release: https://github.com/nilbuild/driver.js/releases/tag/1.10.1
+Upstream release commit: ca44ea064a8a57ab4acb197e57c6f514d2df4da1
+Package source directory: packages/driver
+Retrieval source: https://registry.npmjs.org/driver.js/-/driver.js-1.10.1.tgz
+The package metadata at https://registry.npmjs.org/driver.js/1.10.1 identifies
+the same upstream repository, version, and MIT license.
+
+Published tarball SHA-1: 9a186199a6df5508461315ab1b5b78eae69458fb
+Published tarball SHA-512 (SRI): mpcJ15eIRWnGMykeIWjr0CdQF00/JzImFOEXy/VponYgMbP/y46t24MPBDO3PV/rH6CjdSe3T7WQ9cP3GvEPdQ==
+
+Vendored files extracted without modification:
+driver.js.iife.js  SHA-256 d7d059a79018c128606a204cb5a67bbca7365a3f3c2ca6260ae6dca97ce89c4f
+driver.css         SHA-256 a2ff0ced6e6360499211475063c547b9044b2ad64569cc6404355ca4b600d9ec
+LICENSE            SHA-256 ec3ce3a08736fefd6a03a6d5b52b0705e6919fe06de9d7bd3fb63dcfb492d76d

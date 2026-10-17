@@ -1,0 +1,119 @@
+CLASSROOM MISSION CONTROL — INTERACTIVE DEMO
+
+Scope
+-----
+demo.html is a separate entry point. It does not load index.html, the normal
+hub catalogue, backup/import UI, or phone-session pages. The only real tool
+available for free exploration is Geometry Playground, opened in a same-origin
+iframe with ?demo=1. Its state and roster reads are explicitly redirected to
+mc_demo_tool_geometry_* and mc_demo_classes. The demo language preference is
+mc_demo_retroSuite.lang. The normal keys and storage schema are unchanged.
+
+Restart removes only the four demo keys currently used by this page and
+Geometry Playground: mc_demo_classes, mc_demo_retroSuite.lang,
+mc_demo_tool_geometry_auto, and mc_demo_tool_geometry_saved. It removes the
+iframe before deleting those keys, then restores the deterministic fictional
+class. No Storage monkey patch or localStorage.clear() is used.
+The normal hub backup/export and restore filters explicitly exclude mc_demo_*
+keys, so separate normal-app tabs cannot export or overwrite demo state.
+
+Driver.js provenance
+--------------------
+The locally bundled files are the unmodified npm distribution for Driver.js
+1.10.1, licensed MIT. Upstream is nilbuild/driver.js, release commit
+ca44ea064a8a57ab4acb197e57c6f514d2df4da1. The package metadata confirms the
+upstream repository, version and license. The distribution was retrieved from
+the npm registry tarball, whose SHA-512 integrity is recorded alongside the
+SHA-256 of each vendored file in lib/driverjs/PROVENANCE.txt. The full upstream
+license is retained in lib/driverjs/LICENSE.
+
+Changed files
+-------------
+- demo.html, demo.css, demo.js: entry page, accessible tour, allowlisted share
+  URL, and lifecycle/reset coordination.
+- i18n.js and i18n/{zh,ru}/demo.js: opt-in demo language storage and all demo
+  translations. English is the source text in the existing localization
+  system.
+- tools/geometry.js: explicit demo storage/roster context and validated,
+  same-origin readiness/Escape messages; normal mode keeps its existing keys.
+- index.html: normal backup/export and restore skip the reserved mc_demo_*
+  namespace.
+- lib/driverjs/: pinned local JavaScript/CSS, full license and provenance.
+- HOW-TO-HOST.txt: demo entry-point guidance.
+
+Reproducible checks
+-------------------
+No repository test runner, package manifest or browser automation dependency
+is present. No package manager or test dependency was added. Run the available
+syntax and whitespace checks from the repository root:
+
+  node --check demo.js
+  node --check i18n.js
+  node --check tools/geometry.js
+  node --check i18n/zh/demo.js
+  node --check i18n/ru/demo.js
+  git diff --check
+
+Serve the app using the existing local launcher:
+
+  python3 start-hub.py 8080 --no-browser
+  # Open http://localhost:8080/demo.html
+
+Or use a plain static server:
+
+  python3 -m http.server 8081
+  # Open http://localhost:8081/demo.html
+
+For a subpath check, serve the directory above the repository and open the
+repository's relative path ending in /demo.html. All demo and iframe URLs are
+relative to the entry page.
+
+Validation performed for this change
+------------------------------------
+- All five node --check commands and git diff --check passed.
+- Headless Chromium was run with test-only Storage.prototype instrumentation.
+  Normal mc_classes, mc_tool_geometry_auto, mc_tool_codequest_progress,
+  retroSuite.lang, and an unrelated key were seeded with sentinels. During
+  demo initialization, every tour stage, iframe open/reopen, roster selection,
+  language change, reload, and restart, observed application reads/writes/
+  removals were confined to mc_demo_* keys. The normal and unrelated sentinel
+  values were byte-for-byte unchanged, including while a normal hub tab was
+  open concurrently. Restart removed demo state, reseeded the known roster,
+  removed the iframe, and no delayed Geometry save repopulated the reset key.
+- The six tour targets, Back/Next, repeated tour open/close, restart/reset,
+  iframe Escape, focus return, English/Chinese/Russian demo strings, English
+  fallback in the Russian Geometry tool, projector mode, and a 375 CSS-pixel
+  viewport were checked in Chromium. Reduced-motion emulation selected
+  Driver.js's non-animated mode.
+- A rejected clipboard promise exercised the visible/selectable copy fallback.
+  The generated link contained only demo.html, scenario=classroom and the
+  allowlisted language. Localhost sharing displayed a local-only warning.
+- The existing start-hub.py launcher served demo.html and Geometry Playground.
+  Network inspection while the tour and iframe loaded found no remote assets
+  and no /api requests from the demo. A nested static-host path also loaded
+  the page, locale files, Driver.js and the iframe successfully.
+- The normal hub's backup view was exercised with mixed normal/demo sentinel
+  keys. Export included the normal mc_* values but no mc_demo_* values; import
+  updated normal keys and left existing demo sentinels unchanged.
+
+Remaining checks and limitations
+--------------------------------
+- Free exploration is intentionally bounded to Geometry Playground and the
+  fictional sample cards. Other classroom tools are not launched from demo
+  mode, avoiding un-audited storage, backup and live-session paths.
+- The tour is localized in English, Simplified Chinese and Russian. Existing
+  Geometry Playground content supports English and Chinese only; in Russian
+  the real activity truthfully falls back to English.
+- Phone/QR participation is explanatory only. The demo does not generate a
+  classroom QR code, create a room, call /api/state or /api/send, or require a
+  second device. Hosted sharing uses the current demo.html entry URL; on
+  localhost it does not offer a remotely shareable link.
+- Direct file:// opening is not supported; use the local launcher or an HTTP
+  static server so iframe messaging and browser storage behave consistently.
+- Screen-reader testing, physical touch-device testing, browser-native storage
+  denial, and a public deployment were not performed. The clipboard denial
+  path was exercised with a rejected clipboard promise. Normal hub backup/
+  import/export was exercised through the hub UI in headless Chromium; a
+  manual download/file-picker interaction was not performed.
+- Performance was not measured. Geometry Playground is loaded only when the
+  visitor starts the tour or opens the activity.
